@@ -1,0 +1,32 @@
+{
+  "bhfr_title": "Bots Have Feelings Reborn",
+
+  "bhfr_double_bot_health": "double bot health",
+  "bhfr_double_bot_health_desc": "Doubles bot health. [requires re-entering camp from main menu]",
+
+  "bhfr_improve_bot_aim": "Improve bot aim",
+  "bhfr_improve_bot_aim_desc": "Improved aim, Reduced Spread, Increased reaction time. [requires re-entering camp from main menu]",
+
+  "bhfr_improve_bot_movement": "Improve bot movement",
+  "bhfr_improve_bot_movement_desc": "Skipping unnecessary animations etc. [requires re-entering camp from main menu]",
+
+  "bhfr_bots_give_human_player_xp": "Bot give human player XP",
+  "bhfr_bots_give_human_player_xp_desc": "Bots count as humans at the xp screen.",
+
+  "bhfr_experimental": "Experimental",
+
+  "bhfr_bots_can_carry": "Bots can carry",
+  "bhfr_bots_can_carry_desc": "Bots can carry gold, paintings etc. [requires re-entering camp from main menu]",
+
+  "bhfr_bots_no_unnecessary_revive": "No unnecessary revives",
+  "bhfr_bots_no_unnecessary_revive_desc": "Bots stop reviving, when you do it.",
+
+  "bhfr_bots_throw_grenades": "Bots throw grenades",
+  "bhfr_bots_throw_grenades_desc": "Bots throw grenades to enemies. - and teammates, and then they walk into it, like full retards. use with care.",
+
+  "bhfr_bot_hurt_sound": "Hurt Sound",
+  "bhfr_bot_hurt_sound_desc": "Bots cry out loud, at 10% health. (does this work?)",
+
+  "bhfr_reset": "Default options",
+  "bhfr_reset_confirm": "Are you sure, you want to reset all \"Bots Have Feelings Reborn\" options to their default value?"
+}

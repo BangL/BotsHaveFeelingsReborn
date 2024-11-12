@@ -1,0 +1,57 @@
+<mod name="BotsHaveFeelingsReborn"
+     description="Some slight improvements for the team AI."
+     priority="1"
+     author="Takku, BangL"
+     contact="https://steamcommunity.com/id/BangL"
+     version="0.1"
+     color="60 60 60">
+    <updates>
+        <update provider="modworkshop"
+                identifier="50170" />
+    </updates>
+    <localization directory="loc">
+        <loc file="english.json"
+             language="english" />
+    </localization>
+    <hooks>
+        <pre hook_id="lib/entry"
+             script_path="BotsHaveFeelingsReborn.lua" />
+        <!-- menu -->
+        <post hook_id="lib/managers/menu/menucomponentmanager"
+              script_path="lua/menucomponentmanager.lua" />
+        <!-- carry -->
+        <post hook_id="lib/managers/group_ai_states/groupaistatebase"
+              script_path="lua/groupaistatebase.lua" />
+        <post hook_id="lib/managers/playermanager"
+              script_path="lua/playermanager.lua" />
+        <post hook_id="lib/network/handlers/unitnetworkhandler"
+              script_path="lua/unitnetworkhandler.lua" />
+        <post hook_id="lib/units/player_team/teamaimovement"
+              script_path="lua/teamaimovement.lua" />
+        <post hook_id="lib/units/props/carrydata"
+              script_path="lua/carrydata.lua" />
+        <!-- aim -->
+        <post hook_id="lib/managers/criminalsmanager"
+              script_path="lua/criminalsmanager.lua" />
+        <!-- human xp -->
+        <post hook_id="lib/managers/raidexperiencemanager"
+              script_path="lua/raidexperiencemanager.lua" />
+        <!-- revive -->
+        <post hook_id="lib/units/interactions/interactionext"
+              script_path="lua/interactionext.lua" />
+        <!-- grenades -->
+        <post hook_id="lib/units/player_team/logics/teamailogicassault"
+              script_path="lua/teamailogicassault.lua" />
+        <!-- double health, hurt sound, movement (skip dodging ff) -->
+        <post hook_id="lib/units/player_team/teamaidamage"
+              script_path="lua/teamaidamage.lua" />
+        <!-- not entirely sure what this does precisely. allow to shoot through bots? if yes, it's obsolete -->
+        <!-- <post hook_id="lib/units/weapons/newnpcraycastweaponbase"
+              script_path="lua/newnpcraycastweaponbase.lua" />
+        <post hook_id="lib/units/weapons/npcraycastweaponbase"
+              script_path="lua/npcraycastweaponbase.lua" /> -->
+        <!-- movement -->
+        <post hook_id="lib/tweak_data/charactertweakdata"
+              script_path="lua/charactertweakdata.lua" />
+    </hooks>
+</mod>
