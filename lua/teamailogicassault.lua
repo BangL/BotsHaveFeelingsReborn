@@ -1,10 +1,8 @@
--- bots_throw_grenades
-
 local mvec3_angle = mvector3.angle
 local mvec3_norm = mvector3.normalize
+local projectile_id = BlackMarketTweakData:get_index_from_projectile_id("d343")
 
-local update_original = TeamAILogicAssault.update
-function TeamAILogicAssault.update(data, ...)
+Hooks:PostHook(TeamAILogicAssault, "update", "BHFR_TeamAILogicAssault_update", function(data, ...)
 	if Network:is_server() and BotsHaveFeelingsReborn:GetConfigOption("bots_throw_grenades") then
 		local t = TimerManager:game():time()
 		if not TeamAILogicAssault._conc_t or TeamAILogicAssault._conc_t + 5 < t then
@@ -44,13 +42,11 @@ function TeamAILogicAssault.update(data, ...)
 			if target_unit then
 				local mvec_spread_direction = target_unit:movement():m_head_pos() - from_pos
 				mvec3_norm(mvec_spread_direction)
-				local cc_unit = ProjectileBase.spawn("units/upd_003/weapons/wpn_fps_gre_d343/wpn_fps_gre_d343",
-					from_pos, Rotation())
+				local cc_unit = ProjectileBase.spawn(projectile_id, from_pos, Rotation())
 				crim_mov:play_redirect("throw_grenade")
 				managers.network:session():send_to_peers("play_distance_interact_redirect", data.unit, "throw_grenade")
 				cc_unit:base():throw({ dir = mvec_spread_direction, owner = data.unit })
 			end
 		end
 	end
-	return update_original(data, ...)
-end
+end)
