@@ -2,7 +2,7 @@ local mvec3_angle = mvector3.angle
 local mvec3_norm = mvector3.normalize
 local projectile_id = BlackMarketTweakData:get_index_from_projectile_id("d343")
 
-Hooks:PostHook(TeamAILogicAssault, "update", "BHFR_TeamAILogicAssault_update", function(data, ...)
+Hooks:PreHook(TeamAILogicAssault, "update", "BHFR_TeamAILogicAssault_update", function(data)
 	if Network:is_server() and BotsHaveFeelingsReborn:GetConfigOption("bots_throw_grenades") then
 		local t = TimerManager:game():time()
 		if not TeamAILogicAssault._conc_t or TeamAILogicAssault._conc_t + 5 < t then
