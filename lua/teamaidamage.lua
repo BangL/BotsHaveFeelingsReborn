@@ -15,7 +15,7 @@ function TeamAIDamage:init(unit, ...)
 
         self._HEALTH_INIT = 2 * damage_tweak.HEALTH_INIT
 
-        self._HEALTH_TOTAL = self._HEALTH_INIT + self._HEALTH_BLEEDOUT_INIT
+        self._HEALTH_TOTAL = self._HEALTH_INIT
         self._HEALTH_TOTAL_PERCENT = self._HEALTH_TOTAL / 100
         self._health = self._HEALTH_INIT
         self._health_ratio = self._health / self._HEALTH_INIT
