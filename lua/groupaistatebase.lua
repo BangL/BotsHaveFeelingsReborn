@@ -1,7 +1,7 @@
 -- make sure bots drop bags before a bot despawns
 -- TODO?: only drop the bag of the removed bot, if possible
 
-Hooks:PreHook(GroupAIStateBase, "remove_one_teamAI", "BHFR_GroupAIStateBase_remove_one_teamAI",
+Hooks:PreHook(GroupAIStateBase, "remove_one_criminal_ai", "BHFR_GroupAIStateBase_remove_one_criminal_ai",
 	function(self, name_to_remove, replace_with_player)
 		local _all_AI_criminals = self:all_AI_criminals() or {}
 		for _, data in pairs(_all_AI_criminals) do
