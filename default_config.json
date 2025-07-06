@@ -2,9 +2,11 @@
   "double_bot_health": true,
   "improve_bot_aim": true,
   "improve_bot_movement": true,
-  "bots_can_carry": false,
-  "bots_no_unnecessary_revive": false,
-  "bots_throw_grenades": false,
+  "improve_bot_speed": true,
+  "bots_give_human_player_xp": true,
   "bot_hurt_sound": true,
-  "bots_give_human_player_xp": true
+  "bots_can_catch": false,
+  "bots_secure_carried": false,
+  "bots_no_unnecessary_revive": false,
+  "bots_throw_grenades": false
 }

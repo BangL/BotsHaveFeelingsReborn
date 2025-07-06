@@ -54,7 +54,7 @@ function TeamAIDamage:_regenerated(...)
     return _regenerated_original(self, ...)
 end
 
--- improve_bot_movement: skip dodge anmation through ff
+-- improve_bot_movement: skip dodge animation through ff
 
 function TeamAIDamage:friendly_fire_hit(...)
     if BotsHaveFeelingsReborn:GetConfigOption("improve_bot_movement") then

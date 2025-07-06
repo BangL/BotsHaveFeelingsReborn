@@ -7,19 +7,21 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 
 	self:_MakeHeader()
 
-	self:_MakeSeperator()
+	self:_MakeSeparator()
 
 	self:_MakeOptionToggle("double_bot_health")
 	self:_MakeOptionToggle("improve_bot_aim")
 	self:_MakeOptionToggle("improve_bot_movement")
+	self:_MakeOptionToggle("improve_bot_speed")
 	self:_MakeOptionToggle("bots_give_human_player_xp")
+	self:_MakeOptionToggle("bot_hurt_sound")
 
-	self:_MakeSeperator("bhfr_experimental", true)
+	self:_MakeSeparator("bhfr_experimental", true)
 
-	self:_MakeOptionToggle("bots_can_carry")
+	self:_MakeOptionToggle("bots_can_catch")
+	self:_MakeOptionToggle("bots_secure_carried")
 	self:_MakeOptionToggle("bots_no_unnecessary_revive")
 	self:_MakeOptionToggle("bots_throw_grenades")
-	self:_MakeOptionToggle("bot_hurt_sound")
 
 	self:_MakeResetButton()
 end
@@ -47,7 +49,7 @@ function BotsHaveFeelingsRebornMenu:_MakeResetButton()
 	})
 end
 
-function BotsHaveFeelingsRebornMenu:_MakeSeperator(text, localize)
+function BotsHaveFeelingsRebornMenu:_MakeSeparator(text, localize)
 	self:SubTitle({ text = text, localize = localize, y_offset = text and 0 or 8 })
 end
 
