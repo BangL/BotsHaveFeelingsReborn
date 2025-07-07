@@ -58,12 +58,12 @@ if not BotsHaveFeelingsReborn.Sync then
     end
 
     function BotsHaveFeelingsReborn.Sync:send_to_known_peers(event, data, drop_in_cache_key)
+        if (event ~= self.events.handshake) and drop_in_cache_key then
+            self.drop_in_cache[event] = self.drop_in_cache[event] or {}
+            self.drop_in_cache[event][drop_in_cache_key] = data
+        end
         for peer_id, known in ipairs(self.peers) do
             if known then
-                if (event ~= self.events.handshake) and drop_in_cache_key then
-                    self.drop_in_cache[event] = self.drop_in_cache[event] or {}
-                    self.drop_in_cache[event][drop_in_cache_key] = data
-                end
                 self:send_to_peer(peer_id, event, data)
             end
         end

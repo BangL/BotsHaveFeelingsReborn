@@ -17,7 +17,7 @@ function PlayerStandard:_get_unit_long_distance_action(targets_enemies, targets_
         if targets_enemies then
             local enemies = managers.enemy:all_enemies()
 
-            for u_key, u_data in pairs(enemies) do
+            for _, u_data in pairs(enemies) do
                 if self._unit:movement():team().foes[u_data.unit:movement():team().id] and
                     not u_data.unit:anim_data().long_dis_interact_disabled and
                     (u_data.char_tweak.priority_shout or not only_special_enemies) and
@@ -33,7 +33,6 @@ function PlayerStandard:_get_unit_long_distance_action(targets_enemies, targets_
                 local added
 
                 if not added and
-                    not u_data.is_deployable and
                     not u_data.unit:movement():downed() and
                     not u_data.unit:base().is_local_player and
                     not u_data.unit:anim_data().long_dis_interact_disabled then
@@ -42,10 +41,10 @@ function PlayerStandard:_get_unit_long_distance_action(targets_enemies, targets_
                 end
             end
 
-            if #char_table > 0 then                                  -- only go custom call if found any team ai
+            if #char_table > 0 then                                  -- only go custom call if found any team mate
                 local prime_target = self:_get_interaction_target(char_table, my_head_pos, cam_fwd)
-                if prime_target.unit_type == UNIT_TYPE_TEAMMATE then -- only go custom call if prime target is team ai
-                    -- all conditions met until here? good, let's shout at team ai to follow us in stealth then
+                if prime_target.unit_type == UNIT_TYPE_TEAMMATE then -- only go custom call if prime target is team mate
+                    -- all conditions met until here? good, let's shout at that team mate then
                     return self:_get_long_distance_action(prime_target, char_table, intimidation_amount, primary_only,
                         detect_only)
                 end
@@ -113,10 +112,10 @@ function PlayerStandard:_start_action_intimidate(t, ...)
         local interact_type, sound_name, queue_sound_name, queue_sound_suffix
 
         if voice_type == "down" then
-            interact_type = "cmd_down"
-            sound_name = "l02x_sin" -- FIXME no sound files for this :(
+            interact_type = "cmd_down" -- FIXME no animation for this :(
+            sound_name = "l02x_sin"    -- FIXME no sound files for this :(
         elseif voice_type == "stop" then
-            interact_type = "cmd_stop"
+            interact_type = "cmd_stop" -- FIXME no animation for this :(
             queue_sound_suffix = "_wait"
         elseif voice_type == "come" then
             interact_type = "cmd_come"
