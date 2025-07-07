@@ -43,6 +43,12 @@
                   script_path="lua/playerstandard.lua" />
             <post hook_id="lib/units/props/aiattentionobject"
                   script_path="lua/aiattentionobject.lua" />
+            <post hook_id="lib/units/player_team/teamaibrain"
+                  script_path="lua/teamaibrain.lua" />
+            <post hook_id="lib/units/player_team/logics/teamailogicidle"
+                  script_path="lua/teamailogicidle.lua" />
+            <post hook_id="lib/network/handlers/unitnetworkhandler"
+                  script_path="lua/unitnetworkhandler.lua" />
             <!-- aim -->
             <post hook_id="lib/managers/criminalsmanager"
                   script_path="lua/criminalsmanager.lua" />
@@ -64,7 +70,9 @@
             <post hook_id="lib/units/player_team/actions/lower_body/criminalactionwalk"
                   script_path="lua/criminalactionwalk.lua" />
             <!-- networking -->
-            <post hook_id="lib/network/handlers/unitnetworkhandler"
-                  script_path="lua/unitnetworkhandler.lua" />
+            <post hook_id="lib/network/base/basenetworksession"
+                  script_path="lua/basenetworksession.lua" />
+            <post hook_id="core/lib/managers/coreworldcollection"
+                  script_path="lua/coreworldcollection.lua" />
       </hooks>
 </mod>

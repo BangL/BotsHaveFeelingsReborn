@@ -62,39 +62,43 @@ local _get_long_distance_action_original = PlayerStandard._get_long_distance_act
 
 function PlayerStandard:_get_long_distance_action(prime_target, char_table, intimidation_amount, primary_only,
                                                   detect_only, ...)
-    if prime_target and
+    if BotsHaveFeelingsReborn.Sync:host_has_mod() and
+        prime_target and
         not detect_only and
         prime_target.unit_type == UNIT_TYPE_TEAMMATE then
-        local is_ok, is_teammate_ai
         local unit = prime_target.unit
 
-        local record = managers.groupai:state():all_criminals()[unit:key()]
-        if record and record.ai then
-            is_teammate_ai = true
-            local dmg = unit:character_damage()
-            is_ok = not dmg:need_revive()
-        end
+        if managers.groupai:state():all_AI_criminals()[unit:key()] then
+            local is_ok = not unit:character_damage():need_revive()
+            if is_ok then
+                if unit:movement():is_carrying() and shift() then
+                    if Network:is_server() then
+                        -- tell bot to drop bags
+                        unit:movement():drop_all_carry()
 
-        if is_teammate_ai and is_ok and Network:is_server() then
-            if unit:movement():is_carrying() and shift() then
-                -- tell bot to drop bags
-                unit:movement():drop_all_carry()
+                        return "down", false, prime_target
+                    else
+                        -- tell server to make bot drop bags
+                        -- TODO: sync a drop-request via BotsHaveFeelingsReborn.Sync
 
-                return "down", false, prime_target
-            end
+                        -- return "down", false, prime_target
+                    end
+                end
 
-            local movement = prime_target.unit:movement()
-            if managers.groupai:state():whisper_mode() and not movement:cool() then
-                -- tell bot to stay in stealth
-                local keep_position = mvector3.copy(movement:nav_tracker():field_position())
-                movement._ext_brain:set_objective({
-                    type = "stop",
-                    nav_seg = managers.navigation:get_nav_seg_from_pos(keep_position, true),
-                    pos = keep_position
-                })
-                movement:set_cool(true)
+                local movement = prime_target.unit:movement()
+                if managers.groupai:state():whisper_mode() then
+                    -- tell bot to stay, in stealth
+                    local cmd = movement:cool() and "come" or "stop"
+                    if Network:is_server() then
+                        prime_target.unit:brain()._current_logic.on_long_distance_interact(
+                            prime_target.unit:brain()._logic_data, self._unit)
+                    else
+                        managers.network:session():send_to_host("long_distance_interaction", prime_target.unit, 0,
+                            self._unit)
+                    end
 
-                return "stop", false, prime_target
+                    return cmd, false, prime_target
+                end
             end
         end
     end

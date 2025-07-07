@@ -1,3 +1,27 @@
+-- bots_can_follow_in_stealth networking
+
+Hooks:PostHook(TeamAIMovement, "check_visual_equipment", "BHFR_TeamAIMovement_check_visual_equipment",
+	function(self)
+		log("TeamAIMovement check_visual_equipment!")
+		log("is client: " .. tostring(Network:is_client()))
+		if Network:is_client() then
+			local name = managers.criminals:character_name_by_unit(self._unit)
+			if name then
+				local cached = BotsHaveFeelingsReborn.Sync.drop_in_cache[name] and
+					BotsHaveFeelingsReborn.Sync.drop_in_cache[name][BotsHaveFeelingsReborn.Sync.events.bot_cool]
+				log("cached for " .. name .. ": " .. tostring(cached))
+				if cached and (self:cool() ~= cached.state) then
+					self:set_cool(cached.state)
+					-- vanilla does not store to self._cool on clients, if its false
+					self._cool = cached.state
+				end
+			else
+				log("name isnil!")
+			end
+		end
+	end
+)
+
 -- bots_can_catch
 
 tweak_data.ai_carry = {
@@ -70,27 +94,6 @@ function TeamAIMovement:drop_all_carry()
 	self:modify_carry_weight(0, true)
 end
 
--- bots_secure_carried
-
-function TeamAIMovement:secure_all_carry()
-	if self:is_carrying() then
-		for _, unit in pairs(self._carry_units) do
-			if unit and alive(unit) then
-				local carry_id = unit:carry_data():carry_id()
-				local carry_tweak = tweak_data.carry[carry_id]
-				unit:carry_data():unlink()
-				if BotsHaveFeelingsReborn:GetConfigOption("bots_secure_carried") and (carry_tweak.loot_value or carry_tweak.loot_outlaw_value) then
-					managers.loot:server_secure_loot(carry_id, unit:carry_data():multiplier(),
-						false)
-				end
-				unit:set_slot(0)
-			end
-		end
-	end
-	self._carry_units = {}
-	self:modify_carry_weight(0, true)
-end
-
 function TeamAIMovement:modify_carry_weight(current, abs)
 	if current and abs then
 		self._carry_weight = current
@@ -118,4 +121,25 @@ function TeamAIMovement:modify_carry_weight(current, abs)
 			max = max
 		}, name)
 	end
+end
+
+-- bots_secure_carried
+
+function TeamAIMovement:secure_all_carry()
+	if self:is_carrying() then
+		for _, unit in pairs(self._carry_units) do
+			if unit and alive(unit) then
+				local carry_id = unit:carry_data():carry_id()
+				local carry_tweak = tweak_data.carry[carry_id]
+				unit:carry_data():unlink()
+				if BotsHaveFeelingsReborn:GetConfigOption("bots_secure_carried") and (carry_tweak.loot_value or carry_tweak.loot_outlaw_value) then
+					managers.loot:server_secure_loot(carry_id, unit:carry_data():multiplier(),
+						false)
+				end
+				unit:set_slot(0)
+			end
+		end
+	end
+	self._carry_units = {}
+	self:modify_carry_weight(0, true)
 end

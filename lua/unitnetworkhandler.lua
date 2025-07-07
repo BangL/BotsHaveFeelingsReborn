@@ -1,161 +1,27 @@
-if not BotsHaveFeelingsReborn.Sync then
-    BotsHaveFeelingsReborn.Sync = {
-        msg_id = "BHFR",
-        peers = { false, false, false, false },
-        events = {
-            handshake = "handshake",
-            bot_carry_weight = "bot_carry_weight",
-        },
-        drop_in_cache = {},
-    }
+-- bots_can_follow_in_stealth networking workaround
+-- proxy func without hard calling set_cool(false) too early
 
-    function BotsHaveFeelingsReborn.Sync.table_to_string(tbl)
-        return LuaNetworking:TableToString(tbl) or ""
-    end
+local long_distance_interaction_original = UnitNetworkHandler.long_distance_interaction
 
-    function BotsHaveFeelingsReborn.Sync.string_to_table(str)
-        local tbl = LuaNetworking:StringToTable(str) or ""
-
-        for k, v in pairs(tbl) do
-            tbl[k] = BotsHaveFeelingsReborn.Sync.to_original_type(v)
-        end
-
-        return tbl
-    end
-
-    function BotsHaveFeelingsReborn.Sync.to_original_type(s)
-        local v = s
-        if type(s) == "string" then
-            if s == "nil" then
-                v = nil
-            elseif s == "true" or s == "false" then
-                v = (s == "true")
-            else
-                v = tonumber(s) or s
-            end
-        end
-        return v
-    end
-
-    function BotsHaveFeelingsReborn.Sync:send_to_peer(peer_id, event, data)
-        if peer_id and peer_id ~= LuaNetworking:LocalPeerID() and event then
-            local tags = {
-                id = self.msg_id,
-                event = event
-            }
-
-            if type(data) == "table" then
-                data = self.table_to_string(data)
-                tags["table"] = true
-            end
-
-            LuaNetworking:SendToPeer(peer_id, self.table_to_string(tags), data or "")
+function UnitNetworkHandler:long_distance_interaction(target_unit, amount, aggressor_unit, ...)
+    if self._verify_gamestate(self._gamestate_filter.any_ingame) and
+        self._verify_character(target_unit) and
+        self._verify_character(aggressor_unit) then
+        local target_is_criminal = target_unit:in_slot(managers.slot:get_mask("criminals")) or
+            target_unit:in_slot(managers.slot:get_mask("harmless_criminals"))
+        local aggressor_is_criminal = aggressor_unit:in_slot(managers.slot:get_mask("criminals")) or
+            aggressor_unit:in_slot(managers.slot:get_mask("harmless_criminals"))
+        local brain = target_unit:brain()
+        if target_is_criminal and
+            aggressor_is_criminal and
+            brain and
+            brain.on_long_distance_interact and
+            brain._current_logic and
+            brain._logic_data then
+            brain._current_logic.on_long_distance_interact(brain._logic_data, aggressor_unit)
+            return
         end
     end
 
-    function BotsHaveFeelingsReborn.Sync:send_to_host(event, data)
-        self:send_to_peer(managers.network:session():server_peer():id(), event, data)
-    end
-
-    function BotsHaveFeelingsReborn.Sync:send_to_known_peers(event, data, drop_in_cache_key)
-        if (event ~= self.events.handshake) and drop_in_cache_key then
-            self.drop_in_cache[event] = self.drop_in_cache[event] or {}
-            self.drop_in_cache[event][drop_in_cache_key] = data
-        end
-        for peer_id, known in ipairs(self.peers) do
-            if known then
-                self:send_to_peer(peer_id, event, data)
-            end
-        end
-    end
-
-    function BotsHaveFeelingsReborn.Sync:clear_cache()
-        self.drop_in_cache = {}
-    end
-
-    function BotsHaveFeelingsReborn.Sync:receive(sender, tags, data)
-        sender = tonumber(sender)
-        if sender then
-            tags = self.string_to_table(tags)
-            if tags.id and tags.id == self.msg_id and not string.is_nil_or_empty(tags.event) then
-                if tags.table then
-                    data = self.string_to_table(data)
-                else
-                    data = self.to_original_type(data)
-                end
-                if sender and self.events[tags.event] and self[tags.event] then
-                    self[tags.event](self, sender, data)
-                end
-            end
-        end
-    end
-
-    function BotsHaveFeelingsReborn.Sync:handshake(peer_id, data)
-        if Network:is_server() then
-            log("[BHFR handshake] Client " .. tostring(peer_id) .. " is using BHFR.")
-            -- host handshake confirmation back to client
-            self:send_to_peer(peer_id, self.events.handshake)
-            self:handle_drop_in(peer_id)
-        else
-            log("[BHFR handshake] The host is using BHFR.")
-        end
-        self.peers[peer_id] = true
-    end
-
-    function BotsHaveFeelingsReborn.Sync:handle_drop_in(peer_id)
-        for event, cache in pairs(self.drop_in_cache) do
-            for _, data in pairs(cache) do
-                self:send_to_peer(peer_id, event, data)
-            end
-        end
-    end
-
-    function BotsHaveFeelingsReborn.Sync:reset_peer(peer_id)
-        if self.peers[peer_id] then
-            self.peers[peer_id] = false
-        end
-    end
-
-    function BotsHaveFeelingsReborn.Sync:bot_carry_weight(peer_id, data)
-        if data.name and data.current then
-            local unit = managers.criminals:character_unit_by_name(data.name)
-            if unit and unit:movement() and unit:movement().modify_carry_weight then
-                unit:movement():modify_carry_weight(data.current, true)
-            end
-        end
-    end
+    long_distance_interaction_original(self, target_unit, amount, aggressor_unit, ...)
 end
-
-Hooks:Add("BaseNetworkSessionOnLoadComplete", "BHFR_BaseNetworkSessionOnLoadComplete",
-    function(local_peer, id)
-        if BotsHaveFeelingsReborn.Sync and LuaNetworking:IsMultiplayer() and Network:is_client() then
-            -- client handshake request to host
-            BotsHaveFeelingsReborn.Sync:send_to_host(BotsHaveFeelingsReborn.Sync.events.handshake)
-        end
-    end
-)
-
-Hooks:Add("BaseNetworkSessionOnPeerRemoved", "BHFR_BaseNetworkSessionOnPeerRemoved",
-    function(peer, peer_id, reason)
-        if BotsHaveFeelingsReborn.Sync then
-            -- reset handshake
-            BotsHaveFeelingsReborn.Sync:reset_peer(peer_id)
-        end
-    end
-)
-
-Hooks:Add("NetworkReceivedData", "BHFR_NetworkReceivedData",
-    function(sender, tags, data)
-        if BotsHaveFeelingsReborn.Sync then
-            BotsHaveFeelingsReborn.Sync:receive(sender, tags, data)
-        end
-    end
-)
-
-Hooks:PostHook(CoreWorldCollection, "level_transition_cleanup", "BHFR_CoreWorldCollection_level_transition_cleanup",
-    function(self)
-        if BotsHaveFeelingsReborn.Sync then
-            BotsHaveFeelingsReborn.Sync:clear_cache()
-        end
-    end
-)
