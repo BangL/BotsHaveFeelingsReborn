@@ -84,9 +84,16 @@ function PlayerStandard:_get_long_distance_action(prime_target, char_table, inti
                 return "down", false, prime_target
             end
 
-            if managers.groupai:state():whisper_mode() and not prime_target.unit:movement():cool() then
+            local movement = prime_target.unit:movement()
+            if managers.groupai:state():whisper_mode() and not movement:cool() then
                 -- tell bot to stay in stealth
-                prime_target.unit:movement():set_cool(true)
+                local keep_position = mvector3.copy(movement:nav_tracker():field_position())
+                movement._ext_brain:set_objective({
+                    type = "stop",
+                    nav_seg = managers.navigation:get_nav_seg_from_pos(keep_position, true),
+                    pos = keep_position
+                })
+                movement:set_cool(true)
 
                 return "stop", false, prime_target
             end
@@ -107,7 +114,7 @@ function PlayerStandard:_start_action_intimidate(t, ...)
 
         if voice_type == "down" then
             interact_type = "cmd_down"
-            sound_name = "l02x_sin"
+            sound_name = "l02x_sin" -- FIXME no sound files for this :(
         elseif voice_type == "stop" then
             interact_type = "cmd_stop"
             queue_sound_suffix = "_wait"

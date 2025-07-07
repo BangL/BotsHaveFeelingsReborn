@@ -13,7 +13,9 @@ https://modworkshop.net/mod/12736
 
 - PORT?: Bots' targeting has been overhauled, prioritizing enemies based on distance and focusing on specials
 
-- PORT?: Forcing bots to mask up immediately when a loud sound is made, rather than waiting for the actual alarm
+- PORT?: Forcing bots to 'mask up' immediately when a loud sound is made, rather than waiting for the actual alarm
 
 - select bot weapons? select bot clothing?
-- 'keepers' feature? (tell bots to stay in place / defend a specific area)
+- 'keepers' features? (tell bots to stay in place / defend a specific area etc) [loud]
+- improve grenades somehow?
+- improve: bots properly secure loot (throw) ??

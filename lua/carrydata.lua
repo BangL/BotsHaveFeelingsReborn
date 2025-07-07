@@ -20,8 +20,7 @@ Hooks:PostHook(CarryData, "update", "BHFR_CarryData_update",
 			local _all_AI_criminals = managers.groupai:state():all_AI_criminals() or {}
 			for _, data in pairs(_all_AI_criminals) do
 				if data.unit and alive(data.unit) then
-					if data.unit:movement():cool() or
-						data.unit:movement():downed() or
+					if data.unit:movement():downed() or
 						data.unit:movement().vehicle_unit or
 						not data.unit:movement().add_carry_unit or
 						mvector3.distance(self._unit:position(), data.unit:position()) > tweak_data.ai_carry.throw_force then
