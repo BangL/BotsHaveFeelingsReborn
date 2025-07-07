@@ -32,10 +32,17 @@
                   script_path="lua/raidjobmanager.lua" />
             <post hook_id="lib/managers/hud/hudnamelabel"
                   script_path="lua/hudnamelabel.lua" />
+            <post hook_id="lib/managers/hud/hudteammateai"
+                  script_path="lua/hudteammateai.lua" />
             <post hook_id="lib/managers/hudmanagerpd2"
                   script_path="lua/hudmanagerpd2.lua" />
             <post hook_id="lib/units/vehicles/vehicledrivingext"
                   script_path="lua/vehicledrivingext.lua" />
+            <!-- bots can follow in stealth -->
+            <post hook_id="lib/units/beings/player/states/playerstandard"
+                  script_path="lua/playerstandard.lua" />
+            <post hook_id="lib/units/props/aiattentionobject"
+                  script_path="lua/aiattentionobject.lua" />
             <!-- aim -->
             <post hook_id="lib/managers/criminalsmanager"
                   script_path="lua/criminalsmanager.lua" />
@@ -59,8 +66,5 @@
             <!-- networking -->
             <post hook_id="lib/network/handlers/unitnetworkhandler"
                   script_path="lua/unitnetworkhandler.lua" />
-            <!-- debug -->
-            <!-- <post hook_id="lib/units/beings/player/states/playerstandard"
-                  script_path="lua/playerstandard.lua" /> -->
       </hooks>
 </mod>

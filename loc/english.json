@@ -1,36 +1,42 @@
 {
   "bhfr_title": "Bots Have Feelings Reborn",
 
-  "bhfr_double_bot_health": "double bot health",
+  "bhfr_double_bot_health": "Doubled health",
   "bhfr_double_bot_health_desc": "Doubles bot health. [requires re-entering camp from main menu]",
 
-  "bhfr_improve_bot_aim": "Improve bot aim",
+  "bhfr_improve_bot_aim": "Improved aim",
   "bhfr_improve_bot_aim_desc": "Improved aim, Reduced Spread, Increased reaction time. [requires re-entering camp from main menu]",
 
-  "bhfr_improve_bot_movement": "Improve bot movement (skip animations)",
+  "bhfr_improve_bot_movement": "Improved movement (skip animations)",
   "bhfr_improve_bot_movement_desc": "Skipping unnecessary animations etc. [requires re-entering camp from main menu]",
 
-  "bhfr_improve_bot_speed": "Improve bot movement (increase speed)",
+  "bhfr_improve_bot_speed": "Improved movement (increase speed)",
   "bhfr_improve_bot_speed_desc": "Bots always move at full speed.",
 
-  "bhfr_bots_give_human_player_xp": "Bot give human player XP",
+  "bhfr_bots_give_human_player_xp": "Human player XP",
   "bhfr_bots_give_human_player_xp_desc": "Bots count as humans at the xp screen.",
 
   "bhfr_bot_hurt_sound": "Hurt Sound",
   "bhfr_bot_hurt_sound_desc": "Bots cry out loud, at 10% health.",
 
+  "bhfr_bots_can_catch": "Catch and carry loot",
+  "bhfr_bots_can_catch_desc": "Bots can catch and carry gold, paintings etc.",
+
+  "bhfr_bots_secure_carried": "Secure carried loot",
+  "bhfr_bots_secure_carried_desc": "Loot, carried by bots, counts as secured at mission success.",
+
+  "bhfr_bots_can_follow_in_stealth": "Can follow in stealth",
+  "bhfr_bots_can_follow_in_stealth_desc": "Shout at bots in stealth to follow you. Shout again to wait. [for carry]",
+
+  "bhfr_bots_are_undetectable": "Undetectable in stealth",
+  "bhfr_bots_are_undetectable_desc": "Bots are undetectable in stealth. [for follow in stealth]",
+
   "bhfr_experimental": "Experimental",
-
-  "bhfr_bots_can_catch": "Bots can catch and carry loot",
-  "bhfr_bots_can_catch_desc": "Bots can catch and carry gold, paintings etc. [beta]",
-
-  "bhfr_bots_secure_carried": "Secure bot carried loot",
-  "bhfr_bots_secure_carried_desc": "Loot, carried by bots, counts as secured at mission success. [beta]",
 
   "bhfr_bots_no_unnecessary_revive": "No unnecessary revives",
   "bhfr_bots_no_unnecessary_revive_desc": "Bots stop reviving, when you do it. [and then instantly try again. use at your own risk.]",
 
-  "bhfr_bots_throw_grenades": "Bots throw grenades",
+  "bhfr_bots_throw_grenades": "Grenades",
   "bhfr_bots_throw_grenades_desc": "Bots throw grenades to enemies. [and teammates, and then they walk into it, like full retards. use a your own risk.]",
 
   "bhfr_reset": "Default options",

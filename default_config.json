@@ -5,8 +5,10 @@
   "improve_bot_speed": true,
   "bots_give_human_player_xp": true,
   "bot_hurt_sound": true,
-  "bots_can_catch": false,
-  "bots_secure_carried": false,
+  "bots_can_catch": true,
+  "bots_secure_carried": true,
+  "bots_can_follow_in_stealth": true,
+  "bots_are_undetectable": true,
   "bots_no_unnecessary_revive": false,
   "bots_throw_grenades": false
 }

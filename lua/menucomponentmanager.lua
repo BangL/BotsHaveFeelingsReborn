@@ -15,11 +15,14 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 	self:_MakeOptionToggle("improve_bot_speed")
 	self:_MakeOptionToggle("bots_give_human_player_xp")
 	self:_MakeOptionToggle("bot_hurt_sound")
-
-	self:_MakeSeparator("bhfr_experimental", true)
-
 	self:_MakeOptionToggle("bots_can_catch")
 	self:_MakeOptionToggle("bots_secure_carried")
+	self:_MakeOptionToggle("bots_can_follow_in_stealth")
+	self:_MakeOptionToggle("bots_are_undetectable")
+
+	self:_MakeSeparator()
+	self:_MakeSeparator("bhfr_experimental", true)
+
 	self:_MakeOptionToggle("bots_no_unnecessary_revive")
 	self:_MakeOptionToggle("bots_throw_grenades")
 
