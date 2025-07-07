@@ -2,7 +2,10 @@
 
 Hooks:PostHook(TeamAIMovement, "check_visual_equipment", "BHFR_TeamAIMovement_check_visual_equipment",
 	function(self)
-		if Network:is_client() then
+		if Network:is_client() and
+			BotsHaveFeelingsReborn.Sync and
+			BotsHaveFeelingsReborn.Sync:host_has_mod() and
+			managers.groupai:state():whisper_mode() then
 			local name = managers.criminals:character_name_by_unit(self._unit)
 			if name then
 				local cached = BotsHaveFeelingsReborn.Sync.drop_in_cache[name] and
