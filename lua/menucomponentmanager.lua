@@ -1,4 +1,4 @@
--- menu
+-- options menu
 
 BotsHaveFeelingsRebornMenu = BotsHaveFeelingsRebornMenu or class(BLTMenu)
 

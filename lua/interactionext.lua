@@ -1,4 +1,5 @@
 -- bots_no_unnecessary_revive
+--TODO: rework
 
 local _at_interact_start_original = ReviveInteractionExt._at_interact_start
 

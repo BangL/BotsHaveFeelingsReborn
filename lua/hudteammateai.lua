@@ -1,3 +1,5 @@
+-- bots_can_catch hud ai teammate gui panels
+
 Hooks:PostHook(HUDTeammateAI, "init", "BHFR_HUDTeammateAI_init",
     function(self, i, teammates_panel)
         self:_create_bot_carry_weight_panel()

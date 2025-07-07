@@ -1,3 +1,6 @@
+-- grenades
+--TODO: rework
+
 local mvec3_angle = mvector3.angle
 local mvec3_norm = mvector3.normalize
 local projectile_id = BlackMarketTweakData:get_index_from_projectile_id("d343")

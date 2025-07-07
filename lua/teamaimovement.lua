@@ -70,6 +70,8 @@ function TeamAIMovement:drop_all_carry()
 	self:modify_carry_weight(0, true)
 end
 
+-- bots_secure_carried
+
 function TeamAIMovement:secure_all_carry()
 	if self:is_carrying() then
 		for _, unit in pairs(self._carry_units) do

@@ -1,4 +1,4 @@
--- bots_can_catch
+-- bots_can_catch ui proxy func
 
 function HUDManager:set_bot_carry_weight(i, name_label_id, current, max)
     self._teammate_panels[i]:set_bot_carry_weight(current, max)

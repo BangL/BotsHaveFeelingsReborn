@@ -1,3 +1,5 @@
+-- bots_can_follow_in_stealth // bots_are_undetectable
+
 local get_attention_original = AIAttentionObject.get_attention
 
 function AIAttentionObject:get_attention(filter, min, max, team, ...)

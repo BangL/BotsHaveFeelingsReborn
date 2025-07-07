@@ -1,4 +1,4 @@
--- bots_can_catch
+-- bots_can_catch name labels above heads
 
 HUDNameLabel.WEIGHT_ICON = "weight_icon"
 

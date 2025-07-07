@@ -1,4 +1,4 @@
--- debug // bots_can_follow_in_stealth
+-- bots_can_carry // bots_can_follow_in_stealth shout interactions
 
 local _get_unit_long_distance_action_original = PlayerStandard._get_unit_long_distance_action
 
@@ -123,7 +123,7 @@ function PlayerStandard:_start_action_intimidate(t, ...)
         end
 
         if interact_type then
-            local criminal = managers.groupai:state():all_criminals()[prime_target.unit:key()]
+            local criminal = managers.groupai:state():all_char_criminals()[prime_target.unit:key()]
             if queue_sound_suffix and criminal then
                 local character
                 if criminal.ai then

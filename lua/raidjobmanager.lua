@@ -1,4 +1,4 @@
--- bots_can_catch
+-- bots_can_catch / bots_secure_carried
 
 local external_end_mission_original = RaidJobManager.external_end_mission
 

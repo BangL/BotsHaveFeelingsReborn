@@ -37,6 +37,8 @@ function CriminalsManager:init(...)
     init_original(self, ...)
 end
 
+-- bots_give_human_player_xp
+
 function CriminalsManager:get_num_player_criminals(...)
     if self._count_ai_as_humans then -- special case for RaidExperienceManager:calculate_exp_breakdown
         local num = 0
