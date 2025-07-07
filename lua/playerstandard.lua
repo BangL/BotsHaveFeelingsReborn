@@ -125,23 +125,30 @@ function PlayerStandard:_start_action_intimidate(t, ...)
 
         if interact_type then
             local criminal = managers.groupai:state():all_criminals()[prime_target.unit:key()]
-            if queue_sound_suffix and criminal --[[and criminal.ai]] then
-                local nationality = self:get_wwise_nationality_from_nationality(managers.network:session():local_peer()
-                    ._character)
-                local target_char = self:get_wwise_nationality_from_nationality(prime_target.unit:base()._tweak_table)
-
-                if target_char == nationality and nationality ~= "amer" then
-                    target_char = "amer"
-                elseif target_char == nationality and nationality == "amer" then
-                    target_char = "brit"
+            if queue_sound_suffix and criminal then
+                local character
+                if criminal.ai then
+                    character = prime_target.unit:base()._tweak_table
+                else
+                    character = prime_target.unit:network():peer()._character
                 end
+                if character then
+                    local target_char = self:get_wwise_nationality_from_nationality(character)
+                    local nationality = self:get_wwise_nationality_from_nationality(managers.network:session()
+                        :local_peer()._character)
+                    if target_char == nationality and nationality ~= "amer" then
+                        target_char = "amer"
+                    elseif target_char == nationality and nationality == "amer" then
+                        target_char = "brit"
+                    end
 
-                if nationality == "russian" then
-                    nationality = "rus"
+                    if nationality == "russian" then
+                        nationality = "rus"
+                    end
+
+                    sound_name = nationality .. "_call_" .. target_char
+                    queue_sound_name = "com_" .. nationality .. queue_sound_suffix
                 end
-
-                sound_name = nationality .. "_call_" .. target_char
-                queue_sound_name = "com_" .. nationality .. queue_sound_suffix
             end
 
             if sound_name then
