@@ -2,21 +2,16 @@
 
 Hooks:PostHook(TeamAIMovement, "check_visual_equipment", "BHFR_TeamAIMovement_check_visual_equipment",
 	function(self)
-		log("TeamAIMovement check_visual_equipment!")
-		log("is client: " .. tostring(Network:is_client()))
 		if Network:is_client() then
 			local name = managers.criminals:character_name_by_unit(self._unit)
 			if name then
 				local cached = BotsHaveFeelingsReborn.Sync.drop_in_cache[name] and
 					BotsHaveFeelingsReborn.Sync.drop_in_cache[name][BotsHaveFeelingsReborn.Sync.events.bot_cool]
-				log("cached for " .. name .. ": " .. tostring(cached))
 				if cached and (self:cool() ~= cached.state) then
 					self:set_cool(cached.state)
 					-- vanilla does not store to self._cool on clients, if its false
 					self._cool = cached.state
 				end
-			else
-				log("name isnil!")
 			end
 		end
 	end
