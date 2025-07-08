@@ -25,13 +25,14 @@ function TeamAILogicIdle.on_long_distance_interact(data, instigator)
                 else
                     movement:set_cool(false)
 
+                    local clbk_data = clone(data)
                     data.unit:brain():set_objective({
                         haste = "walk",
                         called = true,
                         follow_unit = instigator,
                         scan = true,
                         type = "follow",
-                        fail_clbk = callback(TeamAILogicIdle, TeamAILogicIdle, "clbk_follow_objective_failed", data),
+                        fail_clbk = callback(TeamAILogicIdle, TeamAILogicIdle, "clbk_follow_objective_failed", clbk_data),
                     })
 
                     return
@@ -44,7 +45,7 @@ function TeamAILogicIdle.on_long_distance_interact(data, instigator)
 end
 
 function TeamAILogicIdle.clbk_follow_objective_failed(data)
-    if managers.groupai:state():whisper_mode() and not data.unit:movement():cool() then
+    if data and data.unit and managers.groupai:state():whisper_mode() and not data.unit:movement():cool() then
         data.unit:movement():set_cool(true)
     end
 end
