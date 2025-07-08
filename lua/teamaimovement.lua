@@ -4,14 +4,19 @@ Hooks:PostHook(TeamAIMovement, "check_visual_equipment", "BHFR_TeamAIMovement_ch
 	function(self)
 		if Network:is_client() and
 			BotsHaveFeelingsReborn.Sync and
-			BotsHaveFeelingsReborn.Sync:host_has_mod() and
-			managers.groupai:state():whisper_mode() then
+			BotsHaveFeelingsReborn.Sync:host_has_mod() then
 			local name = managers.criminals:character_name_by_unit(self._unit)
 			if name then
-				local cached = BotsHaveFeelingsReborn.Sync.drop_in_cache[name] and
-					BotsHaveFeelingsReborn.Sync.drop_in_cache[name][BotsHaveFeelingsReborn.Sync.events.bot_cool]
-				if cached and (self:cool() ~= cached.state) then
-					self:set_cool(cached.state)
+				local cache = BotsHaveFeelingsReborn.Sync.drop_in_cache[name]
+				if cache then
+					local bot_cool_data = cache[BotsHaveFeelingsReborn.Sync.events.bot_cool]
+					if bot_cool_data and (self:cool() ~= bot_cool_data.state) then
+						self:set_cool(bot_cool_data.state)
+					end
+					local bot_carry_weight_data = cache[BotsHaveFeelingsReborn.Sync.events.bot_carry_weight]
+					if bot_carry_weight_data then
+						self:modify_carry_weight(bot_carry_weight_data.current, true)
+					end
 				end
 			end
 		end
@@ -21,6 +26,7 @@ Hooks:PostHook(TeamAIMovement, "check_visual_equipment", "BHFR_TeamAIMovement_ch
 function TeamAIMovement:_switch_to_not_cool(instant)
 	local inventory = self._unit:inventory()
 
+	-- use secondary weapon in stealth
 	local slot = managers.groupai:state():whisper_mode() and PlayerInventory.SLOT_1 or PlayerInventory.SLOT_2
 
 	if inventory:is_selection_available(slot) and inventory:equipped_selection() ~= slot then
@@ -28,7 +34,7 @@ function TeamAIMovement:_switch_to_not_cool(instant)
 	end
 
 	if not Network:is_server() then
-		self._cool = false
+		self._cool = false -- fix client not saving self._cool = false (host saves in _switch_to_not_cool_clbk_func)
 		return
 	end
 
@@ -118,7 +124,7 @@ function TeamAIMovement:drop_all_carry()
 	if self:is_carrying() then
 		for _, unit in pairs(self._carry_units) do
 			if unit and alive(unit) and unit:carry_data() then
-				unit:carry_data():unlink()
+				unit:carry_data():unlink(true)
 			end
 		end
 	end
@@ -151,7 +157,7 @@ function TeamAIMovement:modify_carry_weight(current, abs)
 			name = name,
 			current = self._carry_weight,
 			max = max
-		}, name)
+		})
 	end
 end
 
@@ -163,7 +169,7 @@ function TeamAIMovement:secure_all_carry()
 			if unit and alive(unit) then
 				local carry_id = unit:carry_data():carry_id()
 				local carry_tweak = tweak_data.carry[carry_id]
-				unit:carry_data():unlink()
+				unit:carry_data():unlink(true)
 				if BotsHaveFeelingsReborn:GetConfigOption("bots_secure_carried") and (carry_tweak.loot_value or carry_tweak.loot_outlaw_value) then
 					managers.loot:server_secure_loot(carry_id, unit:carry_data():multiplier(),
 						false)

@@ -61,10 +61,9 @@ if not BotsHaveFeelingsReborn.Sync then
         self:send_to_peer(managers.network:session():server_peer():id(), event, data)
     end
 
-    function BotsHaveFeelingsReborn.Sync:send_to_known_peers(event, data, cache_key)
-        if (event ~= self.events.handshake and event ~= event ~= self.events.rejected) and cache_key then
-            self.drop_in_cache[cache_key] = self.drop_in_cache[cache_key] or {}
-            self.drop_in_cache[cache_key][event] = data
+    function BotsHaveFeelingsReborn.Sync:send_to_known_peers(event, data)
+        if ((event ~= self.events.handshake) and (event ~= self.events.rejected)) then
+            self:cache(event, data)
         end
         for peer_id, known in ipairs(self.peers) do
             if known and peer_id ~= managers.network:session():local_peer():id() then
@@ -123,6 +122,11 @@ if not BotsHaveFeelingsReborn.Sync then
         end
     end
 
+    function BotsHaveFeelingsReborn.Sync:cache(event, data)
+        self.drop_in_cache[data.name] = self.drop_in_cache[data.name] or {}
+        self.drop_in_cache[data.name][event] = data
+    end
+
     -- server event handlers
 
     function BotsHaveFeelingsReborn.Sync:handshake(peer_id, data)
@@ -146,8 +150,13 @@ if not BotsHaveFeelingsReborn.Sync then
         end
         if data.name and data.current then
             local unit = managers.criminals:character_unit_by_name(data.name)
-            if unit and unit:movement() and unit:movement().modify_carry_weight then
-                unit:movement():modify_carry_weight(data.current, true)
+            if unit then
+                if unit:movement() and unit:movement().modify_carry_weight then
+                    unit:movement():modify_carry_weight(data.current, true)
+                end
+            else
+                -- unit was null, cache for TeamAIMovement
+                self:cache(self.events.bot_carry_weight, data)
             end
         end
     end
@@ -164,9 +173,8 @@ if not BotsHaveFeelingsReborn.Sync then
                     unit:movement():set_cool(data.state)
                 end
             else
-                -- unit was null, cache for TeamAIDamage
-                self.drop_in_cache[data.name] = self.drop_in_cache[data.name] or {}
-                self.drop_in_cache[data.name][self.events.bot_cool] = data
+                -- unit was null, cache for TeamAIMovement
+                self:cache(self.events.bot_cool, data)
             end
         end
     end

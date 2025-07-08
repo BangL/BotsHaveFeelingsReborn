@@ -8,7 +8,7 @@ Hooks:PostHook(TeamAIBrain, "on_cool_state_changed", "BHFR_TeamAIBrain_on_cool_s
                 BotsHaveFeelingsReborn.Sync:send_to_known_peers(BotsHaveFeelingsReborn.Sync.events.bot_cool, {
                     name = name,
                     state = state,
-                }, name)
+                })
             end
         end
     end
