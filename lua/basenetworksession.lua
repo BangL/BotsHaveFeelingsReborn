@@ -123,6 +123,10 @@ if not BotsHaveFeelingsReborn.Sync then
     end
 
     function BotsHaveFeelingsReborn.Sync:cache(event, data)
+        if type(data) ~= "table" or not data.name then
+            log("[BHFR Error] synced/cached data must be a table and contain a name field.")
+            return
+        end
         self.drop_in_cache[data.name] = self.drop_in_cache[data.name] or {}
         self.drop_in_cache[data.name][event] = data
     end
