@@ -11,6 +11,11 @@ if not BotsHaveFeelingsReborn.Sync then
             bot_cool = "bot_cool",
             drop_all_carry = "drop_all_carry",
         },
+        valid = {
+            server = 0,
+            client = 1,
+            both = 2,
+        },
         drop_in_cache = {},
     }
 
@@ -40,6 +45,30 @@ if not BotsHaveFeelingsReborn.Sync then
             end
         end
         return v
+    end
+
+    function BotsHaveFeelingsReborn.Sync:_validate(valid_on, valid_from, needs_name, peer_id, data)
+        if (valid_on == self.valid.server) and Network:is_client() then
+            self:send_to_peer(peer_id, self.events.rejected, "clients cannot handle this.")
+            return false
+        end
+        if (valid_on == self.valid.client) and Network:is_server() then
+            self:send_to_peer(peer_id, self.events.rejected, "the host cannot handle this.")
+            return false
+        end
+        if (valid_from == self.valid.server) and (peer_id ~= 1) then
+            self:send_to_peer(peer_id, self.events.rejected, "only the host is allowed to send this.")
+            return false
+        end
+        if (valid_from == self.valid.client) and (peer_id == 1) then
+            self:send_to_peer(peer_id, self.events.rejected, "only clients are allowed to send this.")
+            return false
+        end
+        if needs_name and ((not data) or (type(data) ~= "table") or (not data.name) or (data.name == "")) then
+            self:send_to_peer(peer_id, self.events.rejected, "data must be a table and contain a filled name field.")
+            return false
+        end
+        return true
     end
 
     function BotsHaveFeelingsReborn.Sync:send_to_peer(peer_id, event, data)
@@ -130,36 +159,6 @@ if not BotsHaveFeelingsReborn.Sync then
         end
         self.drop_in_cache[data.name] = self.drop_in_cache[data.name] or {}
         self.drop_in_cache[data.name][event] = data
-    end
-
-    BotsHaveFeelingsReborn.Sync.valid = {
-        server = 0,
-        client = 1,
-        both = 2,
-    }
-
-    function BotsHaveFeelingsReborn.Sync:_validate(valid_on, valid_from, needs_name, peer_id, data)
-        if (valid_on == self.valid.server) and Network:is_client() then
-            self:send_to_peer(peer_id, self.events.rejected, "clients cannot handle this.")
-            return false
-        end
-        if (valid_on == self.valid.client) and Network:is_server() then
-            self:send_to_peer(peer_id, self.events.rejected, "the host cannot handle this.")
-            return false
-        end
-        if (valid_from == self.valid.server) and (peer_id ~= 1) then
-            self:send_to_peer(peer_id, self.events.rejected, "only the host is allowed to send this.")
-            return false
-        end
-        if (valid_from == self.valid.client) and (peer_id == 1) then
-            self:send_to_peer(peer_id, self.events.rejected, "only clients are allowed to send this.")
-            return false
-        end
-        if needs_name and ((not data) or (type(data) ~= "table") or (not data.name) or (data.name == "")) then
-            self:send_to_peer(peer_id, self.events.rejected, "data must be a table and contain a filled name field.")
-            return false
-        end
-        return true
     end
 
     -- bidirectional event handlers
