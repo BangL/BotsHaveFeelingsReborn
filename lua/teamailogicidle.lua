@@ -9,40 +9,42 @@ function TeamAILogicIdle.on_long_distance_interact(data, instigator)
             local peer_id = instigator:network():peer():id()
             local movement = data.unit:movement()
 
-            if managers.groupai:state():whisper_mode() then
-                if BotsHaveFeelingsReborn.Sync:peer_has_mod(peer_id) and not movement:cool() then
-                    local keep_position = mvector3.copy(movement:nav_tracker():field_position())
+            if managers.groupai:state():whisper_mode() and BotsHaveFeelingsReborn.Sync:peer_has_mod(peer_id) then
+                if not movement:cool() then
                     movement:set_cool(true)
-                    -- create custom objective and return
+
+                    local keep_position = mvector3.copy(movement:nav_tracker():field_position())
                     data.unit:brain():set_objective({
-                        type = "stop",
+                        type = "defend_area",
                         nav_seg = managers.navigation:get_nav_seg_from_pos(keep_position, true),
                         pos = keep_position,
-                        -- followup_objective = { -- FIXME?
-                        --     action = {
-                        --         blocks = {
-                        --             action = -1,
-                        --             aim = -1,
-                        --             heavy_hurt = -1,
-                        --             hurt = -1,
-                        --             walk = -1,
-                        --         },
-                        --         body_part = 1,
-                        --         type = "act",
-                        --         variant = "crouch",
-                        --     },
-                        --     scan = true,
-                        --     type = "act",
-                        -- },
+                        scan = true,
                     })
+
                     return
                 else
                     movement:set_cool(false)
-                    -- don't return here, vanilla code will create type = follow objective for us (or even type = revive, if downed)
+
+                    data.unit:brain():set_objective({
+                        haste = "walk",
+                        called = true,
+                        follow_unit = instigator,
+                        scan = true,
+                        type = "follow",
+                        fail_clbk = callback(TeamAILogicIdle, TeamAILogicIdle, "clbk_follow_objective_failed", data),
+                    })
+
+                    return
                 end
             end
         end
     end
 
     on_long_distance_interact_original(data, instigator)
+end
+
+function TeamAILogicIdle.clbk_follow_objective_failed(data)
+    if managers.groupai:state():whisper_mode() and not data.unit:movement():cool() then
+        data.unit:movement():set_cool(true)
+    end
 end

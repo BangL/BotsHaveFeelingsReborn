@@ -12,13 +12,47 @@ Hooks:PostHook(TeamAIMovement, "check_visual_equipment", "BHFR_TeamAIMovement_ch
 					BotsHaveFeelingsReborn.Sync.drop_in_cache[name][BotsHaveFeelingsReborn.Sync.events.bot_cool]
 				if cached and (self:cool() ~= cached.state) then
 					self:set_cool(cached.state)
-					-- vanilla does not store to self._cool on clients, if its false
-					self._cool = cached.state
 				end
 			end
 		end
 	end
 )
+
+function TeamAIMovement:_switch_to_not_cool(instant)
+	local inventory = self._unit:inventory()
+
+	local slot = managers.groupai:state():whisper_mode() and PlayerInventory.SLOT_1 or PlayerInventory.SLOT_2
+
+	if inventory:is_selection_available(slot) and inventory:equipped_selection() ~= slot then
+		inventory:equip_selection(slot)
+	end
+
+	if not Network:is_server() then
+		self._cool = false
+		return
+	end
+
+	if self._heat_listener_clbk then
+		managers.groupai:state():remove_listener(self._heat_listener_clbk)
+
+		self._heat_listener_clbk = nil
+	end
+
+	if instant then
+		if self._switch_to_not_cool_clbk_id then
+			managers.enemy:remove_delayed_clbk(self._switch_to_not_cool_clbk_id)
+		end
+
+		self._switch_to_not_cool_clbk_id = "dummy"
+
+		self:_switch_to_not_cool_clbk_func()
+	elseif not self._switch_to_not_cool_clbk_id then
+		self._switch_to_not_cool_clbk_id = "switch_to_not_cool_clbk" .. tostring(self._unit:key())
+
+		managers.enemy:add_delayed_clbk(self._switch_to_not_cool_clbk_id,
+			callback(self, self, "_switch_to_not_cool_clbk_func"), TimerManager:game():time() + math.random() * 1 + 0.5)
+	end
+end
 
 -- bots_can_catch
 

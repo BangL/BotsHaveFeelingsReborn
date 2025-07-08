@@ -162,8 +162,6 @@ if not BotsHaveFeelingsReborn.Sync then
             if unit then
                 if unit:movement() and unit:movement().cool and (unit:movement():cool() ~= data.state) then
                     unit:movement():set_cool(data.state)
-                    -- vanilla does not store to self._cool on clients, if its false
-                    unit:movement()._cool = data.state
                 end
             else
                 -- unit was null, cache for TeamAIDamage
