@@ -6,6 +6,7 @@
   "bots_give_human_player_xp": true,
   "bot_hurt_sound": true,
   "bots_can_catch": true,
+  "bots_have_strong_back": true,
   "bots_secure_carried": true,
   "bots_can_follow_in_stealth": true,
   "bots_are_undetectable": true,

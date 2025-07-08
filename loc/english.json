@@ -22,6 +22,9 @@
   "bhfr_bots_can_catch": "Catch and carry loot",
   "bhfr_bots_can_catch_desc": "Bots can catch and carry gold, paintings etc.",
 
+  "bhfr_bots_have_strong_back": "Strong back",
+  "bhfr_bots_have_strong_back_desc": "Bots have +2 carry weight from strong back.",
+
   "bhfr_bots_secure_carried": "Secure carried loot",
   "bhfr_bots_secure_carried_desc": "Loot, carried by bots, counts as secured at mission success.",
 

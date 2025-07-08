@@ -113,7 +113,7 @@ end
 function TeamAIMovement:can_carry_weight(carry_id)
 	local carry_tweak = tweak_data.carry[carry_id]
 
-	return not carry_tweak.skip_exit_secure and (self:get_my_carry_weight_limit() >=
+	return (carry_tweak.loot_value or carry_tweak.loot_outlaw_value) and (self:get_my_carry_weight_limit() >=
 		(self:get_my_carry_weight() + (carry_tweak and carry_tweak.weight or tweak_data.carry.default_bag_weight)))
 end
 
@@ -122,9 +122,20 @@ function TeamAIMovement:get_my_carry_weight()
 end
 
 function TeamAIMovement:get_my_carry_weight_limit()
-	local nationality = managers.criminals:character_name_by_unit(self._unit) or "british"
-	local class_tweak_data = tweak_data.player:get_tweak_data_for_class(self.CLASS_MAP[nationality] or "assault")
-	return class_tweak_data.movement.carry.CARRY_WEIGHT_MAX or 5
+	local name = managers.criminals:character_name_by_unit(self._unit) or "british"
+	if Network:is_client() then
+		-- try get from cache if client
+		local cache = BotsHaveFeelingsReborn.Sync.drop_in_cache[name]
+		if cache then
+			local bot_carry_weight_data = cache[BotsHaveFeelingsReborn.Sync.events.bot_carry_weight]
+			if bot_carry_weight_data and bot_carry_weight_data.max then
+				return bot_carry_weight_data.max
+			end
+		end
+	end
+	local class_tweak_data = tweak_data.player:get_tweak_data_for_class(self.CLASS_MAP[name] or "assault")
+	return (class_tweak_data.movement.carry.CARRY_WEIGHT_MAX or 5) +
+		(BotsHaveFeelingsReborn:GetConfigOption("bots_have_strong_back") and 2 or 0)
 end
 
 function TeamAIMovement:drop_all_carry()
