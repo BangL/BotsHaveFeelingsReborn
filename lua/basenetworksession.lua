@@ -9,6 +9,7 @@ if not BotsHaveFeelingsReborn.Sync then
             rejected = "rejected",
             bot_carry_weight = "bot_carry_weight",
             bot_cool = "bot_cool",
+            drop_all_carry = "drop_all_carry",
         },
         drop_in_cache = {},
     }
@@ -131,9 +132,42 @@ if not BotsHaveFeelingsReborn.Sync then
         self.drop_in_cache[data.name][event] = data
     end
 
-    -- server event handlers
+    BotsHaveFeelingsReborn.Sync.valid = {
+        server = 0,
+        client = 1,
+        both = 2,
+    }
+
+    function BotsHaveFeelingsReborn.Sync:_validate(valid_on, valid_from, needs_name, peer_id, data)
+        if (valid_on == self.valid.server) and Network:is_client() then
+            self:send_to_peer(peer_id, self.events.rejected, "clients cannot handle this.")
+            return false
+        end
+        if (valid_on == self.valid.client) and Network:is_server() then
+            self:send_to_peer(peer_id, self.events.rejected, "the host cannot handle this.")
+            return false
+        end
+        if (valid_from == self.valid.server) and (peer_id ~= 1) then
+            self:send_to_peer(peer_id, self.events.rejected, "only the host is allowed to send this.")
+            return false
+        end
+        if (valid_from == self.valid.client) and (peer_id == 1) then
+            self:send_to_peer(peer_id, self.events.rejected, "only clients are allowed to send this.")
+            return false
+        end
+        if needs_name and ((not data) or (type(data) ~= "table") or (not data.name) or (data.name == "")) then
+            self:send_to_peer(peer_id, self.events.rejected, "data must be a table and contain a filled name field.")
+            return false
+        end
+        return true
+    end
+
+    -- bidirectional event handlers
 
     function BotsHaveFeelingsReborn.Sync:handshake(peer_id, data)
+        if not self:_validate(self.valid.both, self.valid.both, false, peer_id, data) then
+            return
+        end
         if Network:is_server() then
             log("[BHFR handshake] Client " .. tostring(peer_id) .. " is using BHFR.")
             -- host handshake confirmation back to client
@@ -145,11 +179,25 @@ if not BotsHaveFeelingsReborn.Sync then
         self.peers[peer_id] = true
     end
 
-    -- client event handlers
+    -- client -> server event handlers
+
+    function BotsHaveFeelingsReborn.Sync:drop_all_carry(peer_id, data)
+        if not self:_validate(self.valid.server, self.valid.client, true, peer_id, data) then
+            return
+        end
+        if data.name then
+            local unit = managers.criminals:character_unit_by_name(data.name)
+            if unit and unit:movement() and unit:movement():is_carrying() then
+                -- tell bot to drop bags
+                unit:movement():drop_all_carry()
+            end
+        end
+    end
+
+    -- server -> client event handlers
 
     function BotsHaveFeelingsReborn.Sync:bot_carry_weight(peer_id, data)
-        if peer_id ~= 1 then -- we only listen to the server!
-            self:send_to_peer(peer_id, self.events.rejected, "only the host is allowed to send this.")
+        if not self:_validate(self.valid.client, self.valid.server, true, peer_id, data) then
             return
         end
         if data.name and data.current then
@@ -166,8 +214,7 @@ if not BotsHaveFeelingsReborn.Sync then
     end
 
     function BotsHaveFeelingsReborn.Sync:bot_cool(peer_id, data)
-        if peer_id ~= 1 then -- we only listen to the server!
-            self:send_to_peer(peer_id, self.events.rejected, "only the host is allowed to send this.")
+        if not self:_validate(self.valid.client, self.valid.server, true, peer_id, data) then
             return
         end
         if data.name and data.state ~= nil then

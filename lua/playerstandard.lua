@@ -72,17 +72,15 @@ function PlayerStandard:_get_long_distance_action(prime_target, char_table, inti
             local is_ok = not unit:character_damage():need_revive()
             if is_ok then
                 if unit:movement():is_carrying() and shift() then
+                    -- tell bot to drop bags
                     if Network:is_server() then
-                        -- tell bot to drop bags
                         unit:movement():drop_all_carry()
-
-                        return "down", false, prime_target
                     else
-                        -- tell server to make bot drop bags
-                        -- TODO: sync a drop-request via BotsHaveFeelingsReborn.Sync
-
-                        -- return "down", false, prime_target
+                        BotsHaveFeelingsReborn.Sync:send_to_host(BotsHaveFeelingsReborn.Sync.events.drop_all_carry, {
+                            name = prime_target.unit:base()._tweak_table
+                        })
                     end
+                    return "down", false, prime_target
                 end
 
                 local movement = prime_target.unit:movement()

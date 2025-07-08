@@ -75,8 +75,14 @@ TeamAIMovement.CLASS_MAP = {
 }
 
 function TeamAIMovement:is_carrying()
-	if self._carry_units and not table.empty(self._carry_units) then
-		return true
+	if Network:is_server() then
+		if self._carry_units and not table.empty(self._carry_units) then
+			return true
+		end
+	else
+		if self:get_my_carry_weight() > 0 then
+			return true
+		end
 	end
 
 	return false
@@ -94,12 +100,13 @@ function TeamAIMovement:add_carry_unit(unit)
 	return false
 end
 
-function TeamAIMovement:remove_carry_unit(unit)
-	if self:is_carrying() then
+function TeamAIMovement:remove_carry_unit(unit, silent)
+	if Network:is_server() and self:is_carrying() then
 		local carry_id = unit:carry_data():carry_id()
 		local carry_tweak = tweak_data.carry[carry_id]
 		self._carry_units[unit:id()] = nil
-		self:modify_carry_weight(-(carry_tweak and carry_tweak.weight or tweak_data.carry.default_bag_weight))
+		self:modify_carry_weight(-(carry_tweak and carry_tweak.weight or tweak_data.carry.default_bag_weight), false,
+			silent)
 	end
 end
 
@@ -121,7 +128,7 @@ function TeamAIMovement:get_my_carry_weight_limit()
 end
 
 function TeamAIMovement:drop_all_carry()
-	if self:is_carrying() then
+	if Network:is_server() and self:is_carrying() then
 		for _, unit in pairs(self._carry_units) do
 			if unit and alive(unit) and unit:carry_data() then
 				unit:carry_data():unlink(true)
@@ -132,13 +139,11 @@ function TeamAIMovement:drop_all_carry()
 	self:modify_carry_weight(0, true)
 end
 
-function TeamAIMovement:modify_carry_weight(current, abs)
-	if current and abs then
-		self._carry_weight = current
-	elseif self:is_carrying() and current and not abs then
-		self._carry_weight = math.round(self:get_my_carry_weight() + current)
-	else
-		self._carry_weight = 0
+function TeamAIMovement:modify_carry_weight(amount, abs, silent)
+	if abs then
+		self._carry_weight = amount or 0
+	elseif amount and amount ~= 0 then
+		self._carry_weight = math.round(self:get_my_carry_weight() + amount)
 	end
 
 	local max = self:get_my_carry_weight_limit()
@@ -150,7 +155,7 @@ function TeamAIMovement:modify_carry_weight(current, abs)
 			self._carry_weight, max)
 	end
 
-	if Network:is_server() and BotsHaveFeelingsReborn.Sync then
+	if Network:is_server() and BotsHaveFeelingsReborn.Sync and not silent then
 		-- update clients
 		local name = managers.criminals:character_name_by_unit(self._unit)
 		BotsHaveFeelingsReborn.Sync:send_to_known_peers(BotsHaveFeelingsReborn.Sync.events.bot_carry_weight, {

@@ -59,9 +59,7 @@ Hooks:PostHook(CarryData, "link_to", "BHFR_CarryData_link_to",
 local unlink_original = CarryData.unlink
 function CarryData:unlink(silent) -- added silent param for less network spam when bot dropping/securing all bags
 	unlink_original(self)
-	if not silent then
-		self:on_carry_unlinked()
-	end
+	self:on_carry_unlinked(silent)
 end
 
 Hooks:PostHook(CarryData, "on_pickup", "BHFR_CarryData_on_pickup",
@@ -70,9 +68,9 @@ Hooks:PostHook(CarryData, "on_pickup", "BHFR_CarryData_on_pickup",
 	end
 )
 
-function CarryData:on_carry_unlinked()
+function CarryData:on_carry_unlinked(silent)
 	if self._linked_to and self._linked_to:movement() and self._linked_to:movement().remove_carry_unit then
-		self._linked_to:movement():remove_carry_unit(self._unit)
+		self._linked_to:movement():remove_carry_unit(self._unit, silent)
 	end
 	self._linked_to = nil
 end
