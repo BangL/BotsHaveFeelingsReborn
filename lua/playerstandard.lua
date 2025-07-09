@@ -85,7 +85,7 @@ function PlayerStandard:_get_long_distance_action(prime_target, char_table, inti
 
                 local movement = prime_target.unit:movement()
                 if managers.groupai:state():whisper_mode() then
-                    -- tell bot to stay, in stealth
+                    -- tell bot to come/stay, in stealth
                     local cmd = movement:cool() and "come" or "stop"
                     if Network:is_server() then
                         prime_target.unit:brain()._current_logic.on_long_distance_interact(

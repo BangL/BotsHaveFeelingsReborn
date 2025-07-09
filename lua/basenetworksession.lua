@@ -186,7 +186,7 @@ if not BotsHaveFeelingsReborn.Sync then
         end
         if data.name then
             local unit = managers.criminals:character_unit_by_name(data.name)
-            if unit and unit:movement() and unit:movement():is_carrying() then
+            if unit and unit:movement() and unit:movement().is_carrying and unit:movement():is_carrying() then
                 -- tell bot to drop bags
                 unit:movement():drop_all_carry()
             end
@@ -203,7 +203,7 @@ if not BotsHaveFeelingsReborn.Sync then
             local unit = managers.criminals:character_unit_by_name(data.name)
             if unit then
                 if unit:movement() and unit:movement().modify_carry_weight then
-                    unit:movement():modify_carry_weight(data.current, true)
+                    unit:movement():modify_carry_weight(data.current, data.max, true)
                 end
             else
                 -- unit was null, cache for TeamAIMovement

@@ -20,8 +20,6 @@ function TeamAILogicIdle.on_long_distance_interact(data, instigator)
                         pos = keep_position,
                         scan = true,
                     })
-
-                    return
                 else
                     movement:set_cool(false)
 
@@ -34,9 +32,8 @@ function TeamAILogicIdle.on_long_distance_interact(data, instigator)
                         type = "follow",
                         fail_clbk = callback(TeamAILogicIdle, TeamAILogicIdle, "clbk_follow_objective_failed", clbk_data),
                     })
-
-                    return
                 end
+                return
             end
         end
     end

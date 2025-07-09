@@ -15,7 +15,7 @@ Hooks:PostHook(TeamAIMovement, "check_visual_equipment", "BHFR_TeamAIMovement_ch
 					end
 					local bot_carry_weight_data = cache[BotsHaveFeelingsReborn.Sync.events.bot_carry_weight]
 					if bot_carry_weight_data then
-						self:modify_carry_weight(bot_carry_weight_data.current, true)
+						self:modify_carry_weight(bot_carry_weight_data.current, bot_carry_weight_data.max, true)
 					end
 				end
 			end
@@ -105,7 +105,7 @@ function TeamAIMovement:remove_carry_unit(unit, silent)
 		local carry_id = unit:carry_data():carry_id()
 		local carry_tweak = tweak_data.carry[carry_id]
 		self._carry_units[unit:id()] = nil
-		self:modify_carry_weight(-(carry_tweak and carry_tweak.weight or tweak_data.carry.default_bag_weight), false,
+		self:modify_carry_weight(-(carry_tweak and carry_tweak.weight or tweak_data.carry.default_bag_weight), nil, false,
 			silent)
 	end
 end
@@ -123,23 +123,16 @@ end
 
 function TeamAIMovement:get_my_carry_weight_limit()
 	local name = managers.criminals:character_name_by_unit(self._unit) or "british"
-	if Network:is_client() then
-		-- try get from cache if client
-		local cache = BotsHaveFeelingsReborn.Sync.drop_in_cache[name]
-		if cache then
-			local bot_carry_weight_data = cache[BotsHaveFeelingsReborn.Sync.events.bot_carry_weight]
-			if bot_carry_weight_data and bot_carry_weight_data.max then
-				return bot_carry_weight_data.max
-			end
-		end
-	end
 	local class_tweak_data = tweak_data.player:get_tweak_data_for_class(self.CLASS_MAP[name] or "assault")
 	return (class_tweak_data.movement.carry.CARRY_WEIGHT_MAX or 5) +
 		(BotsHaveFeelingsReborn:GetConfigOption("bots_have_strong_back") and 2 or 0)
 end
 
 function TeamAIMovement:drop_all_carry()
-	if Network:is_server() and self:is_carrying() then
+	if not Network:is_server() then
+		return
+	end
+	if self:is_carrying() then
 		for _, unit in pairs(self._carry_units) do
 			if unit and alive(unit) and unit:carry_data() then
 				unit:carry_data():unlink(true)
@@ -147,17 +140,17 @@ function TeamAIMovement:drop_all_carry()
 		end
 	end
 	self._carry_units = {}
-	self:modify_carry_weight(0, true)
+	self:reset_carry_weight()
 end
 
-function TeamAIMovement:modify_carry_weight(amount, abs, silent)
+function TeamAIMovement:modify_carry_weight(amount, max, abs, silent)
 	if abs then
 		self._carry_weight = amount or 0
 	elseif amount and amount ~= 0 then
 		self._carry_weight = math.round(self:get_my_carry_weight() + amount)
 	end
 
-	local max = self:get_my_carry_weight_limit()
+	max = max or self:get_my_carry_weight_limit()
 
 	local unit_data = self._unit:unit_data()
 	if unit_data and managers.hud and unit_data.teammate_panel_id and unit_data.name_label_id then
@@ -177,9 +170,16 @@ function TeamAIMovement:modify_carry_weight(amount, abs, silent)
 	end
 end
 
+function TeamAIMovement:reset_carry_weight()
+	self:modify_carry_weight(nil, nil, true)
+end
+
 -- bots_secure_carried
 
 function TeamAIMovement:secure_all_carry()
+	if not Network:is_server() then
+		return
+	end
 	if self:is_carrying() then
 		for _, unit in pairs(self._carry_units) do
 			if unit and alive(unit) then
@@ -195,5 +195,5 @@ function TeamAIMovement:secure_all_carry()
 		end
 	end
 	self._carry_units = {}
-	self:modify_carry_weight(0, true)
+	self:reset_carry_weight()
 end
