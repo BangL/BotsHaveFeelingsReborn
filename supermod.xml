@@ -2,7 +2,8 @@
       description="Some slight improvements for the team AI."
       author="Takku, BangL"
       contact="https://steamcommunity.com/id/BangL"
-      version="0.5.1"
+      version="0.6"
+      priority="-1"
       min_sblt_version="1.2.9"
       color="60 60 60">
       <updates>
@@ -39,17 +40,15 @@
                   script_path="lua/hudnamelabel.lua" />
             <post hook_id="lib/managers/hud/hudteammateai"
                   script_path="lua/hudteammateai.lua" />
-            <!-- bots can follow in stealth -->
+            <!-- bots shout cmds -->
             <post hook_id="lib/units/beings/player/states/playerstandard"
                   script_path="lua/playerstandard.lua" />
             <post hook_id="lib/units/props/aiattentionobject"
                   script_path="lua/aiattentionobject.lua" />
-            <post hook_id="lib/units/player_team/teamaibrain"
-                  script_path="lua/teamaibrain.lua" />
-            <post hook_id="lib/units/player_team/logics/teamailogicidle"
-                  script_path="lua/teamailogicidle.lua" />
             <post hook_id="lib/network/handlers/unitnetworkhandler"
                   script_path="lua/unitnetworkhandler.lua" />
+            <post hook_id="lib/tweak_data/interactiontweakdata"
+                  script_path="lua/interactiontweakdata.lua" />
             <!-- aim -->
             <post hook_id="lib/managers/criminalsmanager"
                   script_path="lua/criminalsmanager.lua" />

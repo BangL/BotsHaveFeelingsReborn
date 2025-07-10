@@ -28,11 +28,26 @@
   "bhfr_bots_secure_carried": "Secure carried loot",
   "bhfr_bots_secure_carried_desc": "Loot, carried by bots, counts as secured at mission success.",
 
-  "bhfr_bots_can_follow_in_stealth": "Can follow in stealth",
-  "bhfr_bots_can_follow_in_stealth_desc": "Shout at bots in stealth to follow you. Shout again to wait. [for carry]",
+  "bhfr_shift_f_for_drop_all_carry": "Shift+$BTN_INTERACT to drop all carry",
+  "bhfr_shift_f_for_drop_all_carry_desc": "Enable drop all carry interaction for you. works as host and when host has bot carrying enabled.",
+
+  "bhfr_bots_can_follow_in_stealth": "Can shout at bots in stealth",
+  "bhfr_bots_can_follow_in_stealth_desc": "Players can shout follow/wait at bots in stealth. (comm wheel follow/help/wait, or also $BTN_INTERACT if mod installed)",
 
   "bhfr_bots_are_undetectable": "Undetectable in stealth",
-  "bhfr_bots_are_undetectable_desc": "Bots are undetectable in stealth. [for follow in stealth]",
+  "bhfr_bots_are_undetectable_desc": "Bots are undetectable in stealth. Carried items on their backs still are! [for follow in stealth]",
+
+  "bhfr_toggle_follow_wait_f_shouts_stealth": "Toggle long dist. interaction in stealth",
+  "bhfr_toggle_follow_wait_f_shouts_stealth_desc": "Toggle between follow/wait when quick shouting, not using the comm wheel. (in stealth)",
+
+  "bhfr_bots_can_wait_when_loud": "Can shout at bots to wait when loud",
+  "bhfr_bots_can_wait_when_loud_desc": "Players can shout 'wait' at bots when loud. (comm wheel follow/help/wait, or also $BTN_INTERACT if mod installed and toggle enabled)",
+
+  "bhfr_toggle_follow_wait_f_shouts_loud": "Toggle long dist. interaction when loud",
+  "bhfr_toggle_follow_wait_f_shouts_loud_desc": "Toggle between follow/wait when quick shouting. $BTN_INTERACT (when loud)",
+
+  "bhfr_send_comm_wheel_like_chat_messages": "Comm-wheel-like chat messages",
+  "bhfr_send_comm_wheel_like_chat_messages_desc": "Send chat messages when quick shouting follow/wait, as if the comm wheel was used.",
 
   "bhfr_experimental": "Experimental",
 

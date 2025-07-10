@@ -1,7 +1,15 @@
 
-https://modworkshop.net/mod/12736
+- ADD: sync bot weapon selection to known peers
+- ADD: add bot weapon selection options
+- ADD: add defense icon for defend_area objective
+- ADD: waypoint controls
 
 - FIX: Bots will no longer attempt to revive teammates who are already being revived
+- IMPROVE: bots properly secure loot (throw) ??
+- IMPROVE: rework grenades?
+
+---
+https://modworkshop.net/mod/12736
 
 - PORT?: Bots can melee enemies, knocking them down and dealing half of their health in damage ?
 
@@ -14,8 +22,3 @@ https://modworkshop.net/mod/12736
 - PORT?: Bots' targeting has been overhauled, prioritizing enemies based on distance and focusing on specials
 
 - PORT?: Forcing bots to 'mask up' immediately when a loud sound is made, rather than waiting for the actual alarm
-
-- select bot weapons? select bot clothing?
-- 'keepers' features? (tell bots to stay in place / defend a specific area etc) [loud]
-- improve grenades somehow?
-- improve: bots properly secure loot (throw) ??

@@ -8,7 +8,7 @@ function CriminalsManager:init(...)
         local gang_weapon = tweak_data.character.presets.weapon.gang_member
         if gang_weapon then
             for _, v in pairs(gang_weapon) do
-                if (#v.FALLOFF == 2) and not (v.FALLOFF[1].dmg_mul == 7.5 and v.FALLOFF[2].dmg_mul == 7.5) then -- skip if 'competent bots' already did its job here
+                if (#v.FALLOFF == 2) and not ((v.FALLOFF[1].dmg_mul == 7.5) and (v.FALLOFF[2].dmg_mul == 7.5)) then -- skip if 'competent bots' already did its job here
                     v.focus_delay = 0
                     v.aim_delay = { 0, 0 }
                     v.range = tweak_data.character.presets.weapon.sniper.ger_kar98_npc.range

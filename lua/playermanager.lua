@@ -11,9 +11,11 @@ function PlayerManager:server_drop_carry(carry_id, carry_multiplier, position, r
 		if carry_unit
 			and alive(carry_unit)
 			and carry_unit:carry_data()
-			and tweak_data.carry
-			and not tweak_data.carry[carry_unit:carry_data():carry_id()].is_corpse then
-			carry_unit:carry_data():start_bot_carry_catch()
+			and tweak_data.carry then
+			local carry_tweak = tweak_data.carry[carry_unit:carry_data():carry_id()]
+			if carry_tweak.loot_value or carry_tweak.loot_outlaw_value then
+				carry_unit:carry_data():start_bot_carry_catch()
+			end
 		end
 	end
 

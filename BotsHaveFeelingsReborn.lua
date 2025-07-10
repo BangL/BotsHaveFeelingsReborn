@@ -19,7 +19,7 @@ function BotsHaveFeelingsReborn:LoadConfig()
     if file then
         local config = json.decode(file:read("*all"))
         file:close()
-        if config and type(config) == "table" then
+        if config and (type(config) == "table") then
             for k, v in pairs(config) do
                 self._config[k] = v
             end

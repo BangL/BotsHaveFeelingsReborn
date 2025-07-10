@@ -7,7 +7,7 @@ function RaidJobManager:external_end_mission(restart_camp, is_failed, ...)
         local _all_AI_criminals = managers.groupai:state():all_AI_criminals() or {}
         for _, data in pairs(_all_AI_criminals) do
             if data.unit and alive(data.unit) and data.unit:movement() then
-                data.unit:movement():secure_all_carry()
+                data.unit:movement():secure_all_carry() -- checks for bots_secure_carried and just deletes, if disabled. no need to check here.
             end
         end
     end

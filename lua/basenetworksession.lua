@@ -8,7 +8,7 @@ if not BotsHaveFeelingsReborn.Sync then
             handshake = "handshake",
             rejected = "rejected",
             bot_carry_weight = "bot_carry_weight",
-            bot_cool = "bot_cool",
+            bot_bhfr_mode = "bot_bhfr_mode",
             drop_all_carry = "drop_all_carry",
         },
         valid = {
@@ -17,6 +17,8 @@ if not BotsHaveFeelingsReborn.Sync then
             both = 2,
         },
         drop_in_cache = {},
+        settings_cache = {},
+        protocol_version = 2
     }
 
     function BotsHaveFeelingsReborn.Sync.table_to_string(tbl)
@@ -24,7 +26,7 @@ if not BotsHaveFeelingsReborn.Sync then
     end
 
     function BotsHaveFeelingsReborn.Sync.string_to_table(str)
-        local tbl = LuaNetworking:StringToTable(str) or ""
+        local tbl = LuaNetworking:StringToTable(str) or {}
 
         for k, v in pairs(tbl) do
             tbl[k] = BotsHaveFeelingsReborn.Sync.to_original_type(v)
@@ -38,7 +40,7 @@ if not BotsHaveFeelingsReborn.Sync then
         if type(s) == "string" then
             if s == "nil" then
                 v = nil
-            elseif s == "true" or s == "false" then
+            elseif (s == "true") or (s == "false") then
                 v = (s == "true")
             else
                 v = tonumber(s) or s
@@ -72,7 +74,7 @@ if not BotsHaveFeelingsReborn.Sync then
     end
 
     function BotsHaveFeelingsReborn.Sync:send_to_peer(peer_id, event, data)
-        if peer_id and peer_id ~= LuaNetworking:LocalPeerID() and event then
+        if peer_id and (peer_id ~= LuaNetworking:LocalPeerID()) and event then
             local tags = {
                 id = self.msg_id,
                 event = event
@@ -80,9 +82,7 @@ if not BotsHaveFeelingsReborn.Sync then
 
             if type(data) == "table" then
                 data = self.table_to_string(data)
-                tags["table"] = true
             end
-
             LuaNetworking:SendToPeer(peer_id, self.table_to_string(tags), data or "")
         end
     end
@@ -92,11 +92,11 @@ if not BotsHaveFeelingsReborn.Sync then
     end
 
     function BotsHaveFeelingsReborn.Sync:send_to_known_peers(event, data)
-        if ((event ~= self.events.handshake) and (event ~= self.events.rejected)) then
+        if (event ~= self.events.handshake) and (event ~= self.events.rejected) then
             self:cache(event, data)
         end
         for peer_id, known in ipairs(self.peers) do
-            if known and peer_id ~= managers.network:session():local_peer():id() then
+            if known and (peer_id ~= managers.network:session():local_peer():id()) then
                 self:send_to_peer(peer_id, event, data)
             end
         end
@@ -112,7 +112,7 @@ if not BotsHaveFeelingsReborn.Sync then
         return self:peer_has_mod(1)
     end
 
-    function BotsHaveFeelingsReborn.Sync:clear_cache()
+    function BotsHaveFeelingsReborn.Sync:clear_drop_in_cache()
         self.drop_in_cache = {}
     end
 
@@ -137,12 +137,8 @@ if not BotsHaveFeelingsReborn.Sync then
         sender = tonumber(sender)
         if sender then
             tags = self.string_to_table(tags)
-            if tags.id and tags.id == self.msg_id and not string.is_nil_or_empty(tags.event) then
-                if tags.table then
-                    data = self.string_to_table(data)
-                else
-                    data = self.to_original_type(data)
-                end
+            if tags.id and (tags.id == self.msg_id) and not string.is_nil_or_empty(tags.event) then
+                data = self.string_to_table(data)
                 if self.events[tags.event] and self[tags.event] then
                     self[tags.event](self, sender, data)
                 elseif tags.event ~= self.events.rejected then
@@ -153,12 +149,17 @@ if not BotsHaveFeelingsReborn.Sync then
     end
 
     function BotsHaveFeelingsReborn.Sync:cache(event, data)
-        if type(data) ~= "table" or not data.name then
+        if (type(data) ~= "table") or (not data.name) then
             log("[BHFR Error] synced/cached data must be a table and contain a name field.")
             return
         end
         self.drop_in_cache[data.name] = self.drop_in_cache[data.name] or {}
         self.drop_in_cache[data.name][event] = data
+    end
+
+    function BotsHaveFeelingsReborn.Sync:GetConfigOption(name)
+        return (Network:is_server() or (BotsHaveFeelingsReborn.Sync:host_has_mod() and self.settings_cache[name]))
+            and BotsHaveFeelingsReborn:GetConfigOption(name)
     end
 
     -- bidirectional event handlers
@@ -167,13 +168,23 @@ if not BotsHaveFeelingsReborn.Sync then
         if not self:_validate(self.valid.both, self.valid.both, false, peer_id, data) then
             return
         end
+
+        if tostring(data.version) ~= tostring(self.protocol_version) then
+            log("[BHFR handshake] received handshake, but wrong protocol version. skipping. local version: " ..
+                tostring(self.protocol_version) .. ", remote version: " .. tostring(data.version))
+            return
+        end
+
         if Network:is_server() then
-            log("[BHFR handshake] Client " .. tostring(peer_id) .. " is using BHFR.")
+            log("[BHFR handshake] Client " .. tostring(peer_id) .. " is using compatible BHFR version.")
             -- host handshake confirmation back to client
-            self:send_to_peer(peer_id, self.events.handshake)
-            -- self:handle_drop_in(peer_id) -- not here! here is way too early!! see BHFR_BaseNetworkSession_on_peer_sync_complete
+            self:send_to_peer(peer_id, self.events.handshake, {
+                version = self.protocol_version,
+                bots_can_follow_in_stealth = BotsHaveFeelingsReborn:GetConfigOption("bots_can_follow_in_stealth")
+            })
         else
-            log("[BHFR handshake] The host is using BHFR.")
+            log("[BHFR handshake] The host is using compatible BHFR version.")
+            self.settings_cache = data
         end
         self.peers[peer_id] = true
     end
@@ -212,19 +223,19 @@ if not BotsHaveFeelingsReborn.Sync then
         end
     end
 
-    function BotsHaveFeelingsReborn.Sync:bot_cool(peer_id, data)
+    function BotsHaveFeelingsReborn.Sync:bot_bhfr_mode(peer_id, data)
         if not self:_validate(self.valid.client, self.valid.server, true, peer_id, data) then
             return
         end
-        if data.name and data.state ~= nil then
+        if data.name and data.mode then
             local unit = managers.criminals:character_unit_by_name(data.name)
             if unit then
-                if unit:movement() and unit:movement().cool and (unit:movement():cool() ~= data.state) then
-                    unit:movement():set_cool(data.state)
+                if unit:movement() and unit:movement().set_bhfr_mode then
+                    unit:movement():set_bhfr_mode(data.mode, data.following)
                 end
             else
                 -- unit was null, cache for TeamAIMovement
-                self:cache(self.events.bot_cool, data)
+                self:cache(self.events.bot_bhfr_mode, data)
             end
         end
     end
@@ -234,7 +245,8 @@ Hooks:Add("BaseNetworkSessionOnLoadComplete", "BHFR_BaseNetworkSessionOnLoadComp
     function(local_peer, id)
         if BotsHaveFeelingsReborn.Sync and LuaNetworking:IsMultiplayer() and Network:is_client() then
             -- client handshake request to host
-            BotsHaveFeelingsReborn.Sync:send_to_host(BotsHaveFeelingsReborn.Sync.events.handshake)
+            BotsHaveFeelingsReborn.Sync:send_to_host(BotsHaveFeelingsReborn.Sync.events.handshake,
+                { version = BotsHaveFeelingsReborn.Sync.protocol_version })
         end
     end
 )

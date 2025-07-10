@@ -13,15 +13,40 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 	self:_MakeOptionToggle("improve_bot_aim")
 	self:_MakeOptionToggle("improve_bot_movement")
 	self:_MakeOptionToggle("improve_bot_speed")
+
+	self:_MakeSeparator()
+
 	self:_MakeOptionToggle("bots_give_human_player_xp")
+
+	self:_MakeSeparator()
+
 	self:_MakeOptionToggle("bot_hurt_sound")
+
+	self:_MakeSeparator()
+
 	self:_MakeOptionToggle("bots_can_catch")
 	self:_MakeOptionToggle("bots_have_strong_back")
 	self:_MakeOptionToggle("bots_secure_carried")
+	self:_MakeOptionToggle("shift_f_for_drop_all_carry")
+
+	self:_MakeSeparator()
+
 	self:_MakeOptionToggle("bots_can_follow_in_stealth")
+	self:_MakeOptionToggle("toggle_follow_wait_f_shouts_stealth")
 	self:_MakeOptionToggle("bots_are_undetectable")
 
 	self:_MakeSeparator()
+
+	self:_MakeOptionToggle("bots_can_wait_when_loud")
+	self:_MakeOptionToggle("toggle_follow_wait_f_shouts_loud")
+
+	self:_MakeSeparator()
+
+	self:_MakeOptionToggle("send_comm_wheel_like_chat_messages")
+
+	self:_MakeSeparator()
+	self:_MakeSeparator()
+
 	self:_MakeSeparator("bhfr_experimental", true)
 
 	self:_MakeOptionToggle("bots_no_unnecessary_revive")
@@ -59,10 +84,16 @@ end
 
 function BotsHaveFeelingsRebornMenu:_MakeOptionToggle(option)
 	local id = "bhfr_" .. option
+	local btn_interact = managers.localization:btn_macro("interact", true) or
+		managers.localization:get_default_macro("BTN_INTERACT")
 	self:Toggle({
 		name = id,
-		text = id,
-		desc = id .. "_desc",
+		text = managers.localization:text(id, { BTN_INTERACT = btn_interact }),
+		localize = false,
+		localized = false,
+		desc = managers.localization:text(id .. "_desc", { BTN_INTERACT = btn_interact }),
+		localize_desc = false,
+		localized_desc = false,
 		value = BotsHaveFeelingsReborn:GetConfigOption(option),
 		callback = callback(self, self, "OnOptionChanged", option),
 	})

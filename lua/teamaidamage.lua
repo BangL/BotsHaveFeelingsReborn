@@ -63,3 +63,9 @@ function TeamAIDamage:friendly_fire_hit(...)
         friendly_fire_hit_original(self, ...)
     end
 end
+
+-- enable crouch for stealth follow and defend area
+
+function TeamAIDamage:set_crouch_move(state)
+    self._char_tweak.crouch_move = state
+end
