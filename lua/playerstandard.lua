@@ -99,18 +99,18 @@ function PlayerStandard:_get_long_distance_action(prime_target, char_table, inti
                     result = "down"
                 elseif whisper_mode and BotsHaveFeelingsReborn:GetConfigOption("bots_can_follow_in_stealth") then
                     if BotsHaveFeelingsReborn:GetConfigOption("toggle_follow_wait_f_shouts_stealth") and following_me then
-                        -- tell bot to wait
+                        -- tell bot to wait in stealth
                         result = "stop"
                     else
-                        -- tell bot to follow/revive (in stealth)
+                        -- tell bot to follow in stealth
                         result = "come"
                     end
                 elseif (not whisper_mode) and BotsHaveFeelingsReborn:GetConfigOption("toggle_follow_wait_f_shouts_loud") and following_me then
-                    -- tell bot to wait
+                    -- tell bot to wait in loud
                     result = "stop"
                 end
 
-                if result then
+                if result and (result ~= "revive") then
                     return result, false, prime_target
                 end
             end
@@ -127,7 +127,7 @@ function PlayerStandard:_start_action_intimidate(t, ...)
         local interact_type, sound_name, queue_sound_name, queue_sound_suffix
 
         if voice_type == "revive" then
-            interact_type = "cmd_come"
+            interact_type = "cmd_get_up"
             queue_sound_suffix = "_help"
         elseif voice_type == "down" then
             interact_type = "cmd_down" -- FIXME no animation for this :(
@@ -188,7 +188,9 @@ function PlayerStandard:_start_action_intimidate(t, ...)
                     managers.groupai:state():handle_bot_shout(voice_type, self._unit, prime_target.unit)
                 end
 
-                return true
+                if voice_type ~= "revive" then
+                    return
+                end
             end
         end
 
