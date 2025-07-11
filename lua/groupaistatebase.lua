@@ -95,11 +95,13 @@ function GroupAIStateBase:handle_bot_shout(cmd, caller, bot)
 	if not Network:is_server() then
 		return
 	end
-	local movement = bot:movement()
-	if (bot:anim_data() and not bot:anim_data().forced) and
-		(bot:brain() and bot:brain()._logic_data and
-			not (bot:brain()._logic_data.objective and (bot:brain()._logic_data.objective.type == "revive"))) then
+	if bot:anim_data() and bot:anim_data().forced then
+		log("[BHFR] warning: bot shout received but skipped! reason: bot unit is busy performing a forced animation.")
+	elseif bot:brain() and bot:brain()._logic_data and bot:brain()._logic_data.objective and (bot:brain()._logic_data.objective.type == "revive") then
+		log("[BHFR] warning: bot shout received but skipped! reason: bot unit is busy reviving someone.")
+	else
 		local whisper_mode = managers.groupai:state():whisper_mode()
+		local movement = bot:movement()
 		if table.contains({ "follow_me", "follow", "assistance", "help", "revive", "come" }, cmd) then
 			if not whisper_mode then
 				-- follow / revive (loud)
@@ -116,10 +118,8 @@ function GroupAIStateBase:handle_bot_shout(cmd, caller, bot)
 		elseif cmd == "down" then
 			-- from drop_all_bags shout. already handled by PlayerStandard:_get_long_distance_action, ignore here
 		else
-			log("[BHFR] debug info: received unknown bot cmd: " .. tostring(cmd))
+			log("[BHFR] debug info: received unimplemented bot shout: " .. tostring(cmd))
 		end
-	else
-		log("[BHFR] warning: bot shout received but skipped! reason: bot unit is busy.")
 	end
 end
 
