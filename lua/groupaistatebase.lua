@@ -100,7 +100,7 @@ function GroupAIStateBase:handle_bot_shout(cmd, caller, bot)
 		(bot:brain() and bot:brain()._logic_data and
 			not (bot:brain()._logic_data.objective and (bot:brain()._logic_data.objective.type == "revive"))) then
 		local whisper_mode = managers.groupai:state():whisper_mode()
-		if table.contains({ "follow_me", "follow", "assistance", "help", "come" }, cmd) then
+		if table.contains({ "follow_me", "follow", "assistance", "help", "revive", "come" }, cmd) then
 			if not whisper_mode then
 				-- follow / revive (loud)
 				movement:set_bhfr_mode(TeamAIMovement.bhfr_modes.vanilla, caller)

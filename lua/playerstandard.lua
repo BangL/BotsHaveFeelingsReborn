@@ -86,7 +86,7 @@ function PlayerStandard:_get_long_distance_action(prime_target, char_table, inti
 
                 if not is_caller_ok then
                     -- tell bot to revive
-                    result = "help"
+                    result = "revive"
                 elseif movement:is_carrying() and shift() and BotsHaveFeelingsReborn:GetConfigOption("shift_f_for_drop_all_carry") then
                     -- tell bot to drop bags
                     if Network:is_server() then
@@ -126,7 +126,7 @@ function PlayerStandard:_start_action_intimidate(t, ...)
         local voice_type, _, prime_target = self:_get_unit_long_distance_action(true, true, true, false, true)
         local interact_type, sound_name, queue_sound_name, queue_sound_suffix
 
-        if voice_type == "help" then
+        if voice_type == "revive" then
             interact_type = "cmd_come"
             queue_sound_suffix = "_help"
         elseif voice_type == "down" then
