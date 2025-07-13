@@ -142,21 +142,25 @@ local teleport_team_ai_original = GroupAIStateBase.teleport_team_ai
 function GroupAIStateBase:teleport_team_ai(...)
 	if Network:is_server() and BotsHaveFeelingsReborn:GetConfigOption("bots_can_wait_when_loud") then
 		local distance_treshold = tweak_data.criminals.loud_teleport_distance_treshold
+		local all_criminals = managers.criminals:ai_criminals()
+		local all_peers = managers.network:session():all_peers()
 
-		for _, char_data in pairs(managers.criminals:ai_criminals()) do
+		for _, char_data in pairs(all_criminals) do
 			local unit = char_data.unit
 			local min_distance = -1
 			local target_unit
 
 			if alive(unit) and (unit:movement():bhfr_mode() ~= TeamAIMovement.bhfr_modes.defend_area) then -- added check here
-				for _, peer in pairs(managers.network:session():all_peers()) do
-					if alive(peer._unit) then
-						local player_pos = peer._unit:position()
+				for _, peer in pairs(all_peers) do
+					local peer_unit = peer:unit()
+
+					if alive(peer_unit) then
+						local player_pos = peer_unit:position()
 						local distance = mvector3.distance_sq(unit:position(), player_pos)
 
 						if min_distance < 0 or distance < min_distance then
 							min_distance = distance
-							target_unit = peer._unit
+							target_unit = peer_unit
 						end
 					end
 				end
