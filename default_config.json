@@ -21,6 +21,7 @@
   "toggle_follow_wait_f_shouts_loud": true,
 
   "send_comm_wheel_like_chat_messages": true,
+  "announce_player_uses_mod": true,
 
   "bots_no_unnecessary_revive": false,
   "bots_throw_grenades": false

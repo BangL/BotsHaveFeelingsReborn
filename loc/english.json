@@ -49,6 +49,10 @@
   "bhfr_send_comm_wheel_like_chat_messages": "Comm-wheel-like chat messages",
   "bhfr_send_comm_wheel_like_chat_messages_desc": "Send chat messages when quick shouting follow/wait, as if the comm wheel was used.",
 
+  "bhfr_announce_player_uses_mod": "Announce players using the mod",
+  "bhfr_announce_player_uses_mod_desc": "Announce in chat when other players use the mod. (only visible for you)",
+  "bhfr_player_uses_mod": "$PLAYER is using BotsHaveFeelingsReborn.",
+
   "bhfr_experimental": "Experimental",
 
   "bhfr_bots_no_unnecessary_revive": "No unnecessary revives",

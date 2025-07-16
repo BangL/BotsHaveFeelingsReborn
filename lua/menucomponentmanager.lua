@@ -43,6 +43,7 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 	self:_MakeSeparator()
 
 	self:_MakeOptionToggle("send_comm_wheel_like_chat_messages")
+	self:_MakeOptionToggle("announce_player_uses_mod")
 
 	self:_MakeSeparator()
 	self:_MakeSeparator()

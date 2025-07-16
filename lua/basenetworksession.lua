@@ -74,7 +74,7 @@ if not BotsHaveFeelingsReborn.Sync then
             self:send_to_peer(peer_id, self.events.rejected, "data must be a table and contain a filled name field.")
             return false
         end
-        return true
+        return managers.network:session():peer(peer_id)
     end
 
     function BotsHaveFeelingsReborn.Sync:send_to_peer(peer_id, event, data)
@@ -169,7 +169,8 @@ if not BotsHaveFeelingsReborn.Sync then
     -- bidirectional event handlers
 
     function BotsHaveFeelingsReborn.Sync:handshake(peer_id, data)
-        if not self:_validate(self.valid.both, self.valid.both, false, peer_id, data) then
+        local peer = self:_validate(self.valid.both, self.valid.both, false, peer_id, data)
+        if not peer then
             return
         end
 
@@ -189,6 +190,11 @@ if not BotsHaveFeelingsReborn.Sync then
             self:send_to_peer(peer_id, self.events.handshake, host_data)
         else
             log("[BHFR handshake] The host is using compatible BHFR version.")
+            if BotsHaveFeelingsReborn:GetConfigOption("announce_player_uses_mod") then
+                managers.chat:feed_system_message(ChatManager.GAME, managers.localization:text("bhfr_player_uses_mod", {
+                    PLAYER = peer:name(),
+                }))
+            end
             self.settings_cache = data
         end
         self.peers[peer_id] = true
