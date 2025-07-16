@@ -18,7 +18,11 @@ if not BotsHaveFeelingsReborn.Sync then
         },
         drop_in_cache = {},
         settings_cache = {},
-        protocol_version = 2
+        protocol_version = 2,
+        synced_settings = {
+            "bots_can_follow_in_stealth",
+            "double_bot_health"
+        },
     }
 
     function BotsHaveFeelingsReborn.Sync.table_to_string(tbl)
@@ -157,9 +161,9 @@ if not BotsHaveFeelingsReborn.Sync then
         self.drop_in_cache[data.name][event] = data
     end
 
-    function BotsHaveFeelingsReborn.Sync:GetConfigOption(name)
+    function BotsHaveFeelingsReborn.Sync:GetConfigOption(name, host_only)
         return (Network:is_server() or (BotsHaveFeelingsReborn.Sync:host_has_mod() and self.settings_cache[name]))
-            and BotsHaveFeelingsReborn:GetConfigOption(name)
+            and (host_only or BotsHaveFeelingsReborn:GetConfigOption(name))
     end
 
     -- bidirectional event handlers
@@ -177,11 +181,12 @@ if not BotsHaveFeelingsReborn.Sync then
 
         if Network:is_server() then
             log("[BHFR handshake] Client " .. tostring(peer_id) .. " is using compatible BHFR version.")
-            -- host handshake confirmation back to client
-            self:send_to_peer(peer_id, self.events.handshake, {
-                version = self.protocol_version,
-                bots_can_follow_in_stealth = BotsHaveFeelingsReborn:GetConfigOption("bots_can_follow_in_stealth")
-            })
+            -- host handshake confirmation back to client, including server protocol version and synced settings
+            local host_data = { version = self.protocol_version }
+            for _, option_id in ipairs(self.synced_settings) do
+                host_data[option_id] = BotsHaveFeelingsReborn:GetConfigOption(option_id)
+            end
+            self:send_to_peer(peer_id, self.events.handshake, host_data)
         else
             log("[BHFR handshake] The host is using compatible BHFR version.")
             self.settings_cache = data
