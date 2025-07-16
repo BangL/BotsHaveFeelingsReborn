@@ -1,40 +1,40 @@
 {
   "bhfr_title": "Bots Have Feelings Reborn",
 
-  "bhfr_double_bot_health": "Doubled health",
+  "bhfr_double_bot_health": "Doubled bot health",
   "bhfr_double_bot_health_desc": "Doubles bot health. [requires re-entering camp from main menu]",
 
-  "bhfr_improve_bot_aim": "Improved aim",
+  "bhfr_improve_bot_aim": "Improved bot aim",
   "bhfr_improve_bot_aim_desc": "Improved aim, Reduced Spread, Increased reaction time. [requires re-entering camp from main menu]",
 
-  "bhfr_improve_bot_movement": "Improved movement (skip animations)",
+  "bhfr_improve_bot_movement": "Improved bot movement (skip animations)",
   "bhfr_improve_bot_movement_desc": "Skipping unnecessary animations etc. [requires re-entering camp from main menu]",
 
-  "bhfr_improve_bot_speed": "Improved movement (increase speed)",
+  "bhfr_improve_bot_speed": "Improved bot movement (increase speed)",
   "bhfr_improve_bot_speed_desc": "Bots always move at full speed.",
 
   "bhfr_bots_give_human_player_xp": "Human player XP",
   "bhfr_bots_give_human_player_xp_desc": "Bots count as humans at the xp screen.",
 
-  "bhfr_bot_hurt_sound": "Hurt Sound",
+  "bhfr_bot_hurt_sound": "Bot hurt sound",
   "bhfr_bot_hurt_sound_desc": "Bots cry out loud, at 10% health.",
 
-  "bhfr_bots_can_catch": "Catch and carry loot",
+  "bhfr_bots_can_catch": "Bots catch and carry loot",
   "bhfr_bots_can_catch_desc": "Bots can catch and carry gold, paintings etc.",
 
-  "bhfr_bots_have_strong_back": "Strong back",
+  "bhfr_bots_have_strong_back": "Bots have strong back",
   "bhfr_bots_have_strong_back_desc": "Bots have +2 carry weight from strong back.",
 
   "bhfr_bots_secure_carried": "Secure carried loot",
   "bhfr_bots_secure_carried_desc": "Loot, carried by bots, counts as secured at mission success.",
 
-  "bhfr_shift_f_for_drop_all_carry": "Shift+$BTN_INTERACT to drop all carry",
+  "bhfr_shift_f_for_drop_all_carry": "Shift+$BTN_INTERACT to make bot drop all carry",
   "bhfr_shift_f_for_drop_all_carry_desc": "Enable drop all carry interaction for you. works as host and when host has bot carrying enabled.",
 
   "bhfr_bots_can_follow_in_stealth": "Can shout at bots in stealth",
   "bhfr_bots_can_follow_in_stealth_desc": "Players can shout follow/wait at bots in stealth. (comm wheel follow/help/wait, or also $BTN_INTERACT if mod installed)",
 
-  "bhfr_bots_are_undetectable": "Undetectable in stealth",
+  "bhfr_bots_are_undetectable": "Undetectable bots in stealth",
   "bhfr_bots_are_undetectable_desc": "Bots are undetectable in stealth. Carried items on their backs still are! [for follow in stealth]",
 
   "bhfr_toggle_follow_wait_f_shouts_stealth": "Toggle long dist. interaction in stealth",
