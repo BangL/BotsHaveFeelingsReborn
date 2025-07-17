@@ -17,7 +17,7 @@
   "bhfr_bots_give_human_player_xp_desc": "Bots count as humans at the xp screen.",
 
   "bhfr_bot_hurt_sound": "Bot hurt sound",
-  "bhfr_bot_hurt_sound_desc": "Bots cry out loud, at 10% health.",
+  "bhfr_bot_hurt_sound_desc": "Bots cry out loud, at 20% health.",
 
   "bhfr_bots_can_catch": "Bots catch and carry loot",
   "bhfr_bots_can_catch_desc": "Bots can catch and carry gold, paintings etc.",
