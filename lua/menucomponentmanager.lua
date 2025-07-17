@@ -142,7 +142,8 @@ Hooks:Add("MenuComponentManagerInitialize", "BHFR_MenuComponentManagerInitialize
 		RaidMenuHelper:CreateMenu({
 			name = "bhfr_options",
 			name_id = "bhfr_title",
-			inject_menu = "blt_options",
+			inject_list = "blt_options",
+			icon = "waypoint_special_escape",
 			class = BotsHaveFeelingsRebornMenu
 		})
 	end
