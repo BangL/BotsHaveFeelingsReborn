@@ -95,6 +95,9 @@ function GroupAIStateBase:handle_bot_shout(cmd, caller, bot)
 	if not Network:is_server() then
 		return
 	end
+	if not self:all_AI_criminals()[bot:key()] then
+		return
+	end
 	if bot:anim_data() and bot:anim_data().forced then
 		log("[BHFR] warning: bot shout received but skipped! reason: bot unit is busy performing a forced animation.")
 	elseif bot:brain() and bot:brain()._logic_data and bot:brain()._logic_data.objective and (bot:brain()._logic_data.objective.type == "revive") then
