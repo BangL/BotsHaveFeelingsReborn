@@ -121,6 +121,9 @@ if not BotsHaveFeelingsReborn.Sync then
     end
 
     function BotsHaveFeelingsReborn.Sync:handle_drop_in(peer_id)
+        if not self:peer_has_mod(peer_id) then
+            return
+        end
         for bot_name, cache in pairs(self.drop_in_cache) do
             local bot_data = managers.criminals:character_data_by_name(bot_name)
             if bot_data and bot_data.ai then
