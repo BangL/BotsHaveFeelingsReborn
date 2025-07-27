@@ -9,6 +9,8 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 
 	self:_MakeSeparator()
 
+	self:AutoBindNamedControlsBegin()
+
 	self:_MakeOptionToggle("double_bot_health")
 	self:_MakeOptionToggle("improve_bot_aim")
 	self:_MakeOptionToggle("improve_bot_movement")
@@ -54,6 +56,7 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 	self:_MakeOptionToggle("bots_throw_grenades")
 
 	self:_MakeResetButton()
+	self:AutoBindNamedControlsEnd()
 end
 
 function BotsHaveFeelingsRebornMenu:_MakeHeader()
@@ -97,6 +100,7 @@ function BotsHaveFeelingsRebornMenu:_MakeOptionToggle(option)
 		localized_desc = false,
 		value = BotsHaveFeelingsReborn:GetConfigOption(option),
 		callback = callback(self, self, "OnOptionChanged", option),
+		auto_select_on_hover = true
 	})
 end
 
@@ -111,11 +115,7 @@ function BotsHaveFeelingsRebornMenu:Reset(value, item)
 		managers.localization:text("bhfr_reset"),
 		managers.localization:text("bhfr_reset_confirm"),
 		{
-			[1] = {
-				text = managers.localization:text("dialog_no"),
-				is_cancel_button = true,
-			},
-			[2] = {
+			{
 				text = managers.localization:text("dialog_yes"),
 				callback = function()
 					-- reset config
@@ -125,6 +125,10 @@ function BotsHaveFeelingsRebornMenu:Reset(value, item)
 					self._something_changed = false
 					self:ReloadMenu()
 				end,
+			},
+			{
+				text = managers.localization:text("dialog_no"),
+				is_cancel_button = true,
 			},
 		},
 		true
