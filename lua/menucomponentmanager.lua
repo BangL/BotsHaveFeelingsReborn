@@ -79,6 +79,7 @@ function BotsHaveFeelingsRebornMenu:_MakeResetButton()
 		ignore_align = true,
 		y = 832,
 		x = 1472,
+		auto_select_on_hover = true
 	})
 end
 
