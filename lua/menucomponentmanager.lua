@@ -55,8 +55,14 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 	self:_MakeOptionToggle("bots_no_unnecessary_revive")
 	self:_MakeOptionToggle("bots_throw_grenades")
 
-	self:_MakeResetButton()
+	self._reset_btn = self:_MakeResetButton()
 	self:AutoBindNamedControlsEnd()
+end
+
+function BotsHaveFeelingsRebornMenu:_additional_active_controls()
+	return {
+		self._reset_btn
+	}
 end
 
 function BotsHaveFeelingsRebornMenu:_MakeHeader()
@@ -71,7 +77,7 @@ function BotsHaveFeelingsRebornMenu:_MakeHeader()
 end
 
 function BotsHaveFeelingsRebornMenu:_MakeResetButton()
-	self:LongRoundedButton2({
+	return self:LongRoundedButton2({
 		name = "bhfr_reset",
 		text = "bhfr_reset",
 		localize = true,
