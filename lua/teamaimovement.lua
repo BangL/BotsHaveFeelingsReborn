@@ -112,7 +112,7 @@ function TeamAIMovement:set_bhfr_mode(mode, caller)
 		brain:set_objective(self:get_bhfr_objective_follow(caller))
 	end
 
-	BotsHaveFeelingsReborn.Sync:send_to_known_peers(BotsHaveFeelingsReborn.Sync.events.bot_bhfr_mode, {
+	BotsHaveFeelingsReborn.Sync:send_to_peers(false, BotsHaveFeelingsReborn.Sync.events.bot_bhfr_mode, {
 		name = self._unit:base()._tweak_table,
 		mode = mode,
 		following = following
@@ -295,7 +295,7 @@ function TeamAIMovement:modify_carry_weight(amount, max, abs, silent)
 
 	if Network:is_server() and BotsHaveFeelingsReborn.Sync and not silent then
 		-- update clients
-		BotsHaveFeelingsReborn.Sync:send_to_known_peers(BotsHaveFeelingsReborn.Sync.events.bot_carry_weight, {
+		BotsHaveFeelingsReborn.Sync:send_to_peers(false, BotsHaveFeelingsReborn.Sync.events.bot_carry_weight, {
 			name = self._unit:base()._tweak_table,
 			current = self._carry_weight,
 			max = max

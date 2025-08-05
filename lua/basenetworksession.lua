@@ -95,12 +95,12 @@ if not BotsHaveFeelingsReborn.Sync then
         self:send_to_peer(managers.network:session():server_peer():id(), event, data)
     end
 
-    function BotsHaveFeelingsReborn.Sync:send_to_known_peers(event, data)
+    function BotsHaveFeelingsReborn.Sync:send_to_peers(all, event, data)
         if (event ~= self.events.handshake) and (event ~= self.events.rejected) then
             self:cache(event, data)
         end
         for peer_id, known in ipairs(self.peers) do
-            if known and (peer_id ~= managers.network:session():local_peer():id()) then
+            if (all or known) and (peer_id ~= managers.network:session():local_peer():id()) then
                 self:send_to_peer(peer_id, event, data)
             end
         end
@@ -177,6 +177,8 @@ if not BotsHaveFeelingsReborn.Sync then
             return
         end
 
+        local peer_is_host = peer_id == 1
+
         if tostring(data.version) ~= tostring(self.protocol_version) then
             log("[BHFR handshake] received handshake, but wrong protocol version. skipping. local version: " ..
                 tostring(self.protocol_version) .. ", remote version: " .. tostring(data.version))
@@ -191,15 +193,19 @@ if not BotsHaveFeelingsReborn.Sync then
                 host_data[option_id] = BotsHaveFeelingsReborn:GetConfigOption(option_id)
             end
             self:send_to_peer(peer_id, self.events.handshake, host_data)
-        else
+        elseif peer_is_host then
             log("[BHFR handshake] The host is using compatible BHFR version.")
-            if BotsHaveFeelingsReborn:GetConfigOption("announce_player_uses_mod") then
-                managers.chat:feed_system_message(ChatManager.GAME, managers.localization:text("bhfr_player_uses_mod", {
-                    PLAYER = peer:name(),
-                }))
-            end
             self.settings_cache = data
+        else
+            log("[BHFR handshake] Client " .. tostring(peer_id) .. " is using compatible BHFR version.")
         end
+
+        if BotsHaveFeelingsReborn:GetConfigOption("announce_player_uses_mod") then
+            managers.chat:feed_system_message(ChatManager.GAME, managers.localization:text("bhfr_player_uses_mod", {
+                PLAYER = peer:name(),
+            }))
+        end
+
         self.peers[peer_id] = true
     end
 
@@ -258,8 +264,8 @@ end
 Hooks:Add("BaseNetworkSessionOnLoadComplete", "BHFR_BaseNetworkSessionOnLoadComplete",
     function(local_peer, id)
         if BotsHaveFeelingsReborn.Sync and LuaNetworking:IsMultiplayer() and Network:is_client() then
-            -- client handshake request to host
-            BotsHaveFeelingsReborn.Sync:send_to_host(BotsHaveFeelingsReborn.Sync.events.handshake,
+            -- client handshake request to all clients
+            BotsHaveFeelingsReborn.Sync:send_to_peers(true, BotsHaveFeelingsReborn.Sync.events.handshake,
                 { version = BotsHaveFeelingsReborn.Sync.protocol_version })
         end
     end
