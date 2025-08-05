@@ -18,7 +18,7 @@ if not BotsHaveFeelingsReborn.Sync then
         },
         drop_in_cache = {},
         settings_cache = {},
-        protocol_version = 2,
+        protocol_version = 3,
         synced_settings = {
             "bots_can_follow_in_stealth",
             "double_bot_health"
