@@ -3,18 +3,17 @@
 local can_secure_original = CarryData.can_secure
 
 function CarryData:start_bot_carry_catch()
-	self._bot_try_catch_t = TimerManager:game():time()
 	self._unit:set_extension_update_enabled(self.IDS_CARRY_DATA, true) -- enable update()
 end
 
 function CarryData:stop_bot_carry_catch()
-	self._bot_try_catch_t = nil
 	self._unit:set_extension_update_enabled(self.IDS_CARRY_DATA, false) -- disable update()
 end
 
 Hooks:PostHook(CarryData, "update", "BHFR_CarryData_update",
 	function(self)
-		if not self:can_secure() or not self._bot_try_catch_t or (TimerManager:game():time() - self._bot_try_catch_t) > tweak_data.ai_carry.catch_timeout then
+		self:_update_in_air()
+		if not self:can_secure() or not self._in_air then
 			self:stop_bot_carry_catch()
 		elseif self._unit:interaction() and self._unit:interaction():active() then
 			local _all_AI_criminals = managers.groupai:state():all_AI_criminals() or {}
@@ -34,6 +33,28 @@ Hooks:PostHook(CarryData, "update", "BHFR_CarryData_update",
 		end
 	end
 )
+
+local tmp_ground_from_vec = Vector3()
+local tmp_ground_to_vec = Vector3()
+local up_offset_vec = math.UP * 30
+local down_offset_vec = math.DOWN * 35
+
+function CarryData:_update_in_air()
+	local pos = tmp_ground_from_vec
+	local down_pos = tmp_ground_to_vec
+	mvector3.set(pos, self._unit:position())
+	mvector3.add(pos, up_offset_vec)
+	mvector3.set(down_pos, pos)
+	mvector3.add(down_pos, down_offset_vec)
+	self._slotmask_gnd_ray = self._slotmask_gnd_ray or managers.slot:get_mask("player_ground_check")
+	if not World:raycast("ray", pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ray_type", "body mover", "sphere_cast_radius", 29) then
+		if not self._in_air then
+			self._in_air = true
+		end
+	elseif self._in_air then
+		self._in_air = false
+	end
+end
 
 Hooks:PostHook(CarryData, "save", "BHFR_CarryData_save",
 	function(self, data)

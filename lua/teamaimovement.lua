@@ -198,8 +198,7 @@ end
 -- bots_can_catch
 
 tweak_data.ai_carry = {
-	throw_force = 150,
-	catch_timeout = 5
+	throw_force = 150
 }
 
 TeamAIMovement.CLASS_MAP = {
