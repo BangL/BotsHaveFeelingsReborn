@@ -177,27 +177,25 @@ if not BotsHaveFeelingsReborn.Sync then
             return
         end
 
-        local peer_is_host = peer_id == 1
-
         if tostring(data.version) ~= tostring(self.protocol_version) then
             log("[BHFR handshake] received handshake, but wrong protocol version. skipping. local version: " ..
                 tostring(self.protocol_version) .. ", remote version: " .. tostring(data.version))
             return
         end
 
-        if Network:is_server() then
-            log("[BHFR handshake] Client " .. tostring(peer_id) .. " is using compatible BHFR version.")
-            -- host handshake confirmation back to client, including server protocol version and synced settings
-            local host_data = { version = self.protocol_version }
-            for _, option_id in ipairs(self.synced_settings) do
-                host_data[option_id] = BotsHaveFeelingsReborn:GetConfigOption(option_id)
-            end
-            self:send_to_peer(peer_id, self.events.handshake, host_data)
-        elseif peer_is_host then
+        if peer_id == 1 then
             log("[BHFR handshake] The host is using compatible BHFR version.")
             self.settings_cache = data
         else
             log("[BHFR handshake] Client " .. tostring(peer_id) .. " is using compatible BHFR version.")
+            if Network:is_server() then
+                -- host handshake confirmation back to client, including server protocol version and synced settings
+                local host_data = { version = self.protocol_version }
+                for _, option_id in ipairs(self.synced_settings) do
+                    host_data[option_id] = BotsHaveFeelingsReborn:GetConfigOption(option_id)
+                end
+                self:send_to_peer(peer_id, self.events.handshake, host_data)
+            end
         end
 
         if BotsHaveFeelingsReborn:GetConfigOption("announce_player_uses_mod") then
