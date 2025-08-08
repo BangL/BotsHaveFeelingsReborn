@@ -61,6 +61,18 @@
   "bhfr_bots_throw_grenades": "Grenades",
   "bhfr_bots_throw_grenades_desc": "Bots throw grenades to enemies. [and teammates, and then they walk into it, like full retards. use a your own risk.]",
 
+  "bhfr_bot_weapons_primary": "Bot Weapons",
+
+	"bhfr_bot_weapon_russian_primary": "Kurgan",
+	"bhfr_bot_weapon_german_primary": "Wolfgang",
+	"bhfr_bot_weapon_british_primary": "Rivet",
+	"bhfr_bot_weapon_american_primary": "Sterling",
+
+	"bhfr_ger_mp38_npc": "MP38",
+	"bhfr_ger_stg44_npc": "Stg44",
+	"bhfr_thompson_npc": "Thompson",
+	"bhfr_usa_garand_npc": "Garand",
+
   "bhfr_reset": "Default options",
   "bhfr_reset_confirm": "Are you sure, you want to reset all \"Bots Have Feelings Reborn\" options to their default value?"
 }

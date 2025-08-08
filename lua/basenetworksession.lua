@@ -21,7 +21,11 @@ if not BotsHaveFeelingsReborn.Sync then
         protocol_version = 3,
         synced_settings = {
             "bots_can_follow_in_stealth",
-            "double_bot_health"
+            "double_bot_health",
+            "bhfr_bot_weapon_russian_primary",
+            "bhfr_bot_weapon_german_primary",
+            "bhfr_bot_weapon_british_primary",
+            "bhfr_bot_weapon_american_primary",
         },
     }
 
@@ -164,9 +168,14 @@ if not BotsHaveFeelingsReborn.Sync then
         self.drop_in_cache[data.name][event] = data
     end
 
-    function BotsHaveFeelingsReborn.Sync:GetConfigOption(name, host_only)
-        return (Network:is_server() or (BotsHaveFeelingsReborn.Sync:host_has_mod() and self.settings_cache[name]))
-            and (host_only or BotsHaveFeelingsReborn:GetConfigOption(name))
+    function BotsHaveFeelingsReborn.Sync:GetConfigOption(name)
+        local result = nil
+        if Network:is_server() then
+            result = BotsHaveFeelingsReborn:GetConfigOption(name)
+        elseif BotsHaveFeelingsReborn.Sync:host_has_mod() then
+            result = self.settings_cache[name]
+        end
+        return result
     end
 
     -- bidirectional event handlers

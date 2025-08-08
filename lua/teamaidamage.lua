@@ -8,8 +8,8 @@ local friendly_fire_hit_original = TeamAIDamage.friendly_fire_hit
 function TeamAIDamage:init(unit, ...)
     init_original(self, unit, ...)
 
-    -- apply doubled bot stealth if enabled by host
-    if BotsHaveFeelingsReborn.Sync:GetConfigOption("double_bot_health", true) then
+    -- apply doubled bot stealth if enabled by host & ignore local setting if client
+    if BotsHaveFeelingsReborn.Sync:GetConfigOption("double_bot_health") then
         self._unit = unit
         self._char_tweak = tweak_data.character[unit:base()._tweak_table]
         local damage_tweak = self._char_tweak.damage

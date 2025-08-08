@@ -15,6 +15,7 @@ function PlayerStandard:_get_unit_long_distance_action(targets_enemies, targets_
                                                        primary_only, detect_only, ...)
     if managers.groupai:state():whisper_mode() and targets_teammates and
         -- only do custom stealth shouts if enabled locally and by host
+        BotsHaveFeelingsReborn:GetConfigOption("bots_can_follow_in_stealth") and
         BotsHaveFeelingsReborn.Sync:GetConfigOption("bots_can_follow_in_stealth")
     then
         local char_table = {}

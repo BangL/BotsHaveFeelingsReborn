@@ -55,6 +55,17 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 	self:_MakeOptionToggle("bots_no_unnecessary_revive")
 	self:_MakeOptionToggle("bots_throw_grenades")
 
+	self:_MakeSeparator("bhfr_bot_weapons_primary", true, 80)
+
+	local primaries_keys = {}
+	for i, data in ipairs(BotsHaveFeelingsReborn.BOT_WEAPONS_PRIMARY) do
+		primaries_keys[i] = data.id
+	end
+	self:_MakeOptionMultiChoice("bot_weapon_russian_primary", primaries_keys)
+	self:_MakeOptionMultiChoice("bot_weapon_german_primary", primaries_keys)
+	self:_MakeOptionMultiChoice("bot_weapon_british_primary", primaries_keys)
+	self:_MakeOptionMultiChoice("bot_weapon_american_primary", primaries_keys)
+
 	self._reset_btn = self:_MakeResetButton()
 	self:AutoBindNamedControlsEnd()
 end
@@ -89,8 +100,8 @@ function BotsHaveFeelingsRebornMenu:_MakeResetButton()
 	})
 end
 
-function BotsHaveFeelingsRebornMenu:_MakeSeparator(text, localize)
-	self:SubTitle({ text = text, localize = localize, y_offset = text and 0 or 8 })
+function BotsHaveFeelingsRebornMenu:_MakeSeparator(text, localize, y_offset)
+	self:SubTitle({ text = text, localize = localize, y_offset = y_offset and y_offset or (text and 0 or 8) })
 end
 
 function BotsHaveFeelingsRebornMenu:_MakeOptionToggle(option)
@@ -111,8 +122,28 @@ function BotsHaveFeelingsRebornMenu:_MakeOptionToggle(option)
 	})
 end
 
+function BotsHaveFeelingsRebornMenu:_MakeOptionMultiChoice(option, items)
+	local id = "bhfr_" .. option
+	local params = {
+		name = id,
+		text = id,
+		desc = id .. "_desc",
+		value = BotsHaveFeelingsReborn:GetConfigOption(option),
+		callback = callback(self, self, "OnOptionChanged", option),
+		items = {},
+		auto_select_on_hover = true
+	}
+	for i, opt_id in ipairs(items) do
+		table.insert(params.items, {
+			text_id = "bhfr_" .. opt_id,
+			value = i,
+		})
+	end
+	self:MultiChoice(params)
+end
+
 function BotsHaveFeelingsRebornMenu:OnOptionChanged(option, value)
-	if BotsHaveFeelingsReborn:SetConfigOption(option, value) then
+	if BotsHaveFeelingsReborn:SetConfigOption(option, (type(value) == "table") and value.value or value) then
 		self._something_changed = true
 	end
 end

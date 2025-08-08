@@ -5,6 +5,13 @@ BotsHaveFeelingsReborn._config_path = SavePath .. "BotsHaveFeelingsReborn.json"
 BotsHaveFeelingsReborn._config = {}
 BotsHaveFeelingsReborn._config_defaults = {}
 
+BotsHaveFeelingsReborn.BOT_WEAPONS_PRIMARY = {
+    { id = "ger_mp38_npc",   weapon = Idstring("units/vanilla/weapons/wpn_npc_ger_mp38/wpn_npc_ger_mp38") },
+    { id = "ger_stg44_npc",  weapon = Idstring("units/vanilla/weapons/wpn_npc_ger_stg44/wpn_npc_ger_stg44") },
+    { id = "thompson_npc",   weapon = Idstring("units/vanilla/weapons/wpn_npc_smg_thompson/wpn_npc_smg_thompson") },
+    { id = "usa_garand_npc", weapon = Idstring("units/vanilla/weapons/wpn_npc_usa_garand/wpn_npc_usa_garand") },
+}
+
 function BotsHaveFeelingsReborn:SaveConfig()
     local file = io.open(self._config_path, "w+")
     if file then

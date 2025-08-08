@@ -23,6 +23,11 @@
   "send_comm_wheel_like_chat_messages": true,
   "announce_player_uses_mod": true,
 
+  "bot_weapon_british_primary": 4,
+  "bot_weapon_russian_primary": 3,
+  "bot_weapon_german_primary": 3,
+  "bot_weapon_american_primary": 4,
+
   "bots_no_unnecessary_revive": false,
   "bots_throw_grenades": false
 }

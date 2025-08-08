@@ -33,6 +33,9 @@
                   script_path="lua/raidjobmanager.lua" />
             <post hook_id="lib/units/vehicles/vehicledrivingext"
                   script_path="lua/vehicledrivingext.lua" />
+            <!-- weapons -->
+            <post hook_id="lib/units/player_team/teamaibase"
+                  script_path="lua/teamaibase.lua" />
             <!-- carry gui -->
             <post hook_id="lib/managers/hudmanagerpd2"
                   script_path="lua/hudmanagerpd2.lua" />
