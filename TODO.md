@@ -1,6 +1,4 @@
 
-- ADD: sync bot weapon selection to known peers
-- ADD: add bot weapon selection options
 - ADD: add defense icon for defend_area objective
 - ADD: waypoint controls
 

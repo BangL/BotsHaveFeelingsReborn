@@ -10,6 +10,19 @@ BotsHaveFeelingsReborn.BOT_WEAPONS_PRIMARY = {
     { id = "ger_stg44_npc",  weapon = Idstring("units/vanilla/weapons/wpn_npc_ger_stg44/wpn_npc_ger_stg44") },
     { id = "thompson_npc",   weapon = Idstring("units/vanilla/weapons/wpn_npc_smg_thompson/wpn_npc_smg_thompson") },
     { id = "usa_garand_npc", weapon = Idstring("units/vanilla/weapons/wpn_npc_usa_garand/wpn_npc_usa_garand") },
+    -- { id = "usa_m1912_npc",  weapon = Idstring("units/vanilla/weapons/wpn_npc_usa_m1912/wpn_npc_usa_m1912") },
+}
+
+-- Settings the host dictates: the client ignores its own copy of these and uses
+-- the value from the handshake. Ids are config keys, used verbatim with
+-- GetConfigOption(), so each one has to exist in default_config.json.
+BotsHaveFeelingsReborn.SYNCED_SETTINGS = {
+    "bots_can_follow_in_stealth",
+    "double_bot_health",
+    "bot_weapon_russian_primary",
+    "bot_weapon_german_primary",
+    "bot_weapon_british_primary",
+    "bot_weapon_american_primary",
 }
 
 function BotsHaveFeelingsReborn:SaveConfig()
@@ -57,3 +70,11 @@ end
 
 BotsHaveFeelingsReborn:LoadConfigDefaults()
 BotsHaveFeelingsReborn:LoadConfig()
+
+-- A synced setting that is missing from default_config.json never makes it into
+-- the handshake data and so never reaches a client - without a word otherwise.
+for _, option_id in ipairs(BotsHaveFeelingsReborn.SYNCED_SETTINGS) do
+    if BotsHaveFeelingsReborn._config_defaults[option_id] == nil then
+        log("[BHFR] unknown synced setting \"" .. tostring(option_id) .. "\", it can never be synced.")
+    end
+end
