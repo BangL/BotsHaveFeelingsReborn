@@ -64,9 +64,13 @@
   "bhfr_bot_weapons_primary": "Bot-Waffen",
 
   "bhfr_bot_weapon_russian_primary": "Kurgan",
+  "bhfr_bot_weapon_russian_primary_desc": "Primärwaffe für Kurgan. Als Client gilt die Einstellung des Hosts.",
   "bhfr_bot_weapon_german_primary": "Wolfgang",
+  "bhfr_bot_weapon_german_primary_desc": "Primärwaffe für Wolfgang. Als Client gilt die Einstellung des Hosts.",
   "bhfr_bot_weapon_british_primary": "Rivet",
+  "bhfr_bot_weapon_british_primary_desc": "Primärwaffe für Rivet. Als Client gilt die Einstellung des Hosts.",
   "bhfr_bot_weapon_american_primary": "Sterling",
+  "bhfr_bot_weapon_american_primary_desc": "Primärwaffe für Sterling. Als Client gilt die Einstellung des Hosts.",
 
   "bhfr_ger_mp38_npc": "MP38",
   "bhfr_ger_stg44_npc": "Stg44",
