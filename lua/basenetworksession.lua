@@ -18,7 +18,7 @@ if not BotsHaveFeelingsReborn.Sync then
         },
         drop_in_cache = {},
         settings_cache = {},
-        protocol_version = 4,
+        protocol_version = 5,
     }
 
     -- LuaNetworking:TableToString() flattens everything through tostring() and
@@ -30,9 +30,12 @@ if not BotsHaveFeelingsReborn.Sync then
     end
 
     function BotsHaveFeelingsReborn.Sync.string_to_table(str)
-        -- SuperBLT pcall guards json.decode and returns false on malformed input,
-        -- which is what a peer on the old , and | protocol now sends us
-        return json.decode(str or "") or {}
+        -- SuperBLT pcall guards json.decode, so malformed input comes back as
+        -- false - and valid json that is not an object comes back as a number or
+        -- a string, which must not reach the field accesses in receive()
+        local tbl = json.decode(str or "")
+
+        return (type(tbl) == "table") and tbl or {}
     end
 
     function BotsHaveFeelingsReborn.Sync:_validate(valid_on, valid_from, needs_name, peer_id, data)
@@ -59,17 +62,17 @@ if not BotsHaveFeelingsReborn.Sync then
         return managers.network:session():peer(peer_id)
     end
 
+    -- the message id stays a plain string, the way every other BLT mod uses it:
+    -- it is the filter every receiver runs on every foreign packet, so it has to
+    -- be comparable without parsing. the event moved into the payload, which is
+    -- only ever decoded once the id matched. json in the id also broke on values
+    -- holding a /, since that is what ProcessChatString splits the message on.
     function BotsHaveFeelingsReborn.Sync:send_to_peer(peer_id, event, data)
         if peer_id and (peer_id ~= LuaNetworking:LocalPeerID()) and event then
-            local tags = {
-                id = self.msg_id,
-                event = event
-            }
-
-            if type(data) == "table" then
-                data = self.table_to_string(data)
-            end
-            LuaNetworking:SendToPeer(peer_id, self.table_to_string(tags), data or "")
+            LuaNetworking:SendToPeer(peer_id, self.msg_id, self.table_to_string({
+                e = event,
+                d = (type(data) == "table") and data or nil
+            }))
         end
     end
 
@@ -122,18 +125,28 @@ if not BotsHaveFeelingsReborn.Sync then
         end
     end
 
-    function BotsHaveFeelingsReborn.Sync:receive(sender, tags, data)
+    function BotsHaveFeelingsReborn.Sync:receive(sender, msg_id, payload)
         sender = tonumber(sender)
-        if sender then
-            tags = self.string_to_table(tags)
-            if tags.id and (tags.id == self.msg_id) and not string.is_nil_or_empty(tags.event) then
-                data = self.string_to_table(data)
-                if self.events[tags.event] and self[tags.event] then
-                    self[tags.event](self, sender, data)
-                elseif tags.event ~= self.events.rejected then
-                    self:send_to_peer(sender, self.events.rejected, { reason = "event unknown." })
-                end
-            end
+
+        -- every mod on the hidden chat channel ends up here, and nothing says
+        -- their ids are json - so compare, never parse
+        if not sender or (msg_id ~= self.msg_id) then
+            return
+        end
+
+        local msg = self.string_to_table(payload)
+        local event = msg.e
+
+        if string.is_nil_or_empty(event) then
+            return
+        end
+
+        local data = (type(msg.d) == "table") and msg.d or {}
+
+        if self.events[event] and self[event] then
+            self[event](self, sender, data)
+        elseif event ~= self.events.rejected then
+            self:send_to_peer(sender, self.events.rejected, { reason = "event unknown." })
         end
     end
 
@@ -275,9 +288,9 @@ Hooks:Add("BaseNetworkSessionOnPeerRemoved", "BHFR_BaseNetworkSessionOnPeerRemov
 )
 
 Hooks:Add("NetworkReceivedData", "BHFR_NetworkReceivedData",
-    function(sender, tags, data)
+    function(sender, msg_id, payload)
         if BotsHaveFeelingsReborn.Sync then
-            BotsHaveFeelingsReborn.Sync:receive(sender, tags, data)
+            BotsHaveFeelingsReborn.Sync:receive(sender, msg_id, payload)
         end
     end
 )
