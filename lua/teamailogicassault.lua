@@ -45,12 +45,11 @@ Hooks:PreHook(TeamAILogicAssault, "update", "BHFR_TeamAILogicAssault_update", fu
 			if target_unit then
 				local mvec_spread_direction = target_unit:movement():m_head_pos() - from_pos
 				mvec3_norm(mvec_spread_direction)
-				local cc_unit = ProjectileBase.spawn(projectile_id, from_pos, Rotation())
+				local cc_unit = ProjectileBase.throw_projectile(projectile_id, from_pos, mvec_spread_direction)
 				if cc_unit then
 					crim_mov:play_redirect("throw_grenade")
 					managers.network:session():send_to_peers_synched("play_distance_interact_redirect", data.unit,
 						"throw_grenade")
-					cc_unit:base():throw({ dir = mvec_spread_direction, owner = data.unit })
 				end
 			end
 		end
