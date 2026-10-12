@@ -181,8 +181,9 @@ function PlayerStandard:_start_action_intimidate(t, ...)
                     end
 
                     local target = self._unit:movement():current_state():teammate_aimed_at_by_player()
-                    managers.chat:send_message(ChatManager.GAME, "Player",
-                        "com_wheel_target_say" .. queue_sound_suffix .. "~" .. target)
+                    local text = target and ("com_wheel_target_say" .. queue_sound_suffix .. "~" .. target)
+                        or ("com_wheel_say" .. queue_sound_suffix)
+                    managers.chat:send_message(ChatManager.GAME, "Player", text)
                 end
 
                 if Network:is_server() and managers.groupai and managers.groupai:state() then
