@@ -13,6 +13,8 @@
       <localization directory="loc">
             <loc file="english.json"
                   language="english" />
+            <loc file="german.json"
+                  language="german" />
       </localization>
       <hooks>
             <pre hook_id="lib/entry"

@@ -1,0 +1,78 @@
+{
+  "bhfr_title": "Bots Have Feelings Reborn",
+
+  "bhfr_double_bot_health": "Doppelte Bot-Gesundheit",
+  "bhfr_double_bot_health_desc": "Verdoppelt die Gesundheit der Bots. [erfordert erneutes Betreten des Camps aus dem Hauptmenü]",
+
+  "bhfr_improve_bot_aim": "Verbessertes Zielen der Bots",
+  "bhfr_improve_bot_aim_desc": "Besseres Zielen, geringere Streuung, kürzere Reaktionszeit. [erfordert erneutes Betreten des Camps aus dem Hauptmenü]",
+
+  "bhfr_improve_bot_movement": "Verbesserte Bot-Bewegung (Animationen überspringen)",
+  "bhfr_improve_bot_movement_desc": "Überspringt unnötige Animationen usw. [erfordert erneutes Betreten des Camps aus dem Hauptmenü]",
+
+  "bhfr_improve_bot_speed": "Verbesserte Bot-Bewegung (höheres Tempo)",
+  "bhfr_improve_bot_speed_desc": "Bots bewegen sich immer mit voller Geschwindigkeit.",
+
+  "bhfr_bots_give_human_player_xp": "XP wie für menschliche Spieler",
+  "bhfr_bots_give_human_player_xp_desc": "Bots zählen im XP-Bildschirm als menschliche Spieler.",
+
+  "bhfr_bot_hurt_sound": "Schmerzlaute der Bots",
+  "bhfr_bot_hurt_sound_desc": "Bots schreien auf, sobald sie auf 20 % Gesundheit sind.",
+
+  "bhfr_bots_can_catch": "Bots fangen und tragen Beute",
+  "bhfr_bots_can_catch_desc": "Bots können Gold, Gemälde usw. fangen und tragen.",
+
+  "bhfr_bots_have_strong_back": "Bots haben \"Strong Back\"",
+  "bhfr_bots_have_strong_back_desc": "Bots haben +2 Tragegewicht durch \"Strong Back\".",
+
+  "bhfr_bots_secure_carried": "Getragene Beute sichern",
+  "bhfr_bots_secure_carried_desc": "Von Bots getragene Beute zählt bei Missionserfolg als gesichert.",
+
+  "bhfr_shift_f_for_drop_all_carry": "Umschalt+$BTN_INTERACT lässt Bots alles Getragene ablegen",
+  "bhfr_shift_f_for_drop_all_carry_desc": "Schaltet die Interaktion zum Ablegen aller getragenen Gegenstände für dich frei. Funktioniert als Host und wenn der Host das Tragen durch Bots aktiviert hat.",
+
+  "bhfr_bots_can_follow_in_stealth": "Bots im Schleichen anrufen",
+  "bhfr_bots_can_follow_in_stealth_desc": "Spieler können Bots im Schleichen \"Folgen\"/\"Warten\" zurufen. (Kommunikationsrad Folgen/Hilfe/Warten, mit installierter Mod auch $BTN_INTERACT)",
+
+  "bhfr_bots_are_undetectable": "Unentdeckbare Bots im Schleichen",
+  "bhfr_bots_are_undetectable_desc": "Bots sind im Schleichen nicht zu entdecken. Von ihnen getragene Gegenstände weiterhin schon! [für Folgen im Schleichen]",
+
+  "bhfr_toggle_follow_wait_f_shouts_stealth": "Fern-Interaktion im Schleichen umschalten",
+  "bhfr_toggle_follow_wait_f_shouts_stealth_desc": "Wechselt beim Schnellzuruf zwischen Folgen und Warten, ohne Kommunikationsrad. (im Schleichen)",
+
+  "bhfr_bots_can_wait_when_loud": "Bots im lauten Spiel \"Warten\" zurufen",
+  "bhfr_bots_can_wait_when_loud_desc": "Spieler können Bots im lauten Spiel \"Warten\" zurufen. (Kommunikationsrad Folgen/Hilfe/Warten, mit installierter Mod und aktivem Umschalten auch $BTN_INTERACT)",
+
+  "bhfr_toggle_follow_wait_f_shouts_loud": "Fern-Interaktion im lauten Spiel umschalten",
+  "bhfr_toggle_follow_wait_f_shouts_loud_desc": "Wechselt beim Schnellzuruf zwischen Folgen und Warten. $BTN_INTERACT (im lauten Spiel)",
+
+  "bhfr_send_comm_wheel_like_chat_messages": "Chat-Nachrichten wie vom Kommunikationsrad",
+  "bhfr_send_comm_wheel_like_chat_messages_desc": "Sendet beim Schnellzuruf von Folgen/Warten Chat-Nachrichten, als wäre das Kommunikationsrad benutzt worden.",
+
+  "bhfr_announce_player_uses_mod": "Anzeigen, wer die Mod nutzt",
+  "bhfr_announce_player_uses_mod_desc": "Meldet im Chat, wenn andere Spieler die Mod nutzen. (nur für dich sichtbar)",
+  "bhfr_player_uses_mod": "$PLAYER nutzt BotsHaveFeelingsReborn.",
+
+  "bhfr_experimental": "Experimentell",
+
+  "bhfr_bots_no_unnecessary_revive": "Keine unnötigen Wiederbelebungen",
+  "bhfr_bots_no_unnecessary_revive_desc": "Bots hören auf wiederzubeleben, sobald du es tust. [und versuchen es sofort wieder. Benutzung auf eigene Gefahr.]",
+
+  "bhfr_bots_throw_grenades": "Granaten",
+  "bhfr_bots_throw_grenades_desc": "Bots werfen Granaten auf Gegner. [und auf Teammitglieder, und laufen dann selbst hinein, wie die letzten Volltrottel. Benutzung auf eigene Gefahr.]",
+
+  "bhfr_bot_weapons_primary": "Bot-Waffen",
+
+  "bhfr_bot_weapon_russian_primary": "Kurgan",
+  "bhfr_bot_weapon_german_primary": "Wolfgang",
+  "bhfr_bot_weapon_british_primary": "Rivet",
+  "bhfr_bot_weapon_american_primary": "Sterling",
+
+  "bhfr_ger_mp38_npc": "MP38",
+  "bhfr_ger_stg44_npc": "Stg44",
+  "bhfr_thompson_npc": "Thompson",
+  "bhfr_usa_garand_npc": "Garand",
+
+  "bhfr_reset": "Standardeinstellungen",
+  "bhfr_reset_confirm": "Bist du sicher, dass du alle \"Bots Have Feelings Reborn\"-Einstellungen auf ihren Standardwert zurücksetzen willst?"
+}
