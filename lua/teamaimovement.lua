@@ -46,6 +46,8 @@ Hooks:PostHook(TeamAIMovement, "check_visual_equipment", "BHFR_TeamAIMovement_ch
 					if (self:bhfr_mode() ~= data.mode) or (self:bhfr_following(data.following)) then
 						self:set_bhfr_mode(data.mode, data.following)
 					end
+					-- set_bhfr_mode skips the hud if nothing changed, but the label may be new
+					self:_update_bhfr_hud()
 				end
 				local bot_carry_weight_data = cache[BotsHaveFeelingsReborn.Sync.events.bot_carry_weight]
 				if bot_carry_weight_data then

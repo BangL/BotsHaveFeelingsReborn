@@ -29,7 +29,8 @@ function CopLogicAttack._find_cover(data, my_data, threat_pos, ...)
 			return
 		end
 
-		local found_cover = managers.navigation:find_cover_near_pos_1(near_pos, threat_pos, 400, 0, true)
+		local found_cover = managers.navigation:find_cover_near_pos_1(near_pos, threat_pos, 400, 0, true) or
+			managers.navigation:find_cover_near_pos_1(near_pos, threat_pos, 1000, 0, true)
 
 		if found_cover then
 			local better_cover = { found_cover }
