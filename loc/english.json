@@ -63,10 +63,11 @@
   "bhfr_bots_no_unnecessary_revive": "No unnecessary revives",
   "bhfr_bots_no_unnecessary_revive_desc": "Bots do not revive a teammate who is already being revived, and stop when you start.",
 
-  "bhfr_experimental": "Experimental",
+  "bhfr_bots_avoid_grenades": "Bots avoid grenades",
+  "bhfr_bots_avoid_grenades_desc": "Bots step out of the blast radius of live grenades (yours, your team's and the enemy's) and out of fires.",
 
   "bhfr_bots_throw_grenades": "Grenades",
-  "bhfr_bots_throw_grenades_desc": "Bots throw grenades to enemies. [and teammates, and then they walk into it, like full retards. use a your own risk.]",
+  "bhfr_bots_throw_grenades_desc": "Bots throw grenades at groups of enemies, but only when nobody of the team is inside the blast radius. Which throwable: see Bot Grenades.",
 
   "bhfr_bot_weapons_primary": "Bot Weapons",
 
@@ -83,6 +84,24 @@
 	"bhfr_ger_stg44_npc": "Stg44",
 	"bhfr_thompson_npc": "Thompson",
 	"bhfr_usa_garand_npc": "Garand",
+
+  "bhfr_bot_grenades": "Bot Grenades",
+
+  "bhfr_bot_grenade_russian": "Kurgan",
+  "bhfr_bot_grenade_russian_desc": "Throwable for Kurgan. Only used with Grenades enabled. Host setting applies.",
+  "bhfr_bot_grenade_german": "Wolfgang",
+  "bhfr_bot_grenade_german_desc": "Throwable for Wolfgang. Only used with Grenades enabled. Host setting applies.",
+  "bhfr_bot_grenade_british": "Sterling",
+  "bhfr_bot_grenade_british_desc": "Throwable for Sterling. Only used with Grenades enabled. Host setting applies.",
+  "bhfr_bot_grenade_american": "Rivet",
+  "bhfr_bot_grenade_american_desc": "Throwable for Rivet. Only used with Grenades enabled. Host setting applies.",
+
+  "bhfr_grenade_none": "None",
+  "bhfr_grenade_m24": "M24",
+  "bhfr_grenade_concrete": "Concrete",
+  "bhfr_grenade_d343": "343d",
+  "bhfr_grenade_mills": "Mills",
+  "bhfr_grenade_betty": "Spring Mine",
 
   "bhfr_reset": "Default options",
   "bhfr_reset_confirm": "Are you sure, you want to reset all \"Bots Have Feelings Reborn\" options to their default value?"

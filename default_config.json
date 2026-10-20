@@ -30,5 +30,10 @@
   "bot_weapon_american_primary": 4,
 
   "bots_no_unnecessary_revive": false,
-  "bots_throw_grenades": false
+  "bots_avoid_grenades": true,
+  "bots_throw_grenades": false,
+  "bot_grenade_russian": 4,
+  "bot_grenade_german": 6,
+  "bot_grenade_british": 5,
+  "bot_grenade_american": 2
 }

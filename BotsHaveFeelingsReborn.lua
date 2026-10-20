@@ -13,6 +13,16 @@ BotsHaveFeelingsReborn.BOT_WEAPONS_PRIMARY = {
     -- { id = "usa_m1912_npc",  weapon = Idstring("units/vanilla/weapons/wpn_npc_usa_m1912/wpn_npc_usa_m1912") },
 }
 
+-- throwables a bot can be given (id = loc key suffix, projectile = tweak_data.projectiles entry)
+BotsHaveFeelingsReborn.BOT_GRENADES = {
+    { id = "grenade_none" },
+    { id = "grenade_concrete", projectile = "concrete" },
+    { id = "grenade_betty",    projectile = "betty" },
+    { id = "grenade_d343",     projectile = "d343" },
+    { id = "grenade_mills",    projectile = "mills" },
+    { id = "grenade_m24",      projectile = "m24" },
+}
+
 -- Settings the host dictates: the client ignores its own copy of these and uses
 -- the value from the handshake. Ids are config keys, used verbatim with
 -- GetConfigOption(), so each one has to exist in default_config.json.

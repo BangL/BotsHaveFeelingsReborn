@@ -48,13 +48,10 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 	self:_MakeOptionToggle("send_comm_wheel_like_chat_messages")
 	self:_MakeOptionToggle("announce_player_uses_mod")
 	self:_MakeOptionToggle("bots_no_unnecessary_revive")
+	self:_MakeOptionToggle("bots_avoid_grenades")
 
-	-- big offset pushes the experimental block into the next column
-	self:_MakeSeparator("bhfr_experimental", true, 80)
-
-	self:_MakeOptionToggle("bots_throw_grenades")
-
-	self:_MakeSeparator("bhfr_bot_weapons_primary", true, 16)
+	-- big offset pushes the bot blocks into the next column
+	self:_MakeSeparator("bhfr_bot_weapons_primary", true, 80)
 
 	local primaries_keys = {}
 	for i, data in ipairs(BotsHaveFeelingsReborn.BOT_WEAPONS_PRIMARY) do
@@ -64,6 +61,19 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 	self:_MakeOptionMultiChoice("bot_weapon_german_primary", primaries_keys)
 	self:_MakeOptionMultiChoice("bot_weapon_british_primary", primaries_keys)
 	self:_MakeOptionMultiChoice("bot_weapon_american_primary", primaries_keys)
+
+	self:_MakeSeparator("bhfr_bot_grenades", true, 16)
+
+	self:_MakeOptionToggle("bots_throw_grenades")
+
+	local grenades_keys = {}
+	for i, data in ipairs(BotsHaveFeelingsReborn.BOT_GRENADES) do
+		grenades_keys[i] = data.id
+	end
+	self:_MakeOptionMultiChoice("bot_grenade_russian", grenades_keys)
+	self:_MakeOptionMultiChoice("bot_grenade_german", grenades_keys)
+	self:_MakeOptionMultiChoice("bot_grenade_british", grenades_keys)
+	self:_MakeOptionMultiChoice("bot_grenade_american", grenades_keys)
 
 	self._reset_btn = self:_MakeResetButton()
 	self:AutoBindNamedControlsEnd()

@@ -73,6 +73,13 @@
                   script_path="lua/coplogicattack.lua" />
             <post hook_id="lib/units/player_team/logics/teamailogicidle"
                   script_path="lua/teamailogicidle.lua" />
+            <!-- bots avoid grenades -->
+            <post hook_id="lib/managers/group_ai_states/groupaistatebase"
+                  script_path="lua/danger.lua" />
+            <post hook_id="lib/units/weapons/projectiles/projectilebase"
+                  script_path="lua/projectilebase.lua" />
+            <post hook_id="lib/managers/firemanager"
+                  script_path="lua/firemanager.lua" />
             <!-- grenades -->
             <post hook_id="lib/units/player_team/logics/teamailogicassault"
                   script_path="lua/teamailogicassault.lua" />

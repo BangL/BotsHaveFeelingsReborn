@@ -63,10 +63,11 @@
   "bhfr_bots_no_unnecessary_revive": "Keine unnötigen Wiederbelebungen",
   "bhfr_bots_no_unnecessary_revive_desc": "Bots beleben niemanden, der gerade schon wiederbelebt wird, und hören auf, sobald du anfängst.",
 
-  "bhfr_experimental": "Experimentell",
+  "bhfr_bots_avoid_grenades": "Bots weichen Granaten aus",
+  "bhfr_bots_avoid_grenades_desc": "Bots verlassen den Explosionsradius aktiver Granaten (deine, die des Teams und die der Gegner) sowie Feuer.",
 
   "bhfr_bots_throw_grenades": "Granaten",
-  "bhfr_bots_throw_grenades_desc": "Bots werfen Granaten auf Gegner. [und auf Teammitglieder, und laufen dann selbst hinein, wie die letzten Volltrottel. Benutzung auf eigene Gefahr.]",
+  "bhfr_bots_throw_grenades_desc": "Bots werfen Granaten auf Gegnergruppen, aber nur wenn niemand vom Team im Explosionsradius steht. Welche Granate: siehe Bot-Granaten.",
 
   "bhfr_bot_weapons_primary": "Bot-Waffen",
 
@@ -83,6 +84,24 @@
   "bhfr_ger_stg44_npc": "Stg44",
   "bhfr_thompson_npc": "Thompson",
   "bhfr_usa_garand_npc": "Garand",
+
+  "bhfr_bot_grenades": "Bot-Granaten",
+
+  "bhfr_bot_grenade_russian": "Kurgan",
+  "bhfr_bot_grenade_russian_desc": "Wurfgranate für Kurgan. Nur wirksam bei aktivierten Granaten. Es gilt die Einstellung des Hosts.",
+  "bhfr_bot_grenade_german": "Wolfgang",
+  "bhfr_bot_grenade_german_desc": "Wurfgranate für Wolfgang. Nur wirksam bei aktivierten Granaten. Es gilt die Einstellung des Hosts.",
+  "bhfr_bot_grenade_british": "Sterling",
+  "bhfr_bot_grenade_british_desc": "Wurfgranate für Sterling. Nur wirksam bei aktivierten Granaten. Es gilt die Einstellung des Hosts.",
+  "bhfr_bot_grenade_american": "Rivet",
+  "bhfr_bot_grenade_american_desc": "Wurfgranate für Rivet. Nur wirksam bei aktivierten Granaten. Es gilt die Einstellung des Hosts.",
+
+  "bhfr_grenade_none": "Keine",
+  "bhfr_grenade_m24": "M24",
+  "bhfr_grenade_concrete": "Beton",
+  "bhfr_grenade_d343": "343d",
+  "bhfr_grenade_mills": "Mills",
+  "bhfr_grenade_betty": "Springmine",
 
   "bhfr_reset": "Standardeinstellungen",
   "bhfr_reset_confirm": "Bist du sicher, dass du alle \"Bots Have Feelings Reborn\"-Einstellungen auf ihren Standardwert zurücksetzen willst?"
