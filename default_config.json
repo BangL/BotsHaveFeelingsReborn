@@ -19,6 +19,7 @@
   
   "bots_can_wait_when_loud": true,
   "toggle_follow_wait_f_shouts_loud": true,
+  "wait_modes": 1,
 
   "send_comm_wheel_like_chat_messages": true,
   "announce_player_uses_mod": true,

@@ -44,7 +44,14 @@
   "bhfr_bots_can_wait_when_loud_desc": "Spieler können Bots im lauten Spiel \"Warten\" zurufen. (Kommunikationsrad Folgen/Hilfe/Warten, mit installierter Mod und aktivem Umschalten auch $BTN_INTERACT)",
 
   "bhfr_toggle_follow_wait_f_shouts_loud": "Fern-Interaktion im lauten Spiel umschalten",
-  "bhfr_toggle_follow_wait_f_shouts_loud_desc": "Wechselt beim Schnellzuruf zwischen Folgen und Warten. $BTN_INTERACT (im lauten Spiel)",
+  "bhfr_toggle_follow_wait_f_shouts_loud_desc": "Schaltet beim Schnellzuruf durch Folgen/Warte-Modi. $BTN_INTERACT (im lauten Spiel)",
+
+  "bhfr_wait_modes": "Warte-Modi",
+  "bhfr_wait_modes_desc": "Warte-Modi im lauten Spiel. Stationär hält die Position, Deckung nutzen sucht Deckung in der Nähe und kehrt zurück. Erneut rufen wechselt. Client: Host-Einstellung.",
+  "bhfr_wait_mode_stationary": "Stationär",
+  "bhfr_wait_modes_stationary_cover": "Stat. > Deckung",
+  "bhfr_wait_modes_cover_stationary": "Deckung > Stat.",
+  "bhfr_wait_mode_cover": "Deckung nutzen",
 
   "bhfr_send_comm_wheel_like_chat_messages": "Chat-Nachrichten wie vom Kommunikationsrad",
   "bhfr_send_comm_wheel_like_chat_messages_desc": "Sendet beim Schnellzuruf von Folgen/Warten Chat-Nachrichten, als wäre das Kommunikationsrad benutzt worden.",

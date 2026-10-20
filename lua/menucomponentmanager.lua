@@ -41,21 +41,20 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 
 	self:_MakeOptionToggle("bots_can_wait_when_loud")
 	self:_MakeOptionToggle("toggle_follow_wait_f_shouts_loud")
+	self:_MakeOptionMultiChoice("wait_modes", { "wait_modes_stationary_cover", "wait_modes_cover_stationary", "wait_mode_stationary", "wait_mode_cover" })
 
 	self:_MakeSeparator()
 
 	self:_MakeOptionToggle("send_comm_wheel_like_chat_messages")
 	self:_MakeOptionToggle("announce_player_uses_mod")
 
-	self:_MakeSeparator()
-	self:_MakeSeparator()
-
-	self:_MakeSeparator("bhfr_experimental", true)
+	-- big offset pushes the experimental block into the next column
+	self:_MakeSeparator("bhfr_experimental", true, 100)
 
 	self:_MakeOptionToggle("bots_no_unnecessary_revive")
 	self:_MakeOptionToggle("bots_throw_grenades")
 
-	self:_MakeSeparator("bhfr_bot_weapons_primary", true, 80)
+	self:_MakeSeparator("bhfr_bot_weapons_primary", true, 16)
 
 	local primaries_keys = {}
 	for i, data in ipairs(BotsHaveFeelingsReborn.BOT_WEAPONS_PRIMARY) do

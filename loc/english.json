@@ -44,7 +44,14 @@
   "bhfr_bots_can_wait_when_loud_desc": "Players can shout 'wait' at bots when loud. (comm wheel follow/help/wait, or also $BTN_INTERACT if mod installed and toggle enabled)",
 
   "bhfr_toggle_follow_wait_f_shouts_loud": "Toggle long dist. interaction when loud",
-  "bhfr_toggle_follow_wait_f_shouts_loud_desc": "Toggle between follow/wait when quick shouting. $BTN_INTERACT (when loud)",
+  "bhfr_toggle_follow_wait_f_shouts_loud_desc": "Cycle follow/wait modes when quick shouting. $BTN_INTERACT (when loud)",
+
+  "bhfr_wait_modes": "Wait modes",
+  "bhfr_wait_modes_desc": "Wait modes when loud. Stationary holds the spot, use cover takes cover nearby and returns. Shout again to switch. Client: host's setting.",
+  "bhfr_wait_mode_stationary": "Stationary",
+  "bhfr_wait_modes_stationary_cover": "Stat. > Cover",
+  "bhfr_wait_modes_cover_stationary": "Cover > Stat.",
+  "bhfr_wait_mode_cover": "Use cover",
 
   "bhfr_send_comm_wheel_like_chat_messages": "Comm-wheel-like chat messages",
   "bhfr_send_comm_wheel_like_chat_messages_desc": "Send chat messages when quick shouting follow/wait, as if the comm wheel was used.",

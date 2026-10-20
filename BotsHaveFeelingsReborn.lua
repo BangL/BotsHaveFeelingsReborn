@@ -18,6 +18,7 @@ BotsHaveFeelingsReborn.BOT_WEAPONS_PRIMARY = {
 -- GetConfigOption(), so each one has to exist in default_config.json.
 BotsHaveFeelingsReborn.SYNCED_SETTINGS = {
     "bots_can_follow_in_stealth",
+    "wait_modes",
     "double_bot_health",
     "bot_weapon_russian_primary",
     "bot_weapon_german_primary",

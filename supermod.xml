@@ -63,6 +63,11 @@
             <!-- revive -->
             <post hook_id="lib/units/interactions/interactionext"
                   script_path="lua/interactionext.lua" />
+            <!-- wait modes: stationary / use cover -->
+            <post hook_id="lib/units/enemies/cop/logics/coplogicattack"
+                  script_path="lua/coplogicattack.lua" />
+            <post hook_id="lib/units/player_team/logics/teamailogicidle"
+                  script_path="lua/teamailogicidle.lua" />
             <!-- grenades -->
             <post hook_id="lib/units/player_team/logics/teamailogicassault"
                   script_path="lua/teamailogicassault.lua" />

@@ -101,3 +101,69 @@ function HUDNameLabel:set_bot_carry_weight(current, max)
         self:_remove_active_state("bot_carry_weight")
     end
 end
+
+
+-- wait modes (stationary / use cover) icon next to the name
+
+Hooks:PostHook(HUDNameLabel, "init", "BHFR_HUDNameLabel_init_mode_icon",
+    function(self, hud, params)
+        self:_create_bot_mode_icon()
+    end
+)
+
+function HUDNameLabel:_create_bot_mode_icon()
+    local icon = tweak_data.gui.icons.waypoint_special_wait
+
+    self._bot_mode_icon = self._object:bitmap({
+        layer = 6,
+        name = "bot_mode_icon",
+        texture = icon.texture,
+        texture_rect = icon.texture_rect,
+        h = self.PLAYER_NAME_H - 4,
+        w = self.PLAYER_NAME_H - 4,
+        visible = false,
+    })
+end
+
+function HUDNameLabel:_fit_bot_mode_icon()
+    if self._bot_mode_icon then
+        local _, _, w = self._character_name:text_rect()
+
+        self._bot_mode_icon:set_left((self._object:w() / 2) + (w / 2) + 4)
+        self._bot_mode_icon:set_center_y(self._character_name:center_y())
+    end
+end
+
+function HUDNameLabel:set_bot_mode(mode)
+    local modes = TeamAIMovement.bhfr_modes
+    local icon_id = (mode == modes.defend_area) and "waypoint_special_wait"
+        or (mode == modes.defend_cover) and "waypoint_special_defend"
+    local icon = icon_id and tweak_data.gui.icons[icon_id]
+
+    self._bot_mode = icon and mode or nil
+
+    if icon then
+        self._bot_mode_icon:set_image(icon.texture, unpack(icon.texture_rect))
+        self:_fit_bot_mode_icon()
+    end
+    self._bot_mode_icon:set_visible((icon and not self._active_states.downed) and true or false)
+end
+
+Hooks:PostHook(HUDNameLabel, "refresh", "BHFR_HUDNameLabel_refresh_mode_icon",
+    function(self)
+        self:_fit_bot_mode_icon()
+    end
+)
+
+-- no icon while downed (the timer replaces the name)
+Hooks:PostHook(HUDNameLabel, "go_into_bleedout", "BHFR_HUDNameLabel_go_into_bleedout_mode_icon",
+    function(self)
+        self._bot_mode_icon:set_visible(false)
+    end
+)
+
+Hooks:PostHook(HUDNameLabel, "on_revived", "BHFR_HUDNameLabel_on_revived_mode_icon",
+    function(self)
+        self._bot_mode_icon:set_visible(self._bot_mode ~= nil)
+    end
+)

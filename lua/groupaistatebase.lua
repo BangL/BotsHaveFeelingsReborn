@@ -115,8 +115,8 @@ function GroupAIStateBase:handle_bot_shout(cmd, caller, bot)
 			end
 		elseif table.contains({ "stop", "wait" }, cmd) then
 			if BotsHaveFeelingsReborn:GetConfigOption(whisper_mode and "bots_can_follow_in_stealth" or "bots_can_wait_when_loud") then
-				-- defend area
-				movement:set_bhfr_mode(TeamAIMovement.bhfr_modes.defend_area, nil)
+				-- defend area: stationary in stealth, cycling stationary / use cover when loud
+				movement:set_bhfr_mode(whisper_mode and TeamAIMovement.bhfr_modes.defend_area or movement:bhfr_next_wait_mode(), nil)
 			end
 		elseif cmd == "down" then
 			-- from drop_all_bags shout. already handled by PlayerStandard:_get_long_distance_action, ignore here
@@ -125,6 +125,27 @@ function GroupAIStateBase:handle_bot_shout(cmd, caller, bot)
 		end
 	end
 end
+
+-- alarm: bots waiting stationary (from stealth) switch to the first loud wait mode
+
+Hooks:PostHook(GroupAIStateBase, "set_whisper_mode", "BHFR_GroupAIStateBase_set_whisper_mode",
+	function(self, enabled)
+		if enabled or not Network:is_server() or not BotsHaveFeelingsReborn:GetConfigOption("bots_can_wait_when_loud") then
+			return
+		end
+		local stationary = TeamAIMovement.bhfr_modes.defend_area
+		local first = TeamAIMovement.bhfr_wait_modes()
+		if first == stationary then
+			return
+		end
+		for _, char_data in pairs(managers.criminals:ai_criminals()) do
+			local unit = char_data.unit
+			if alive(unit) and (unit:movement():bhfr_mode() == stationary) then
+				unit:movement():set_bhfr_mode(first, nil)
+			end
+		end
+	end
+)
 
 -- prevent bots from following next player if follow_unit peer is gone in stealth
 local _determine_objective_for_criminal_AI_original = GroupAIStateBase._determine_objective_for_criminal_AI
@@ -153,7 +174,7 @@ function GroupAIStateBase:teleport_team_ai(...)
 			local min_distance = -1
 			local target_unit
 
-			if alive(unit) and (unit:movement():bhfr_mode() ~= TeamAIMovement.bhfr_modes.defend_area) then -- added check here
+			if alive(unit) and not unit:movement():bhfr_is_wait_mode() then -- added check here
 				for _, peer in pairs(all_peers) do
 					local peer_unit = peer:unit()
 

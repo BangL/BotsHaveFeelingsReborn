@@ -18,7 +18,7 @@ if not BotsHaveFeelingsReborn.Sync then
         },
         drop_in_cache = {},
         settings_cache = {},
-        protocol_version = 5,
+        protocol_version = 6,
     }
 
     -- LuaNetworking:TableToString() flattens everything through tostring() and

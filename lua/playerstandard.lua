@@ -106,9 +106,16 @@ function PlayerStandard:_get_long_distance_action(prime_target, char_table, inti
                         -- tell bot to follow in stealth
                         result = "come"
                     end
-                elseif (not whisper_mode) and BotsHaveFeelingsReborn:GetConfigOption("toggle_follow_wait_f_shouts_loud") and following_me then
-                    -- tell bot to wait in loud
-                    result = "stop"
+                elseif (not whisper_mode) and BotsHaveFeelingsReborn:GetConfigOption("toggle_follow_wait_f_shouts_loud") then
+                    -- follow -> first wait mode -> second wait mode -> follow
+                    local _, last_wait_mode = TeamAIMovement.bhfr_wait_modes()
+                    if movement:bhfr_mode() == last_wait_mode then
+                        -- tell bot to follow in loud
+                        result = "come"
+                    elseif following_me or movement:bhfr_is_wait_mode() then
+                        -- tell bot to wait in loud (host picks the mode)
+                        result = "stop"
+                    end
                 end
 
                 if result and (result ~= "revive") then

@@ -39,6 +39,34 @@ function HUDTeammateAI:_create_bot_carry_weight_panel()
     self._bot_carry_weight_icon:set_center_y(self._bot_carry_weight_panel:h() / 2)
 
     self:_fit_bot_carry_panel()
+    self:_create_bot_mode_panel()
+end
+
+function HUDTeammateAI:_create_bot_mode_panel()
+    self._bot_mode_icon = self._right_panel:bitmap({
+        layer = 1,
+        name = "bot_mode_icon",
+        texture = tweak_data.gui.icons.waypoint_special_wait.texture,
+        texture_rect = tweak_data.gui.icons.waypoint_special_wait.texture_rect,
+        h = HUDTeammateAI.PLAYER_NAME_H - 2,
+        w = HUDTeammateAI.PLAYER_NAME_H - 2,
+        visible = false,
+    })
+    self._bot_mode_icon:set_center_y((HUDTeammateAI.PLAYER_NAME_H / 2) - 4)
+end
+
+-- stationary / use cover icon next to the name (and the carry weight, if shown)
+function HUDTeammateAI:set_bot_mode(mode)
+    local modes = TeamAIMovement.bhfr_modes
+    local icon_id = (mode == modes.defend_area) and "waypoint_special_wait"
+        or (mode == modes.defend_cover) and "waypoint_special_defend"
+    local icon = icon_id and tweak_data.gui.icons[icon_id]
+
+    if icon then
+        self._bot_mode_icon:set_image(icon.texture, unpack(icon.texture_rect))
+    end
+    self._bot_mode_icon:set_visible(icon and true or false)
+    self:_fit_bot_carry_panel()
 end
 
 function HUDTeammateAI:set_bot_carry_weight(current, max)
@@ -57,6 +85,12 @@ function HUDTeammateAI:_fit_bot_carry_panel()
     self._bot_carry_weight_panel:set_w(self._bot_carry_weight_text:right())
     BLT:make_fine_text(self._player_name)
     self._bot_carry_weight_panel:set_left(self._player_name:right() + 10)
+
+    if self._bot_mode_icon then
+        local left = self._bot_carry_weight_panel:visible() and self._bot_carry_weight_panel:right()
+            or self._player_name:right()
+        self._bot_mode_icon:set_left(left + 10)
+    end
 end
 
 Hooks:PostHook(HUDTeammateAI, "set_name", "BHFR_HUDTeammateAI_set_name",
@@ -74,5 +108,6 @@ Hooks:PostHook(HUDTeammateAI, "refresh", "BHFR_HUDTeammateAI_refresh",
 Hooks:PostHook(HUDTeammateAI, "reset_state", "BHFR_HUDTeammateAI_reset_state",
     function(self)
         self._bot_carry_weight_panel:set_visible(false)
+        self._bot_mode_icon:set_visible(false)
     end
 )

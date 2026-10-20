@@ -3,8 +3,36 @@
 TeamAIMovement.bhfr_modes = {
 	vanilla = 0,     -- follow/revive (loud)
 	stealth_follow = 1, -- follow (stealth)
-	defend_area = 2, -- wait (stealth/loud)
+	defend_area = 2, -- wait: stationary (stealth/loud)
+	defend_cover = 3, -- wait: use cover (loud)
 }
+
+-- wait modes in the order they are cycled through (host setting "wait_modes":
+-- 1 = stationary -> cover, 2 = cover -> stationary, 3 = only stationary,
+-- 4 = only cover). a single mode is returned as both first and second.
+function TeamAIMovement.bhfr_wait_modes()
+	local modes = TeamAIMovement.bhfr_modes
+	local setting = BotsHaveFeelingsReborn.Sync:GetConfigOption("wait_modes")
+	if setting == 2 then
+		return modes.defend_cover, modes.defend_area
+	elseif setting == 3 then
+		return modes.defend_area, modes.defend_area
+	elseif setting == 4 then
+		return modes.defend_cover, modes.defend_cover
+	end
+	return modes.defend_area, modes.defend_cover
+end
+
+function TeamAIMovement:bhfr_is_wait_mode()
+	local mode = self:bhfr_mode()
+	return (mode == self.bhfr_modes.defend_area) or (mode == self.bhfr_modes.defend_cover)
+end
+
+-- first -> second -> first, anything else -> first (single mode: always that one)
+function TeamAIMovement:bhfr_next_wait_mode()
+	local first, second = self.bhfr_wait_modes()
+	return (self:bhfr_mode() == first) and second or first
+end
 
 Hooks:PostHook(TeamAIMovement, "check_visual_equipment", "BHFR_TeamAIMovement_check_visual_equipment",
 	function(self)
@@ -33,7 +61,7 @@ function TeamAIMovement:_switch_to_not_cool(instant)
 	local whisper_mode = managers.groupai:state():whisper_mode()
 
 	-- update crouching
-	self._unit:character_damage():set_crouch_move(whisper_mode or (self:bhfr_mode() == self.bhfr_modes.defend_area))
+	self._unit:character_damage():set_crouch_move(whisper_mode or self:bhfr_is_wait_mode())
 
 	-- use secondary weapon in stealth
 	local slot = whisper_mode and PlayerInventory.SLOT_1 or PlayerInventory.SLOT_2
@@ -90,6 +118,8 @@ function TeamAIMovement:set_bhfr_mode(mode, caller)
 	-- bot crouching
 	self._unit:character_damage():set_crouch_move(self:bhfr_mode() ~= self.bhfr_modes.vanilla)
 
+	self:_update_bhfr_hud()
+
 	if not Network:is_server() then
 		return
 	end
@@ -103,8 +133,8 @@ function TeamAIMovement:set_bhfr_mode(mode, caller)
 		-- revive
 		following = caller_string
 		brain:set_objective(self:get_bhfr_objective_revive(caller))
-	elseif (mode == self.bhfr_modes.defend_area) then
-		-- defend area
+	elseif self:bhfr_is_wait_mode() then
+		-- defend area (stationary / use cover, told apart by the logic hooks)
 		brain:set_objective(self:get_bhfr_objective_defend_area())
 	elseif caller then
 		-- follow
@@ -185,6 +215,13 @@ function TeamAIMovement:get_bhfr_objective_defend_area()
 		nav_seg = self:nav_tracker():nav_segment(),
 		radius = 1000,
 	}
+end
+
+function TeamAIMovement:_update_bhfr_hud()
+	local unit_data = self._unit:unit_data()
+	if unit_data and managers.hud and unit_data.teammate_panel_id then
+		managers.hud:set_bot_bhfr_mode(unit_data.teammate_panel_id, unit_data.name_label_id, self:bhfr_mode())
+	end
 end
 
 function TeamAIMovement:bhfr_mode()
