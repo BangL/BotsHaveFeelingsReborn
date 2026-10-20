@@ -60,10 +60,10 @@
   "bhfr_announce_player_uses_mod_desc": "Announce in chat when other players use the mod. (only visible for you)",
   "bhfr_player_uses_mod": "$PLAYER is using BotsHaveFeelingsReborn.",
 
-  "bhfr_experimental": "Experimental",
-
   "bhfr_bots_no_unnecessary_revive": "No unnecessary revives",
-  "bhfr_bots_no_unnecessary_revive_desc": "Bots stop reviving, when you do it. [and then instantly try again. use at your own risk.]",
+  "bhfr_bots_no_unnecessary_revive_desc": "Bots do not revive a teammate who is already being revived, and stop when you start.",
+
+  "bhfr_experimental": "Experimental",
 
   "bhfr_bots_throw_grenades": "Grenades",
   "bhfr_bots_throw_grenades_desc": "Bots throw grenades to enemies. [and teammates, and then they walk into it, like full retards. use a your own risk.]",

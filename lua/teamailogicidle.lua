@@ -31,3 +31,7 @@ function TeamAILogicIdle.update(data, ...)
 
 	return _update_original(data, ...)
 end
+
+-- bots_no_unnecessary_revive
+
+BotsHaveFeelingsReborn:BlockRevivesInProgress(TeamAILogicIdle)

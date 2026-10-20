@@ -49,6 +49,10 @@ Hooks:PostHook(TeamAIMovement, "check_visual_equipment", "BHFR_TeamAIMovement_ch
 					-- set_bhfr_mode skips the hud if nothing changed, but the label may be new
 					self:_update_bhfr_hud()
 				end
+				local revive_data = cache[BotsHaveFeelingsReborn.Sync.events.bot_bhfr_revive]
+				if revive_data then
+					self:set_bhfr_reviving(revive_data.target)
+				end
 				local bot_carry_weight_data = cache[BotsHaveFeelingsReborn.Sync.events.bot_carry_weight]
 				if bot_carry_weight_data then
 					self:modify_carry_weight(bot_carry_weight_data.current, bot_carry_weight_data.max, true)
@@ -223,7 +227,34 @@ function TeamAIMovement:_update_bhfr_hud()
 	local unit_data = self._unit:unit_data()
 	if unit_data and managers.hud and unit_data.teammate_panel_id then
 		managers.hud:set_bot_bhfr_mode(unit_data.teammate_panel_id, unit_data.name_label_id, self:bhfr_mode())
+
+		-- revive icon: red when the bot is on its way to revive the local player, white for anybody else
+		local target = self._bhfr_reviving
+		local state = target and ((target == managers.criminals:local_character_name()) and "me" or "other")
+		managers.hud:set_bot_bhfr_revive(unit_data.teammate_panel_id, unit_data.name_label_id, state)
 	end
+end
+
+-- name of the criminal this bot is on its way to revive (nil = none)
+function TeamAIMovement:set_bhfr_reviving(target_name)
+	if self._bhfr_reviving == target_name then
+		return
+	end
+
+	self._bhfr_reviving = target_name
+
+	self:_update_bhfr_hud()
+
+	if Network:is_server() and BotsHaveFeelingsReborn.Sync then
+		BotsHaveFeelingsReborn.Sync:send_to_peers(false, BotsHaveFeelingsReborn.Sync.events.bot_bhfr_revive, {
+			name = self._unit:base()._tweak_table,
+			target = target_name
+		})
+	end
+end
+
+function TeamAIMovement:bhfr_reviving()
+	return self._bhfr_reviving
 end
 
 function TeamAIMovement:bhfr_mode()

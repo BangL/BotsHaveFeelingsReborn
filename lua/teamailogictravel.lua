@@ -1,0 +1,3 @@
+-- bots_no_unnecessary_revive
+
+BotsHaveFeelingsReborn:BlockRevivesInProgress(TeamAILogicTravel)

@@ -123,6 +123,18 @@ function HUDNameLabel:_create_bot_mode_icon()
         w = self.PLAYER_NAME_H - 4,
         visible = false,
     })
+
+    icon = tweak_data.gui.icons.waypoint_special_health
+
+    self._bot_revive_icon = self._object:bitmap({
+        layer = 6,
+        name = "bot_revive_icon",
+        texture = icon.texture,
+        texture_rect = icon.texture_rect,
+        h = self.PLAYER_NAME_H - 4,
+        w = self.PLAYER_NAME_H - 4,
+        visible = false,
+    })
 end
 
 function HUDNameLabel:_fit_bot_mode_icon()
@@ -131,7 +143,19 @@ function HUDNameLabel:_fit_bot_mode_icon()
 
         self._bot_mode_icon:set_left((self._object:w() / 2) + (w / 2) + 4)
         self._bot_mode_icon:set_center_y(self._character_name:center_y())
+        -- revive icon sits on the other side of the name
+        self._bot_revive_icon:set_right((self._object:w() / 2) - (w / 2) - 4)
+        self._bot_revive_icon:set_center_y(self._character_name:center_y())
     end
+end
+
+-- on its way to revive: white = somebody else, red = the local player
+function HUDNameLabel:set_bot_revive(state)
+    self._bot_revive_state = state
+
+    self._bot_revive_icon:set_color((state == "me") and Color.red or Color.white)
+    self._bot_revive_icon:set_visible((state and not self._active_states.downed) and true or false)
+    self:_fit_bot_mode_icon()
 end
 
 function HUDNameLabel:set_bot_mode(mode)
@@ -159,11 +183,13 @@ Hooks:PostHook(HUDNameLabel, "refresh", "BHFR_HUDNameLabel_refresh_mode_icon",
 Hooks:PostHook(HUDNameLabel, "go_into_bleedout", "BHFR_HUDNameLabel_go_into_bleedout_mode_icon",
     function(self)
         self._bot_mode_icon:set_visible(false)
+        self._bot_revive_icon:set_visible(false)
     end
 )
 
 Hooks:PostHook(HUDNameLabel, "on_revived", "BHFR_HUDNameLabel_on_revived_mode_icon",
     function(self)
         self._bot_mode_icon:set_visible(self._bot_mode ~= nil)
+        self._bot_revive_icon:set_visible(self._bot_revive_state ~= nil)
     end
 )

@@ -21,3 +21,15 @@ function HUDManager:set_bot_bhfr_mode(i, name_label_id, mode)
         name_label:set_bot_mode(mode)
     end
 end
+
+function HUDManager:set_bot_bhfr_revive(i, name_label_id, state)
+    local panel = self._teammate_panels[i]
+    if panel and panel.set_bot_revive then
+        panel:set_bot_revive(state)
+    end
+
+    local name_label = name_label_id and self:_get_name_label(name_label_id)
+    if name_label and name_label.set_bot_revive then
+        name_label:set_bot_revive(state)
+    end
+end

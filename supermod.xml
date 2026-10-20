@@ -2,7 +2,7 @@
       description="Some slight improvements for the team AI."
       author="Takku, BangL"
       contact="https://steamcommunity.com/id/BangL"
-      version="0.10.3"
+      version="0.11.0"
       priority="-1"
 	min_sblt_version="2.0.0"
       color="60 60 60">
@@ -63,6 +63,11 @@
             <!-- revive -->
             <post hook_id="lib/units/interactions/interactionext"
                   script_path="lua/interactionext.lua" />
+            <post hook_id="lib/units/player_team/logics/teamailogictravel"
+                  script_path="lua/teamailogictravel.lua" />
+            <!-- bot revive icon -->
+            <post hook_id="lib/units/player_team/teamaibrain"
+                  script_path="lua/teamaibrain.lua" />
             <!-- wait modes: stationary / use cover -->
             <post hook_id="lib/units/enemies/cop/logics/coplogicattack"
                   script_path="lua/coplogicattack.lua" />

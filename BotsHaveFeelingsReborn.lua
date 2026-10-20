@@ -72,6 +72,31 @@ end
 BotsHaveFeelingsReborn:LoadConfigDefaults()
 BotsHaveFeelingsReborn:LoadConfig()
 
+-- bots_no_unnecessary_revive: set by ReviveInteractionExt (see interactionext.lua)
+-- the timeout keeps a revive that never got interrupted (reviver left) from
+-- blocking the bots forever
+function BotsHaveFeelingsReborn:IsBeingRevived(unit)
+    local interaction = alive(unit) and unit:interaction()
+    local t = interaction and interaction._bhfr_revive_t
+
+    return t and ((TimerManager:game():time() - t) < (tweak_data.interaction:get_interaction("revive").timer + 3)) or false
+end
+
+-- bots refuse new revive objectives for a unit somebody is already reviving
+function BotsHaveFeelingsReborn:BlockRevivesInProgress(logic)
+    local is_available_for_assignment_original = logic.is_available_for_assignment
+
+    function logic.is_available_for_assignment(data, new_objective, ...)
+        if new_objective and (new_objective.type == "revive") and
+            BotsHaveFeelingsReborn:GetConfigOption("bots_no_unnecessary_revive") and
+            BotsHaveFeelingsReborn:IsBeingRevived(new_objective.follow_unit) then
+            return false
+        end
+
+        return is_available_for_assignment_original(data, new_objective, ...)
+    end
+end
+
 -- A synced setting that is missing from default_config.json never makes it into
 -- the handshake data and so never reaches a client - without a word otherwise.
 for _, option_id in ipairs(BotsHaveFeelingsReborn.SYNCED_SETTINGS) do

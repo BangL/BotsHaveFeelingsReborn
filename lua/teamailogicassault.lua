@@ -55,3 +55,7 @@ Hooks:PreHook(TeamAILogicAssault, "update", "BHFR_TeamAILogicAssault_update", fu
 		end
 	end
 end)
+
+-- bots_no_unnecessary_revive
+
+BotsHaveFeelingsReborn:BlockRevivesInProgress(TeamAILogicAssault)

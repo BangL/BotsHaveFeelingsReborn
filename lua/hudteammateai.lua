@@ -53,6 +53,26 @@ function HUDTeammateAI:_create_bot_mode_panel()
         visible = false,
     })
     self._bot_mode_icon:set_center_y((HUDTeammateAI.PLAYER_NAME_H / 2) - 4)
+
+    local icon = tweak_data.gui.icons.waypoint_special_health
+
+    self._bot_revive_icon = self._right_panel:bitmap({
+        layer = 1,
+        name = "bot_revive_icon",
+        texture = icon.texture,
+        texture_rect = icon.texture_rect,
+        h = HUDTeammateAI.PLAYER_NAME_H - 2,
+        w = HUDTeammateAI.PLAYER_NAME_H - 2,
+        visible = false,
+    })
+    self._bot_revive_icon:set_center_y((HUDTeammateAI.PLAYER_NAME_H / 2) - 4)
+end
+
+-- on its way to revive: white = somebody else, red = the local player
+function HUDTeammateAI:set_bot_revive(state)
+    self._bot_revive_icon:set_color((state == "me") and Color.red or Color.white)
+    self._bot_revive_icon:set_visible(state and true or false)
+    self:_fit_bot_carry_panel()
 end
 
 -- stationary / use cover icon next to the name (and the carry weight, if shown)
@@ -91,6 +111,13 @@ function HUDTeammateAI:_fit_bot_carry_panel()
             or self._player_name:right()
         self._bot_mode_icon:set_left(left + 10)
     end
+
+    if self._bot_revive_icon then
+        local left = self._bot_mode_icon:visible() and self._bot_mode_icon:right()
+            or self._bot_carry_weight_panel:visible() and self._bot_carry_weight_panel:right()
+            or self._player_name:right()
+        self._bot_revive_icon:set_left(left + 10)
+    end
 end
 
 Hooks:PostHook(HUDTeammateAI, "set_name", "BHFR_HUDTeammateAI_set_name",
@@ -109,5 +136,6 @@ Hooks:PostHook(HUDTeammateAI, "reset_state", "BHFR_HUDTeammateAI_reset_state",
     function(self)
         self._bot_carry_weight_panel:set_visible(false)
         self._bot_mode_icon:set_visible(false)
+        self._bot_revive_icon:set_visible(false)
     end
 )

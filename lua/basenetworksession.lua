@@ -9,6 +9,7 @@ if not BotsHaveFeelingsReborn.Sync then
             rejected = "rejected",
             bot_carry_weight = "bot_carry_weight",
             bot_bhfr_mode = "bot_bhfr_mode",
+            bot_bhfr_revive = "bot_bhfr_revive",
             drop_all_carry = "drop_all_carry",
         },
         valid = {
@@ -255,6 +256,21 @@ if not BotsHaveFeelingsReborn.Sync then
                 -- unit was null, cache for TeamAIMovement
                 self:cache(self.events.bot_bhfr_mode, data)
             end
+        end
+    end
+
+    function BotsHaveFeelingsReborn.Sync:bot_bhfr_revive(peer_id, data)
+        if not self:_validate(self.valid.client, self.valid.server, true, peer_id, data) then
+            return
+        end
+        local unit = managers.criminals:character_unit_by_name(data.name)
+        if unit then
+            if unit:movement() and unit:movement().set_bhfr_reviving then
+                unit:movement():set_bhfr_reviving(data.target)
+            end
+        else
+            -- unit was null, cache for TeamAIMovement
+            self:cache(self.events.bot_bhfr_revive, data)
         end
     end
 end

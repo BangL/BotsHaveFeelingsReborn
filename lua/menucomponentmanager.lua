@@ -47,11 +47,11 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 
 	self:_MakeOptionToggle("send_comm_wheel_like_chat_messages")
 	self:_MakeOptionToggle("announce_player_uses_mod")
+	self:_MakeOptionToggle("bots_no_unnecessary_revive")
 
 	-- big offset pushes the experimental block into the next column
-	self:_MakeSeparator("bhfr_experimental", true, 100)
+	self:_MakeSeparator("bhfr_experimental", true, 80)
 
-	self:_MakeOptionToggle("bots_no_unnecessary_revive")
 	self:_MakeOptionToggle("bots_throw_grenades")
 
 	self:_MakeSeparator("bhfr_bot_weapons_primary", true, 16)

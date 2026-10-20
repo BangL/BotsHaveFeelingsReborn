@@ -1,8 +1,6 @@
 
-- ADD: add defense icon for defend_area objective
 - ADD: waypoint controls
 
-- FIX: Bots will no longer attempt to revive teammates who are already being revived
 - IMPROVE: bots properly secure loot (throw) ??
 - IMPROVE: rework grenades?
 
