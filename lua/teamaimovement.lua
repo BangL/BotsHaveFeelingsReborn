@@ -53,6 +53,10 @@ Hooks:PostHook(TeamAIMovement, "check_visual_equipment", "BHFR_TeamAIMovement_ch
 				if revive_data then
 					self:set_bhfr_reviving(revive_data.target)
 				end
+				local follow_data = cache[BotsHaveFeelingsReborn.Sync.events.bot_bhfr_follow]
+				if follow_data then
+					self:set_bhfr_follow_target(follow_data.target)
+				end
 				local bot_carry_weight_data = cache[BotsHaveFeelingsReborn.Sync.events.bot_carry_weight]
 				if bot_carry_weight_data then
 					self:modify_carry_weight(bot_carry_weight_data.current, bot_carry_weight_data.max, true)
@@ -223,6 +227,29 @@ function TeamAIMovement:get_bhfr_objective_defend_area()
 	}
 end
 
+-- colour of the followed character, picked locally: the same one WolfgangHUD
+-- (if installed, it has its own colorize modes) or the game uses for names and outlines
+function TeamAIMovement:_bhfr_follow_color()
+	local target = self._bhfr_follow_target
+
+	if not target then
+		return nil
+	end
+
+	local target_unit = managers.criminals:character_unit_by_name(target)
+	local color_id
+
+	if alive(target_unit) then
+		if WolfgangHUD and WolfgangHUD.character_color_id then
+			color_id = WolfgangHUD:character_color_id(target_unit)
+		else
+			color_id = managers.criminals:character_color_id_by_unit(target_unit)
+		end
+	end
+
+	return color_id and tweak_data.chat_colors[color_id] or Color.white
+end
+
 function TeamAIMovement:_update_bhfr_hud()
 	local unit_data = self._unit:unit_data()
 	if unit_data and managers.hud and unit_data.teammate_panel_id then
@@ -232,6 +259,9 @@ function TeamAIMovement:_update_bhfr_hud()
 		local target = self._bhfr_reviving
 		local state = target and ((target == managers.criminals:local_character_name()) and "me" or "other")
 		managers.hud:set_bot_bhfr_revive(unit_data.teammate_panel_id, unit_data.name_label_id, state)
+
+		managers.hud:set_bot_bhfr_follow(unit_data.teammate_panel_id, unit_data.name_label_id,
+			self:_bhfr_follow_color())
 	end
 end
 
@@ -255,6 +285,24 @@ end
 
 function TeamAIMovement:bhfr_reviving()
 	return self._bhfr_reviving
+end
+
+-- name of the criminal this bot follows (nil = none)
+function TeamAIMovement:set_bhfr_follow_target(target_name)
+	if self._bhfr_follow_target == target_name then
+		return
+	end
+
+	self._bhfr_follow_target = target_name
+
+	self:_update_bhfr_hud()
+
+	if Network:is_server() and BotsHaveFeelingsReborn.Sync then
+		BotsHaveFeelingsReborn.Sync:send_to_peers(false, BotsHaveFeelingsReborn.Sync.events.bot_bhfr_follow, {
+			name = self._unit:base()._tweak_table,
+			target = target_name
+		})
+	end
 end
 
 function TeamAIMovement:bhfr_mode()

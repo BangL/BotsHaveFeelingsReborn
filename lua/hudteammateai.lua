@@ -67,6 +67,19 @@ function HUDTeammateAI:_create_bot_mode_panel()
     })
     self._bot_revive_icon:set_center_y((HUDTeammateAI.PLAYER_NAME_H / 2) - 4)
 
+    local follow_icon = tweak_data.gui.icons.comm_wheel_follow_me
+
+    self._bot_follow_icon = self._right_panel:bitmap({
+        layer = 1,
+        name = "bot_follow_icon",
+        texture = follow_icon.texture,
+        texture_rect = follow_icon.texture_rect,
+        h = HUDTeammateAI.PLAYER_NAME_H - 2,
+        w = HUDTeammateAI.PLAYER_NAME_H - 2,
+        visible = false,
+    })
+    self._bot_follow_icon:set_center_y((HUDTeammateAI.PLAYER_NAME_H / 2) - 4)
+
     self._bot_respawn_text = self._right_panel:text({
         align = "left",
         font = tweak_data.gui.fonts[HUDTeammateAI.PLAYER_NAME_FONT],
@@ -113,8 +126,19 @@ function HUDTeammateAI:set_bot_revive(state)
     self:_update_bot_icons()
 end
 
+-- follow icon in the colour of the character the bot follows
+function HUDTeammateAI:set_bot_follow(color)
+    self._bot_follow_color = color
+
+    if color then
+        self._bot_follow_icon:set_color(color)
+    end
+    self:_update_bot_icons()
+end
+
 -- icons are only shown while the bot is up
 function HUDTeammateAI:_update_bot_icons()
+    self._bot_follow_icon:set_visible((self._bot_follow_color ~= nil) and not self._bot_downed)
     self._bot_mode_icon:set_visible((self._bot_mode ~= nil) and not self._bot_downed)
     self._bot_revive_icon:set_visible((self._bot_revive_state ~= nil) and not self._bot_downed)
     self:_fit_bot_carry_panel()
@@ -152,17 +176,17 @@ function HUDTeammateAI:_fit_bot_carry_panel()
     BLT:make_fine_text(self._player_name)
     self._bot_carry_weight_panel:set_left(self._player_name:right() + 10)
 
-    if self._bot_mode_icon then
-        local left = self._bot_carry_weight_panel:visible() and self._bot_carry_weight_panel:right()
-            or self._player_name:right()
-        self._bot_mode_icon:set_left(left + 10)
-    end
+    -- everything next to the name, left to right
+    local x = self._bot_carry_weight_panel:visible() and self._bot_carry_weight_panel:right() or self._player_name:right()
 
-    if self._bot_revive_icon then
-        local left = self._bot_mode_icon:visible() and self._bot_mode_icon:right()
-            or self._bot_carry_weight_panel:visible() and self._bot_carry_weight_panel:right()
-            or self._player_name:right()
-        self._bot_revive_icon:set_left(left + 10)
+    for _, icon in ipairs({ self._bot_mode_icon, self._bot_revive_icon, self._bot_follow_icon }) do
+        if icon then
+            icon:set_left(x + 10)
+
+            if icon:visible() then
+                x = icon:right()
+            end
+        end
     end
 
     if self._bot_respawn_text then
@@ -190,6 +214,8 @@ Hooks:PostHook(HUDTeammateAI, "reset_state", "BHFR_HUDTeammateAI_reset_state",
         self._bot_mode = nil
         self._bot_revive_state = nil
         self._bot_downed = nil
+        self._bot_follow_color = nil
+        self._bot_follow_icon:set_visible(false)
         self._bot_respawn_name = nil
         self._bot_respawn_text:stop()
         self._bot_respawn_text:set_visible(false)

@@ -135,6 +135,18 @@ function HUDNameLabel:_create_bot_mode_icon()
         w = self.PLAYER_NAME_H - 4,
         visible = false,
     })
+
+    icon = tweak_data.gui.icons.comm_wheel_follow_me
+
+    self._bot_follow_icon = self._object:bitmap({
+        layer = 6,
+        name = "bot_follow_icon",
+        texture = icon.texture,
+        texture_rect = icon.texture_rect,
+        h = self.PLAYER_NAME_H - 4,
+        w = self.PLAYER_NAME_H - 4,
+        visible = false,
+    })
 end
 
 function HUDNameLabel:_fit_bot_mode_icon()
@@ -143,9 +155,17 @@ function HUDNameLabel:_fit_bot_mode_icon()
 
         self._bot_mode_icon:set_left((self._object:w() / 2) + (w / 2) + 4)
         self._bot_mode_icon:set_center_y(self._character_name:center_y())
-        -- revive icon sits on the other side of the name
-        self._bot_revive_icon:set_right((self._object:w() / 2) - (w / 2) - 4)
-        self._bot_revive_icon:set_center_y(self._character_name:center_y())
+        -- follow and revive icons sit on the other side of the name
+        local right = (self._object:w() / 2) - (w / 2) - 4
+
+        for _, icon in ipairs({ self._bot_follow_icon, self._bot_revive_icon }) do
+            icon:set_right(right)
+            icon:set_center_y(self._character_name:center_y())
+
+            if icon:visible() then
+                right = icon:left() - 4
+            end
+        end
     end
 end
 
@@ -155,6 +175,17 @@ function HUDNameLabel:set_bot_revive(state)
 
     self._bot_revive_icon:set_color((state == "me") and Color.red or Color.white)
     self._bot_revive_icon:set_visible((state and not self._active_states.downed) and true or false)
+    self:_fit_bot_mode_icon()
+end
+
+-- follow icon in the colour of the character the bot follows
+function HUDNameLabel:set_bot_follow(color)
+    self._bot_follow_color = color
+
+    if color then
+        self._bot_follow_icon:set_color(color)
+    end
+    self._bot_follow_icon:set_visible((color and not self._active_states.downed) and true or false)
     self:_fit_bot_mode_icon()
 end
 
@@ -184,6 +215,7 @@ Hooks:PostHook(HUDNameLabel, "go_into_bleedout", "BHFR_HUDNameLabel_go_into_blee
     function(self)
         self._bot_mode_icon:set_visible(false)
         self._bot_revive_icon:set_visible(false)
+        self._bot_follow_icon:set_visible(false)
     end
 )
 
@@ -191,5 +223,6 @@ Hooks:PostHook(HUDNameLabel, "on_revived", "BHFR_HUDNameLabel_on_revived_mode_ic
     function(self)
         self._bot_mode_icon:set_visible(self._bot_mode ~= nil)
         self._bot_revive_icon:set_visible(self._bot_revive_state ~= nil)
+        self._bot_follow_icon:set_visible(self._bot_follow_color ~= nil)
     end
 )

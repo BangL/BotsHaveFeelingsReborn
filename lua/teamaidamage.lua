@@ -78,6 +78,7 @@ local function clear_bhfr_reviving(self)
     local movement = self._unit:movement()
     if movement and movement.set_bhfr_reviving then
         movement:set_bhfr_reviving(nil)
+        movement:set_bhfr_follow_target(nil)
 
         if movement:bhfr_is_wait_mode() then
             movement:set_bhfr_mode(TeamAIMovement.bhfr_modes.vanilla, nil)
