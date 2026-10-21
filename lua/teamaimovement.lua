@@ -241,7 +241,10 @@ function TeamAIMovement:_bhfr_follow_color()
 
 	if alive(target_unit) then
 		if WolfgangHUD and WolfgangHUD.character_color_id then
-			color_id = WolfgangHUD:character_color_id(target_unit)
+			-- its panel mode looks the unit up in the criminals manager, which can fail while units come and go
+			local ok, id = pcall(WolfgangHUD.character_color_id, WolfgangHUD, target_unit)
+
+			color_id = ok and id or nil
 		else
 			color_id = managers.criminals:character_color_id_by_unit(target_unit)
 		end
