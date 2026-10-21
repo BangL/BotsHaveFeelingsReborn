@@ -1,8 +1,6 @@
 
 - ADD: waypoint controls
-
 - IMPROVE: bots properly secure loot (throw) ??
-- IMPROVE: rework grenades?
 
 ---
 https://modworkshop.net/mod/12736
