@@ -119,6 +119,13 @@ function Danger:update_bot(unit, t)
 	local objective = brain:objective()
 	local flee = movement._bhfr_flee
 
+	if unit:movement():downed() or unit:character_damage():need_revive() then
+		-- nothing to restore for a bot that is down
+		movement._bhfr_flee = nil
+
+		return
+	end
+
 	if flee and (objective ~= flee.objective) then
 		-- something else gave the bot a new job, not ours to restore anymore
 		movement._bhfr_flee = nil

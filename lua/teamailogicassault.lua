@@ -8,7 +8,7 @@ local CHECK_INTERVAL = 1 -- seconds between two looks for a target
 local COOLDOWN = 8       -- seconds between two throws of one bot
 local MIN_GROUP_SIZE = 3 -- enemies in blast range of the target
 local MAX_THROW_DIS = 2000 -- cm
-local SAFETY_MARGIN = 100  -- cm outside of the blast radius
+local SAFETY_MARGIN = 200  -- cm outside of the blast radius (more than the flee margin in danger.lua)
 
 local projectile_indices = {}
 
