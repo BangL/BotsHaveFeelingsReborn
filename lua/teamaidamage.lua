@@ -70,3 +70,27 @@ end
 function TeamAIDamage:set_crouch_move(state)
     self._char_tweak.crouch_move = state
 end
+
+-- a bot that is down or dead is not on its way to anybody and no longer waits
+-- (a revived bot starts over with the vanilla follow behaviour)
+
+local function clear_bhfr_reviving(self)
+    local movement = self._unit:movement()
+    if movement and movement.set_bhfr_reviving then
+        movement:set_bhfr_reviving(nil)
+
+        if movement:bhfr_is_wait_mode() then
+            movement:set_bhfr_mode(TeamAIMovement.bhfr_modes.vanilla, nil)
+        end
+    end
+end
+
+Hooks:PostHook(TeamAIDamage, "_check_bleed_out", "BHFR_TeamAIDamage_check_bleed_out",
+    function(self)
+        if self._bleed_out then
+            clear_bhfr_reviving(self)
+        end
+    end
+)
+
+Hooks:PostHook(TeamAIDamage, "_die", "BHFR_TeamAIDamage_die", clear_bhfr_reviving)

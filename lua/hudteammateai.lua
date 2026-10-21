@@ -66,12 +66,57 @@ function HUDTeammateAI:_create_bot_mode_panel()
         visible = false,
     })
     self._bot_revive_icon:set_center_y((HUDTeammateAI.PLAYER_NAME_H / 2) - 4)
+
+    self._bot_respawn_text = self._right_panel:text({
+        align = "left",
+        font = tweak_data.gui.fonts[HUDTeammateAI.PLAYER_NAME_FONT],
+        font_size = HUDTeammateAI.PLAYER_NAME_FONT_SIZE,
+        layer = 1,
+        name = "bot_respawn_text",
+        text = "",
+        vertical = "center",
+        visible = false,
+    })
+end
+
+-- time until the (dead) bot is respawned, counted down by the trade manager on every machine
+function HUDTeammateAI:set_bot_respawn_timer(character_name)
+    self._bot_respawn_name = character_name
+    self._bot_respawn_text:stop()
+    self._bot_respawn_text:set_visible(true)
+    self._bot_respawn_text:animate(callback(self, self, "_animate_bot_respawn_timer"))
+end
+
+function HUDTeammateAI:_animate_bot_respawn_timer(text)
+    while managers.trade:is_criminal_in_custody(self._bot_respawn_name) do
+        local seconds = managers.trade:respawn_delay_by_name(self._bot_respawn_name)
+
+        -- 0 = waiting for the trade to be allowed (e.g. stealth)
+        text:set_text((seconds > 0) and string.format("%d:%02d", math.floor(seconds / 60), seconds % 60) or "...")
+        self:_fit_bot_carry_panel()
+
+        local t = 0
+        while t < 0.25 do
+            t = t + coroutine.yield()
+        end
+    end
+
+    self._bot_respawn_name = nil
+    text:set_visible(false)
 end
 
 -- on its way to revive: white = somebody else, red = the local player
 function HUDTeammateAI:set_bot_revive(state)
+    self._bot_revive_state = state
+
     self._bot_revive_icon:set_color((state == "me") and Color.red or Color.white)
-    self._bot_revive_icon:set_visible(state and true or false)
+    self:_update_bot_icons()
+end
+
+-- icons are only shown while the bot is up
+function HUDTeammateAI:_update_bot_icons()
+    self._bot_mode_icon:set_visible((self._bot_mode ~= nil) and not self._bot_downed)
+    self._bot_revive_icon:set_visible((self._bot_revive_state ~= nil) and not self._bot_downed)
     self:_fit_bot_carry_panel()
 end
 
@@ -82,11 +127,12 @@ function HUDTeammateAI:set_bot_mode(mode)
         or (mode == modes.defend_cover) and "waypoint_special_defend"
     local icon = icon_id and tweak_data.gui.icons[icon_id]
 
+    self._bot_mode = icon and mode or nil
+
     if icon then
         self._bot_mode_icon:set_image(icon.texture, unpack(icon.texture_rect))
     end
-    self._bot_mode_icon:set_visible(icon and true or false)
-    self:_fit_bot_carry_panel()
+    self:_update_bot_icons()
 end
 
 function HUDTeammateAI:set_bot_carry_weight(current, max)
@@ -118,6 +164,12 @@ function HUDTeammateAI:_fit_bot_carry_panel()
             or self._player_name:right()
         self._bot_revive_icon:set_left(left + 10)
     end
+
+    if self._bot_respawn_text then
+        BLT:make_fine_text(self._bot_respawn_text)
+        self._bot_respawn_text:set_left(self._player_name:right() + 10)
+        self._bot_respawn_text:set_center_y((HUDTeammateAI.PLAYER_NAME_H / 2) - 4)
+    end
 end
 
 Hooks:PostHook(HUDTeammateAI, "set_name", "BHFR_HUDTeammateAI_set_name",
@@ -135,7 +187,27 @@ Hooks:PostHook(HUDTeammateAI, "refresh", "BHFR_HUDTeammateAI_refresh",
 Hooks:PostHook(HUDTeammateAI, "reset_state", "BHFR_HUDTeammateAI_reset_state",
     function(self)
         self._bot_carry_weight_panel:set_visible(false)
+        self._bot_mode = nil
+        self._bot_revive_state = nil
+        self._bot_downed = nil
+        self._bot_respawn_name = nil
+        self._bot_respawn_text:stop()
+        self._bot_respawn_text:set_visible(false)
         self._bot_mode_icon:set_visible(false)
         self._bot_revive_icon:set_visible(false)
+    end
+)
+
+Hooks:PostHook(HUDTeammateAI, "go_into_bleedout", "BHFR_HUDTeammateAI_go_into_bleedout",
+    function(self)
+        self._bot_downed = true
+        self:_update_bot_icons()
+    end
+)
+
+Hooks:PostHook(HUDTeammateAI, "on_revived", "BHFR_HUDTeammateAI_on_revived",
+    function(self)
+        self._bot_downed = nil
+        self:_update_bot_icons()
     end
 )

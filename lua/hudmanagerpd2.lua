@@ -33,3 +33,10 @@ function HUDManager:set_bot_bhfr_revive(i, name_label_id, state)
         name_label:set_bot_revive(state)
     end
 end
+
+function HUDManager:set_bot_respawn_timer(i, character_name)
+    local panel = self._teammate_panels[i]
+    if panel and panel.set_bot_respawn_timer then
+        panel:set_bot_respawn_timer(character_name)
+    end
+end
