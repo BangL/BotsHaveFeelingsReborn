@@ -7,51 +7,52 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 
 	self:_MakeHeader()
 
-	self:_MakeSeparator()
+	self:EnableScrolling() -- header stays fixed, everything below scrolls
 
 	self:AutoBindNamedControlsBegin()
 
+	self:_MakeSeparator("bhfr_cat_stats", true, 16)
+
 	self:_MakeOptionToggle("double_bot_health")
 	self:_MakeOptionToggle("improve_bot_aim")
+
+	self:_MakeSeparator("bhfr_cat_movement", true, 16)
+
 	self:_MakeOptionToggle("improve_bot_movement")
 	self:_MakeOptionToggle("improve_bot_speed")
 
-	self:_MakeSeparator()
+	self:_MakeSeparator("bhfr_cat_behavior", true, 16)
 
-	self:_MakeOptionToggle("bots_give_human_player_xp")
+	self:_MakeOptionToggle("bots_avoid_grenades")
+	self:_MakeOptionToggle("bots_no_unnecessary_revive")
 
-	self:_MakeSeparator()
-
-	self:_MakeOptionToggle("bot_hurt_sound")
-
-	self:_MakeSeparator()
+	self:_MakeSeparator("bhfr_cat_loot", true, 16)
 
 	self:_MakeOptionToggle("bots_can_catch")
 	self:_MakeOptionToggle("bots_have_strong_back")
 	self:_MakeOptionToggle("bots_secure_carried")
 	self:_MakeOptionToggle("shift_f_for_drop_all_carry")
 
-	self:_MakeSeparator()
+	self:_MakeSeparator("bhfr_cat_commands_stealth", true, 16)
 
 	self:_MakeOptionToggle("bots_can_follow_in_stealth")
 	self:_MakeOptionToggle("toggle_follow_wait_f_shouts_stealth")
 	self:_MakeOptionToggle("bots_are_undetectable")
 
-	self:_MakeSeparator()
+	self:_MakeSeparator("bhfr_cat_commands_loud", true, 16)
 
 	self:_MakeOptionToggle("bots_can_wait_when_loud")
 	self:_MakeOptionToggle("toggle_follow_wait_f_shouts_loud")
 	self:_MakeOptionMultiChoice("wait_modes", { "wait_modes_stationary_cover", "wait_modes_cover_stationary", "wait_mode_stationary", "wait_mode_cover" })
 
-	self:_MakeSeparator()
+	self:_MakeSeparator("bhfr_cat_feedback", true, 16)
 
+	self:_MakeOptionToggle("bot_hurt_sound")
+	self:_MakeOptionToggle("bots_give_human_player_xp")
 	self:_MakeOptionToggle("send_comm_wheel_like_chat_messages")
 	self:_MakeOptionToggle("announce_player_uses_mod")
-	self:_MakeOptionToggle("bots_no_unnecessary_revive")
-	self:_MakeOptionToggle("bots_avoid_grenades")
 
-	-- big offset pushes the bot blocks into the next column
-	self:_MakeSeparator("bhfr_bot_weapons_primary", true, 80)
+	self:_MakeSeparator("bhfr_bot_weapons_primary", true, 16)
 
 	local primaries_keys = {}
 	for i, data in ipairs(BotsHaveFeelingsReborn.BOT_WEAPONS_PRIMARY) do

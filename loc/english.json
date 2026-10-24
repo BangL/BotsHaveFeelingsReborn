@@ -1,11 +1,15 @@
 {
   "bhfr_title": "Bots Have Feelings Reborn",
 
+  "bhfr_cat_stats": "Bot Stats",
+
   "bhfr_double_bot_health": "Doubled bot health",
   "bhfr_double_bot_health_desc": "Doubles bot health. [requires re-entering camp from main menu]",
 
   "bhfr_improve_bot_aim": "Improved bot aim",
   "bhfr_improve_bot_aim_desc": "Improved aim, Reduced Spread, Increased reaction time. [requires re-entering camp from main menu]",
+
+  "bhfr_cat_movement": "Bot Movement",
 
   "bhfr_improve_bot_movement": "Improved bot movement (skip animations)",
   "bhfr_improve_bot_movement_desc": "Skipping unnecessary animations etc. [requires re-entering camp from main menu]",
@@ -13,11 +17,15 @@
   "bhfr_improve_bot_speed": "Improved bot movement (increase speed)",
   "bhfr_improve_bot_speed_desc": "Bots always move at full speed.",
 
-  "bhfr_bots_give_human_player_xp": "Human player XP",
-  "bhfr_bots_give_human_player_xp_desc": "Bots count as humans at the xp screen.",
+  "bhfr_cat_behavior": "Bot Behavior",
 
-  "bhfr_bot_hurt_sound": "Bot hurt sound",
-  "bhfr_bot_hurt_sound_desc": "Bots cry out loud, at 20% health.",
+  "bhfr_bots_avoid_grenades": "Bots avoid grenades",
+  "bhfr_bots_avoid_grenades_desc": "Bots step out of the blast radius of live grenades (yours, your team's and the enemy's) and out of fires.",
+
+  "bhfr_bots_no_unnecessary_revive": "No unnecessary revives",
+  "bhfr_bots_no_unnecessary_revive_desc": "Bots do not revive a teammate who is already being revived, and stop when you start.",
+
+  "bhfr_cat_loot": "Loot",
 
   "bhfr_bots_can_catch": "Bots catch and carry loot",
   "bhfr_bots_can_catch_desc": "Bots can catch and carry gold, paintings etc.",
@@ -31,14 +39,18 @@
   "bhfr_shift_f_for_drop_all_carry": "Shift+$BTN_INTERACT to make bot drop all carry",
   "bhfr_shift_f_for_drop_all_carry_desc": "Enable drop all carry interaction for you. works as host and when host has bot carrying enabled.",
 
+  "bhfr_cat_commands_stealth": "Commands (Stealth)",
+
   "bhfr_bots_can_follow_in_stealth": "Can shout at bots in stealth",
   "bhfr_bots_can_follow_in_stealth_desc": "Players can shout follow/wait at bots in stealth. (comm wheel follow/help/wait, or also $BTN_INTERACT if mod installed)",
+
+  "bhfr_toggle_follow_wait_f_shouts_stealth": "Toggle long dist. interaction in stealth",
+  "bhfr_toggle_follow_wait_f_shouts_stealth_desc": "Toggle between follow/wait when quick shouting, not using the comm wheel. (in stealth)",
 
   "bhfr_bots_are_undetectable": "Undetectable bots in stealth",
   "bhfr_bots_are_undetectable_desc": "Bots are undetectable in stealth. Carried items on their backs still are! [for follow in stealth]",
 
-  "bhfr_toggle_follow_wait_f_shouts_stealth": "Toggle long dist. interaction in stealth",
-  "bhfr_toggle_follow_wait_f_shouts_stealth_desc": "Toggle between follow/wait when quick shouting, not using the comm wheel. (in stealth)",
+  "bhfr_cat_commands_loud": "Commands (Loud)",
 
   "bhfr_bots_can_wait_when_loud": "Can shout at bots to wait when loud",
   "bhfr_bots_can_wait_when_loud_desc": "Players can shout 'wait' at bots when loud. (comm wheel follow/help/wait, or also $BTN_INTERACT if mod installed and toggle enabled)",
@@ -53,6 +65,14 @@
   "bhfr_wait_modes_cover_stationary": "Cover > Stat.",
   "bhfr_wait_mode_cover": "Use cover",
 
+  "bhfr_cat_feedback": "Feedback & Chat",
+
+  "bhfr_bot_hurt_sound": "Bot hurt sound",
+  "bhfr_bot_hurt_sound_desc": "Bots cry out loud, at 20% health.",
+
+  "bhfr_bots_give_human_player_xp": "Human player XP",
+  "bhfr_bots_give_human_player_xp_desc": "Bots count as humans at the xp screen.",
+
   "bhfr_send_comm_wheel_like_chat_messages": "Comm-wheel-like chat messages",
   "bhfr_send_comm_wheel_like_chat_messages_desc": "Send chat messages when quick shouting follow/wait, as if the comm wheel was used.",
 
@@ -60,39 +80,39 @@
   "bhfr_announce_player_uses_mod_desc": "Announce in chat when other players use the mod. (only visible for you)",
   "bhfr_player_uses_mod": "$PLAYER is using BotsHaveFeelingsReborn.",
 
-  "bhfr_bots_no_unnecessary_revive": "No unnecessary revives",
-  "bhfr_bots_no_unnecessary_revive_desc": "Bots do not revive a teammate who is already being revived, and stop when you start.",
+  "bhfr_bot_weapons_primary": "Bot Weapons",
 
-  "bhfr_bots_avoid_grenades": "Bots avoid grenades",
-  "bhfr_bots_avoid_grenades_desc": "Bots step out of the blast radius of live grenades (yours, your team's and the enemy's) and out of fires.",
+  "bhfr_bot_weapon_russian_primary": "Kurgan",
+  "bhfr_bot_weapon_russian_primary_desc": "Primary weapon for Kurgan. As a client, the host's setting applies.",
+
+  "bhfr_bot_weapon_german_primary": "Wolfgang",
+  "bhfr_bot_weapon_german_primary_desc": "Primary weapon for Wolfgang. As a client, the host's setting applies.",
+
+  "bhfr_bot_weapon_british_primary": "Sterling",
+  "bhfr_bot_weapon_british_primary_desc": "Primary weapon for Sterling. As a client, the host's setting applies.",
+
+  "bhfr_bot_weapon_american_primary": "Rivet",
+  "bhfr_bot_weapon_american_primary_desc": "Primary weapon for Rivet. As a client, the host's setting applies.",
+
+  "bhfr_ger_mp38_npc": "MP38",
+  "bhfr_ger_stg44_npc": "Stg44",
+  "bhfr_thompson_npc": "Thompson",
+  "bhfr_usa_garand_npc": "Garand",
+
+  "bhfr_bot_grenades": "Bot Grenades",
 
   "bhfr_bots_throw_grenades": "Grenades",
   "bhfr_bots_throw_grenades_desc": "Bots throw grenades at groups of enemies, but only when nobody of the team is inside the blast radius. Which throwable: see Bot Grenades.",
 
-  "bhfr_bot_weapons_primary": "Bot Weapons",
-
-	"bhfr_bot_weapon_russian_primary": "Kurgan",
-	"bhfr_bot_weapon_russian_primary_desc": "Primary weapon for Kurgan. As a client, the host's setting applies.",
-	"bhfr_bot_weapon_german_primary": "Wolfgang",
-	"bhfr_bot_weapon_german_primary_desc": "Primary weapon for Wolfgang. As a client, the host's setting applies.",
-	"bhfr_bot_weapon_british_primary": "Sterling",
-	"bhfr_bot_weapon_british_primary_desc": "Primary weapon for Sterling. As a client, the host's setting applies.",
-	"bhfr_bot_weapon_american_primary": "Rivet",
-	"bhfr_bot_weapon_american_primary_desc": "Primary weapon for Rivet. As a client, the host's setting applies.",
-
-	"bhfr_ger_mp38_npc": "MP38",
-	"bhfr_ger_stg44_npc": "Stg44",
-	"bhfr_thompson_npc": "Thompson",
-	"bhfr_usa_garand_npc": "Garand",
-
-  "bhfr_bot_grenades": "Bot Grenades",
-
   "bhfr_bot_grenade_russian": "Kurgan",
   "bhfr_bot_grenade_russian_desc": "Throwable for Kurgan. Only used with Grenades enabled. Host setting applies.",
+
   "bhfr_bot_grenade_german": "Wolfgang",
   "bhfr_bot_grenade_german_desc": "Throwable for Wolfgang. Only used with Grenades enabled. Host setting applies.",
+
   "bhfr_bot_grenade_british": "Sterling",
   "bhfr_bot_grenade_british_desc": "Throwable for Sterling. Only used with Grenades enabled. Host setting applies.",
+
   "bhfr_bot_grenade_american": "Rivet",
   "bhfr_bot_grenade_american_desc": "Throwable for Rivet. Only used with Grenades enabled. Host setting applies.",
 

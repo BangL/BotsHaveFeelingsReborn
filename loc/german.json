@@ -1,11 +1,15 @@
 {
   "bhfr_title": "Bots Have Feelings Reborn",
 
+  "bhfr_cat_stats": "Bot-Werte",
+
   "bhfr_double_bot_health": "Doppelte Bot-Gesundheit",
   "bhfr_double_bot_health_desc": "Verdoppelt die Gesundheit der Bots. [erfordert erneutes Betreten des Camps aus dem Hauptmenü]",
 
   "bhfr_improve_bot_aim": "Verbessertes Zielen der Bots",
   "bhfr_improve_bot_aim_desc": "Besseres Zielen, geringere Streuung, kürzere Reaktionszeit. [erfordert erneutes Betreten des Camps aus dem Hauptmenü]",
+
+  "bhfr_cat_movement": "Bot-Bewegung",
 
   "bhfr_improve_bot_movement": "Verbesserte Bot-Bewegung (Animationen überspringen)",
   "bhfr_improve_bot_movement_desc": "Überspringt unnötige Animationen usw. [erfordert erneutes Betreten des Camps aus dem Hauptmenü]",
@@ -13,11 +17,15 @@
   "bhfr_improve_bot_speed": "Verbesserte Bot-Bewegung (höheres Tempo)",
   "bhfr_improve_bot_speed_desc": "Bots bewegen sich immer mit voller Geschwindigkeit.",
 
-  "bhfr_bots_give_human_player_xp": "XP wie für menschliche Spieler",
-  "bhfr_bots_give_human_player_xp_desc": "Bots zählen im XP-Bildschirm als menschliche Spieler.",
+  "bhfr_cat_behavior": "Bot-Verhalten",
 
-  "bhfr_bot_hurt_sound": "Schmerzlaute der Bots",
-  "bhfr_bot_hurt_sound_desc": "Bots schreien auf, sobald sie auf 20 % Gesundheit sind.",
+  "bhfr_bots_avoid_grenades": "Bots weichen Granaten aus",
+  "bhfr_bots_avoid_grenades_desc": "Bots verlassen den Explosionsradius aktiver Granaten (deine, die des Teams und die der Gegner) sowie Feuer.",
+
+  "bhfr_bots_no_unnecessary_revive": "Keine unnötigen Wiederbelebungen",
+  "bhfr_bots_no_unnecessary_revive_desc": "Bots beleben niemanden, der gerade schon wiederbelebt wird, und hören auf, sobald du anfängst.",
+
+  "bhfr_cat_loot": "Beute",
 
   "bhfr_bots_can_catch": "Bots fangen und tragen Beute",
   "bhfr_bots_can_catch_desc": "Bots können Gold, Gemälde usw. fangen und tragen.",
@@ -31,14 +39,18 @@
   "bhfr_shift_f_for_drop_all_carry": "Umschalt+$BTN_INTERACT lässt Bots alles Getragene ablegen",
   "bhfr_shift_f_for_drop_all_carry_desc": "Schaltet die Interaktion zum Ablegen aller getragenen Gegenstände für dich frei. Funktioniert als Host und wenn der Host das Tragen durch Bots aktiviert hat.",
 
+  "bhfr_cat_commands_stealth": "Befehle (Stealth)",
+
   "bhfr_bots_can_follow_in_stealth": "Bots im Schleichen anrufen",
   "bhfr_bots_can_follow_in_stealth_desc": "Spieler können Bots im Schleichen \"Folgen\"/\"Warten\" zurufen. (Kommunikationsrad Folgen/Hilfe/Warten, mit installierter Mod auch $BTN_INTERACT)",
+
+  "bhfr_toggle_follow_wait_f_shouts_stealth": "Fern-Interaktion im Schleichen umschalten",
+  "bhfr_toggle_follow_wait_f_shouts_stealth_desc": "Wechselt beim Schnellzuruf zwischen Folgen und Warten, ohne Kommunikationsrad. (im Schleichen)",
 
   "bhfr_bots_are_undetectable": "Unentdeckbare Bots im Schleichen",
   "bhfr_bots_are_undetectable_desc": "Bots sind im Schleichen nicht zu entdecken. Von ihnen getragene Gegenstände weiterhin schon! [für Folgen im Schleichen]",
 
-  "bhfr_toggle_follow_wait_f_shouts_stealth": "Fern-Interaktion im Schleichen umschalten",
-  "bhfr_toggle_follow_wait_f_shouts_stealth_desc": "Wechselt beim Schnellzuruf zwischen Folgen und Warten, ohne Kommunikationsrad. (im Schleichen)",
+  "bhfr_cat_commands_loud": "Befehle (Laut)",
 
   "bhfr_bots_can_wait_when_loud": "Bots im lauten Spiel \"Warten\" zurufen",
   "bhfr_bots_can_wait_when_loud_desc": "Spieler können Bots im lauten Spiel \"Warten\" zurufen. (Kommunikationsrad Folgen/Hilfe/Warten, mit installierter Mod und aktivem Umschalten auch $BTN_INTERACT)",
@@ -53,6 +65,14 @@
   "bhfr_wait_modes_cover_stationary": "Deckung > Stat.",
   "bhfr_wait_mode_cover": "Deckung nutzen",
 
+  "bhfr_cat_feedback": "Feedback & Chat",
+
+  "bhfr_bot_hurt_sound": "Schmerzlaute der Bots",
+  "bhfr_bot_hurt_sound_desc": "Bots schreien auf, sobald sie auf 20 % Gesundheit sind.",
+
+  "bhfr_bots_give_human_player_xp": "XP wie für menschliche Spieler",
+  "bhfr_bots_give_human_player_xp_desc": "Bots zählen im XP-Bildschirm als menschliche Spieler.",
+
   "bhfr_send_comm_wheel_like_chat_messages": "Chat-Nachrichten wie vom Kommunikationsrad",
   "bhfr_send_comm_wheel_like_chat_messages_desc": "Sendet beim Schnellzuruf von Folgen/Warten Chat-Nachrichten, als wäre das Kommunikationsrad benutzt worden.",
 
@@ -60,23 +80,17 @@
   "bhfr_announce_player_uses_mod_desc": "Meldet im Chat, wenn andere Spieler die Mod nutzen. (nur für dich sichtbar)",
   "bhfr_player_uses_mod": "$PLAYER nutzt BotsHaveFeelingsReborn.",
 
-  "bhfr_bots_no_unnecessary_revive": "Keine unnötigen Wiederbelebungen",
-  "bhfr_bots_no_unnecessary_revive_desc": "Bots beleben niemanden, der gerade schon wiederbelebt wird, und hören auf, sobald du anfängst.",
-
-  "bhfr_bots_avoid_grenades": "Bots weichen Granaten aus",
-  "bhfr_bots_avoid_grenades_desc": "Bots verlassen den Explosionsradius aktiver Granaten (deine, die des Teams und die der Gegner) sowie Feuer.",
-
-  "bhfr_bots_throw_grenades": "Granaten",
-  "bhfr_bots_throw_grenades_desc": "Bots werfen Granaten auf Gegnergruppen, aber nur wenn niemand vom Team im Explosionsradius steht. Welche Granate: siehe Bot-Granaten.",
-
   "bhfr_bot_weapons_primary": "Bot-Waffen",
 
   "bhfr_bot_weapon_russian_primary": "Kurgan",
   "bhfr_bot_weapon_russian_primary_desc": "Primärwaffe für Kurgan. Als Client gilt die Einstellung des Hosts.",
+
   "bhfr_bot_weapon_german_primary": "Wolfgang",
   "bhfr_bot_weapon_german_primary_desc": "Primärwaffe für Wolfgang. Als Client gilt die Einstellung des Hosts.",
+
   "bhfr_bot_weapon_british_primary": "Sterling",
   "bhfr_bot_weapon_british_primary_desc": "Primärwaffe für Sterling. Als Client gilt die Einstellung des Hosts.",
+
   "bhfr_bot_weapon_american_primary": "Rivet",
   "bhfr_bot_weapon_american_primary_desc": "Primärwaffe für Rivet. Als Client gilt die Einstellung des Hosts.",
 
@@ -87,12 +101,18 @@
 
   "bhfr_bot_grenades": "Bot-Granaten",
 
+  "bhfr_bots_throw_grenades": "Granaten",
+  "bhfr_bots_throw_grenades_desc": "Bots werfen Granaten auf Gegnergruppen, aber nur wenn niemand vom Team im Explosionsradius steht. Welche Granate: siehe Bot-Granaten.",
+
   "bhfr_bot_grenade_russian": "Kurgan",
   "bhfr_bot_grenade_russian_desc": "Wurfgranate für Kurgan. Nur wirksam bei aktivierten Granaten. Es gilt die Einstellung des Hosts.",
+
   "bhfr_bot_grenade_german": "Wolfgang",
   "bhfr_bot_grenade_german_desc": "Wurfgranate für Wolfgang. Nur wirksam bei aktivierten Granaten. Es gilt die Einstellung des Hosts.",
+
   "bhfr_bot_grenade_british": "Sterling",
   "bhfr_bot_grenade_british_desc": "Wurfgranate für Sterling. Nur wirksam bei aktivierten Granaten. Es gilt die Einstellung des Hosts.",
+
   "bhfr_bot_grenade_american": "Rivet",
   "bhfr_bot_grenade_american_desc": "Wurfgranate für Rivet. Nur wirksam bei aktivierten Granaten. Es gilt die Einstellung des Hosts.",
 

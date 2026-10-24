@@ -2,13 +2,14 @@
       description="Some slight improvements for the team AI."
       author="Takku, BangL"
       contact="https://steamcommunity.com/id/BangL"
-      version="0.12.0"
+      version="0.12.1"
       priority="-1"
-	min_sblt_version="2.0.0"
+	min_sblt_version="2.1.0"
       color="60 60 60">
       <updates>
-            <update provider="modworkshop"
-                  identifier="50170" />
+            <update identifier="botshavefeelingsreborn">
+                <host meta="https://raw.githubusercontent.com/BangL/raid-mods-meta/main/botshavefeelingsreborn.json"/>
+            </update>
       </updates>
       <localization directory="loc">
             <loc file="english.json"
