@@ -1,5 +1,14 @@
 -- bots_can_catch
 
+local NO_CATCH_CARRY_IDS = {
+	corpse_body = true,
+	german_spy_body = true,
+	ladder_4m = true,
+	-- plank = true,
+	parachute = true,
+	turret_m2_gun = true,
+}
+
 local BotCarryBags_PlayerManager_server_drop_carry = PlayerManager.server_drop_carry
 
 function PlayerManager:server_drop_carry(carry_id, carry_multiplier, position, rotation,
@@ -12,8 +21,7 @@ function PlayerManager:server_drop_carry(carry_id, carry_multiplier, position, r
 			and alive(carry_unit)
 			and carry_unit:carry_data()
 			and tweak_data.carry then
-			local carry_tweak = tweak_data.carry[carry_unit:carry_data():carry_id()]
-			if carry_tweak.loot_value or carry_tweak.loot_outlaw_value then
+			if not NO_CATCH_CARRY_IDS[carry_unit:carry_data():carry_id()] then
 				carry_unit:carry_data():start_bot_carry_catch()
 			end
 		end
