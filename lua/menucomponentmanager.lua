@@ -24,6 +24,7 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 	self:_MakeSeparator("bhfr_cat_behavior", true, 16)
 
 	self:_MakeOptionToggle("bots_avoid_grenades")
+	self:_MakeOptionToggle("bots_extinguish_flares")
 	self:_MakeOptionToggle("bots_no_unnecessary_revive")
 
 	self:_MakeSeparator("bhfr_cat_loot", true, 16)

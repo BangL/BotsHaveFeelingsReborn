@@ -31,6 +31,7 @@
   "bot_weapon_american_primary": 4,
 
   "bots_no_unnecessary_revive": true,
+  "bots_extinguish_flares": true,
   "bots_avoid_grenades": true,
   "bots_throw_grenades": false,
   "bot_grenade_russian": 4,

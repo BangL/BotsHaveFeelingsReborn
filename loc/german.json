@@ -20,6 +20,8 @@
   "bhfr_cat_behavior": "Bot-Verhalten",
 
   "bhfr_bots_avoid_grenades": "Bots weichen Granaten aus",
+  "bhfr_bots_extinguish_flares": "Bots löschen Spotter-Flares",
+  "bhfr_bots_extinguish_flares_desc": "Ein Bot in Reichweite (Restzeit x Tempo) läuft zu einer Spotter-Flare und löscht sie, bevor das Sperrfeuer startet.",
   "bhfr_bots_avoid_grenades_desc": "Bots verlassen den Explosionsradius aktiver Granaten (deine, die des Teams und die der Gegner) sowie Feuer.",
 
   "bhfr_bots_no_unnecessary_revive": "Keine unnötigen Wiederbelebungen",

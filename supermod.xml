@@ -17,6 +17,11 @@
             <loc file="german.json"
                   language="german" />
       </localization>
+      <assets base_path="assets/">
+            <group name="effects/bhfr/">
+                  <file :name="pee_stream.effect" />
+            </group>
+      </assets>
       <hooks>
             <pre hook_id="lib/entry"
                   script_path="BotsHaveFeelingsReborn.lua" />
@@ -80,6 +85,9 @@
             <!-- bots avoid grenades -->
             <post hook_id="lib/managers/group_ai_states/groupaistatebase"
                   script_path="lua/danger.lua" />
+            <!-- bots extinguish spotter flares -->
+            <post hook_id="lib/managers/group_ai_states/groupaistatebase"
+                  script_path="lua/flares.lua" />
             <post hook_id="lib/units/weapons/projectiles/projectilebase"
                   script_path="lua/projectilebase.lua" />
             <post hook_id="lib/managers/firemanager"

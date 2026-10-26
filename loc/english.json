@@ -20,6 +20,8 @@
   "bhfr_cat_behavior": "Bot Behavior",
 
   "bhfr_bots_avoid_grenades": "Bots avoid grenades",
+  "bhfr_bots_extinguish_flares": "Bots extinguish spotter flares",
+  "bhfr_bots_extinguish_flares_desc": "A bot within reach (remaining time x speed) runs to a spotter flare and puts it out before the barrage starts.",
   "bhfr_bots_avoid_grenades_desc": "Bots step out of the blast radius of live grenades (yours, your team's and the enemy's) and out of fires.",
 
   "bhfr_bots_no_unnecessary_revive": "No unnecessary revives",
