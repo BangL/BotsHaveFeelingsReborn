@@ -30,6 +30,7 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 
 	self:_MakeOptionToggle("bots_can_catch")
 	self:_MakeOptionToggle("bots_have_strong_back")
+	self:_MakeOptionToggle("bots_slowed_by_carry")
 	self:_MakeOptionToggle("bots_secure_carried")
 	self:_MakeOptionToggle("shift_f_for_drop_all_carry")
 

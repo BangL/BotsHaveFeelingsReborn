@@ -10,6 +10,7 @@
 
   "bots_can_catch": true,
   "bots_have_strong_back": true,
+  "bots_slowed_by_carry": true,
   "bots_secure_carried": true,
   "shift_f_for_drop_all_carry": true,
 
