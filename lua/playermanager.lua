@@ -2,10 +2,12 @@
 
 BotsHaveFeelingsReborn.NO_CATCH_CARRY_IDS = {
 	corpse_body = true,
+	flak_shell_pallete = true,
 	german_spy_body = true,
 	ladder_4m = true,
-	-- plank = true,
 	parachute = true,
+	-- plank = true,
+	tank_shells = true,
 	turret_m2_gun = true,
 }
 
