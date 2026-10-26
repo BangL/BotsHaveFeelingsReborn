@@ -426,27 +426,3 @@ end
 function TeamAIMovement:reset_carry_weight()
 	self:modify_carry_weight(nil, nil, true)
 end
-
--- bots_secure_carried
-
-function TeamAIMovement:secure_all_carry()
-	if not Network:is_server() then
-		return
-	end
-	if self:is_carrying() then
-		for _, unit in pairs(self._carry_units) do
-			if unit and alive(unit) then
-				local carry_id = unit:carry_data():carry_id()
-				local carry_tweak = tweak_data.carry[carry_id]
-				unit:carry_data():unlink(true)
-				if BotsHaveFeelingsReborn:GetConfigOption("bots_secure_carried") and (carry_tweak.loot_value or carry_tweak.loot_outlaw_value) then
-					managers.loot:server_secure_loot(carry_id, unit:carry_data():multiplier(),
-						false)
-				end
-				unit:set_slot(0)
-			end
-		end
-	end
-	self._carry_units = {}
-	self:reset_carry_weight()
-end

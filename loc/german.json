@@ -37,8 +37,6 @@
   "bhfr_bots_slowed_by_carry": "Bots werden durch Tragen langsamer",
   "bhfr_bots_slowed_by_carry_desc": "Getragene Bags bremsen Bots wie Spieler (nach Gewicht und Bag-Typ).",
 
-  "bhfr_bots_secure_carried": "Getragene Beute sichern",
-  "bhfr_bots_secure_carried_desc": "Von Bots getragene Beute zählt bei Missionserfolg als gesichert.",
 
   "bhfr_shift_f_for_drop_all_carry": "Umschalt+$BTN_INTERACT lässt Bots alles Getragene ablegen",
   "bhfr_shift_f_for_drop_all_carry_desc": "Schaltet die Interaktion zum Ablegen aller getragenen Gegenstände für dich frei. Funktioniert als Host und wenn der Host das Tragen durch Bots aktiviert hat.",

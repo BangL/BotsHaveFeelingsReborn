@@ -37,8 +37,6 @@
   "bhfr_bots_slowed_by_carry": "Bots slowed by carrying",
   "bhfr_bots_slowed_by_carry_desc": "Carried bags slow bots down like players (by weight and bag type).",
 
-  "bhfr_bots_secure_carried": "Secure carried loot",
-  "bhfr_bots_secure_carried_desc": "Loot, carried by bots, counts as secured at mission success.",
 
   "bhfr_shift_f_for_drop_all_carry": "Shift+$BTN_INTERACT to make bot drop all carry",
   "bhfr_shift_f_for_drop_all_carry_desc": "Enable drop all carry interaction for you. works as host and when host has bot carrying enabled.",

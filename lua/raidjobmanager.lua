@@ -1,4 +1,4 @@
--- bots_can_catch / bots_secure_carried
+-- bots_can_catch (carried loot is not secured, bots drop it)
 
 local external_end_mission_original = RaidJobManager.external_end_mission
 
@@ -7,7 +7,7 @@ function RaidJobManager:external_end_mission(restart_camp, is_failed, ...)
         local _all_AI_criminals = managers.groupai:state():all_AI_criminals() or {}
         for _, data in pairs(_all_AI_criminals) do
             if data.unit and alive(data.unit) and data.unit:movement() then
-                data.unit:movement():secure_all_carry() -- checks for bots_secure_carried and just deletes, if disabled. no need to check here.
+                data.unit:movement():drop_all_carry() -- bags carried by bots do not count
             end
         end
     end
