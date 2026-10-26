@@ -34,6 +34,12 @@
 
   "bhfr_bots_have_strong_back": "Bots have strong back",
   "bhfr_bots_have_strong_back_desc": "Bots have +2 carry weight from strong back.",
+  "bhfr_monkeepers_mode": "Bots carry bags like players",
+  "bhfr_monkeepers_mode_desc": "Throw a bag far away (7 m+) and bots start to fetch the bags lying around where you picked yours up and throw them the same way. Host only. Same id: only bags of the same kind, same type: only bags that fly the same distance.",
+  "bhfr_monkeepers_off": "Off",
+  "bhfr_monkeepers_id": "Same id",
+  "bhfr_monkeepers_type": "Same type",
+  "bhfr_monkeepers_any": "Any bag",
   "bhfr_bots_slowed_by_carry": "Bots slowed by carrying",
   "bhfr_bots_slowed_by_carry_desc": "Carried bags slow bots down like players (by weight and bag type).",
 

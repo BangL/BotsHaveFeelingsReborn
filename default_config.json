@@ -11,6 +11,7 @@
   "bots_can_catch": true,
   "bots_have_strong_back": true,
   "bots_slowed_by_carry": true,
+  "monkeepers_mode": 4,
   "shift_f_for_drop_all_carry": true,
 
   "bots_can_follow_in_stealth": true,

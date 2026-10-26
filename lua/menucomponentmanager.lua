@@ -32,6 +32,7 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 	self:_MakeOptionToggle("bots_can_catch")
 	self:_MakeOptionToggle("bots_have_strong_back")
 	self:_MakeOptionToggle("bots_slowed_by_carry")
+	self:_MakeOptionMultiChoice("monkeepers_mode", { "monkeepers_off", "monkeepers_id", "monkeepers_type", "monkeepers_any" })
 	self:_MakeOptionToggle("shift_f_for_drop_all_carry")
 
 	self:_MakeSeparator("bhfr_cat_commands_stealth", true, 16)
@@ -154,6 +155,10 @@ function BotsHaveFeelingsRebornMenu:_MakeOptionMultiChoice(option, items)
 end
 
 function BotsHaveFeelingsRebornMenu:OnOptionChanged(option, value)
+	if option == "monkeepers_mode" and BotsHaveFeelingsReborn.Monkeepers then
+		-- routes are only valid for the mode they were made in
+		BotsHaveFeelingsReborn.Monkeepers:reset()
+	end
 	if BotsHaveFeelingsReborn:SetConfigOption(option, (type(value) == "table") and value.value or value) then
 		self._something_changed = true
 	end

@@ -78,3 +78,15 @@ Hooks:PostHook(ReviveInteractionExt, "set_waypoint_paused", "BHFR_ReviveInteract
 		end
 	end
 )
+
+-- monkeepers_mode: remember where a player picked a bag up
+
+Hooks:PreHook(CarryInteractionExt, "sync_interacted", "BHFR_CarryInteractionExt_sync_interacted",
+	function(self, peer, player)
+		local monkeepers = BotsHaveFeelingsReborn.Monkeepers
+
+		if monkeepers and monkeepers:enabled() then
+			monkeepers:on_pickup(self._unit, peer, player)
+		end
+	end
+)

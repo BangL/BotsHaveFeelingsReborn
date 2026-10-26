@@ -34,7 +34,7 @@ local function bot_available(unit)
 	local movement = unit:movement()
 	local objective = unit:brain():objective()
 
-	return not (movement._bhfr_flare or movement:downed() or unit:character_damage():need_revive() or
+	return not (movement._bhfr_flare or movement._bhfr_mkp or movement:downed() or unit:character_damage():need_revive() or
 		(objective and objective.type == "revive"))
 end
 
@@ -168,7 +168,7 @@ function Flares.play_stream(unit, duration)
 end
 
 -- same as UseInteractionExt:interact, minus the parts that only make sense for the local player
-local function extinguish(unit, flare, piss)
+local function extinguish(unit, flare)
 	local ext = flare:interaction()
 
 	if not ext or not ext:active() then
@@ -277,7 +277,7 @@ function Flares:update_bot(unit, job, game_t)
 	if job.done_t then
 		-- the animation runs, put the flare out when the time is up
 		if game_t >= job.done_t then
-			extinguish(unit, flare, job.piss)
+			extinguish(unit, flare)
 			release(unit, job)
 		end
 
