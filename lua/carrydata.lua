@@ -89,6 +89,13 @@ Hooks:PostHook(CarryData, "on_pickup", "BHFR_CarryData_on_pickup",
 	end
 )
 
+-- bag secured/removed while a bot still carries it: release its weight, else the carry display stays stuck
+Hooks:PreHook(CarryData, "destroy", "BHFR_CarryData_destroy",
+	function(self)
+		self:on_carry_unlinked()
+	end
+)
+
 function CarryData:on_carry_unlinked(silent)
 	if self._linked_to and self._linked_to:movement() and self._linked_to:movement().remove_carry_unit then
 		self._linked_to:movement():remove_carry_unit(self._unit, silent)
