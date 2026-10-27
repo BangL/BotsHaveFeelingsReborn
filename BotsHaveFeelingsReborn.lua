@@ -17,7 +17,6 @@ BotsHaveFeelingsReborn.BOT_WEAPONS_PRIMARY = {
 BotsHaveFeelingsReborn.BOT_GRENADES = {
     { id = "grenade_none" },
     { id = "grenade_concrete", projectile = "concrete" },
-    { id = "grenade_betty",    projectile = "betty" },
     { id = "grenade_d343",     projectile = "d343" },
     { id = "grenade_mills",    projectile = "mills" },
     { id = "grenade_m24",      projectile = "m24" },
@@ -53,6 +52,17 @@ function BotsHaveFeelingsReborn:LoadConfig()
         if config and (type(config) == "table") then
             for k, v in pairs(config) do
                 self._config[k] = v
+            end
+            -- "Spring Mine" (betty) was removed from BOT_GRENADES: shift saved indices once
+            if not config.grenades_migrated then
+                for _, nationality in ipairs({ "russian", "german", "british", "american" }) do
+                    local key = "bot_grenade_" .. nationality
+                    local idx = tonumber(config[key])
+                    if idx then
+                        self._config[key] = (idx > 3) and (idx - 1) or idx
+                    end
+                end
+                self._config.grenades_migrated = true
             end
         end
     end
