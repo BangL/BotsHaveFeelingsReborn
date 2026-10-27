@@ -110,7 +110,7 @@
   "bhfr_bot_grenades": "Bot Grenades",
 
   "bhfr_bots_throw_grenades": "Grenades",
-  "bhfr_bots_throw_grenades_desc": "Bots throw grenades at groups of enemies, but only when nobody of the team is inside the blast radius. Which throwable: see Bot Grenades.",
+  "bhfr_bots_throw_grenades_desc": "Bots throw grenades at groups of enemies, but only when nobody of the team is inside the blast radius. Which throwable: see Bot Grenades. A bot carries as many as a player can and refills at grenade pickups nearby.",
 
   "bhfr_bot_grenade_russian": "Kurgan",
   "bhfr_bot_grenade_russian_desc": "Throwable for Kurgan. Only used with Grenades enabled. Host setting applies.",

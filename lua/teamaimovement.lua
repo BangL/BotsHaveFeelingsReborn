@@ -57,6 +57,10 @@ Hooks:PostHook(TeamAIMovement, "check_visual_equipment", "BHFR_TeamAIMovement_ch
 				if follow_data then
 					self:set_bhfr_follow_target(follow_data.target)
 				end
+				local carry_data = cache[BotsHaveFeelingsReborn.Sync.events.bot_bhfr_carry]
+				if carry_data then
+					self:set_bhfr_carry_job(carry_data.state)
+				end
 				local bot_carry_weight_data = cache[BotsHaveFeelingsReborn.Sync.events.bot_carry_weight]
 				if bot_carry_weight_data then
 					self:modify_carry_weight(bot_carry_weight_data.current, bot_carry_weight_data.max, true)
@@ -265,6 +269,25 @@ function TeamAIMovement:_update_bhfr_hud()
 
 		managers.hud:set_bot_bhfr_follow(unit_data.teammate_panel_id, unit_data.name_label_id,
 			self:_bhfr_follow_color())
+		managers.hud:set_bot_bhfr_carry(unit_data.teammate_panel_id, unit_data.name_label_id, self._bhfr_carry_job)
+	end
+end
+
+-- monkeepers_mode: "fetch" = on its way to a bag, "bring" = carrying it to the throw spot (nil = none)
+function TeamAIMovement:set_bhfr_carry_job(state)
+	if self._bhfr_carry_job == state then
+		return
+	end
+
+	self._bhfr_carry_job = state
+
+	self:_update_bhfr_hud()
+
+	if Network:is_server() and BotsHaveFeelingsReborn.Sync then
+		BotsHaveFeelingsReborn.Sync:send_to_peers(false, BotsHaveFeelingsReborn.Sync.events.bot_bhfr_carry, {
+			name = self._unit:base()._tweak_table,
+			state = state
+		})
 	end
 end
 

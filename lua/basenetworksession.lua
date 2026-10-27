@@ -11,6 +11,7 @@ if not BotsHaveFeelingsReborn.Sync then
             bot_bhfr_mode = "bot_bhfr_mode",
             bot_bhfr_revive = "bot_bhfr_revive",
             bot_bhfr_follow = "bot_bhfr_follow",
+            bot_bhfr_carry = "bot_bhfr_carry",
             drop_all_carry = "drop_all_carry",
             bot_flare_stream = "bot_flare_stream",
         },
@@ -300,6 +301,21 @@ if not BotsHaveFeelingsReborn.Sync then
         else
             -- unit was null, cache for TeamAIMovement
             self:cache(self.events.bot_bhfr_follow, data)
+        end
+    end
+
+    function BotsHaveFeelingsReborn.Sync:bot_bhfr_carry(peer_id, data)
+        if not self:_validate(self.valid.client, self.valid.server, true, peer_id, data) then
+            return
+        end
+        local unit = managers.criminals:character_unit_by_name(data.name)
+        if unit then
+            if unit:movement() and unit:movement().set_bhfr_carry_job then
+                unit:movement():set_bhfr_carry_job(data.state)
+            end
+        else
+            -- unit was null, cache for TeamAIMovement
+            self:cache(self.events.bot_bhfr_carry, data)
         end
     end
 end

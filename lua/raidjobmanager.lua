@@ -1,10 +1,13 @@
--- bots_can_catch / monkeepers_mode (carried loot is not secured, bots drop it)
+-- bots_can_catch / monkeepers_mode (carried loot is not secured, bots drop it), grenades (the counts start over with every mission)
 
 local external_end_mission_original = RaidJobManager.external_end_mission
 
 function RaidJobManager:external_end_mission(restart_camp, is_failed, ...)
     if BotsHaveFeelingsReborn.Monkeepers then
         BotsHaveFeelingsReborn.Monkeepers:reset()
+    end
+    if BotsHaveFeelingsReborn.GrenadePickups then
+        BotsHaveFeelingsReborn.GrenadePickups:reset()
     end
     if not restart_camp and Network:is_server() and self._current_job and not is_failed then
         local _all_AI_criminals = managers.groupai:state():all_AI_criminals() or {}
@@ -22,6 +25,9 @@ local external_start_mission_clbk_original = RaidJobManager.external_start_missi
 function RaidJobManager:external_start_mission_clbk(...)
     if BotsHaveFeelingsReborn.Monkeepers then
         BotsHaveFeelingsReborn.Monkeepers:reset()
+    end
+    if BotsHaveFeelingsReborn.GrenadePickups then
+        BotsHaveFeelingsReborn.GrenadePickups:reset()
     end
     return external_start_mission_clbk_original(self, ...)
 end

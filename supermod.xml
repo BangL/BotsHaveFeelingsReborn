@@ -88,6 +88,9 @@
             <!-- bots carry bags along player routes -->
             <post hook_id="lib/managers/group_ai_states/groupaistatebase"
                   script_path="lua/monkeepers.lua" />
+            <!-- bots refill their grenades at pickups -->
+            <post hook_id="lib/managers/group_ai_states/groupaistatebase"
+                  script_path="lua/grenadepickups.lua" />
             <!-- bots extinguish spotter flares -->
             <post hook_id="lib/managers/group_ai_states/groupaistatebase"
                   script_path="lua/flares.lua" />

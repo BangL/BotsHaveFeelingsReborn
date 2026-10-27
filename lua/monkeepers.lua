@@ -196,7 +196,7 @@ function M:bot_available(unit)
 
 	local movement = unit:movement()
 
-	if movement._bhfr_mkp or movement._bhfr_flare or movement._bhfr_flee or movement:downed() or
+	if movement._bhfr_mkp or movement._bhfr_gpk or movement._bhfr_flare or movement._bhfr_flee or movement:downed() or
 		unit:character_damage():need_revive() or movement:is_carrying() or movement:chk_action_forbidden("walk") then
 		return false
 	end
@@ -314,8 +314,12 @@ function M:register_bag(bag, route)
 			job.state = "walking"
 			job.carrier = unit
 			job.t = now()
+			job.prev_objective = job.candidates and job.candidates[unit:key()]
 			job.objective = unit:brain():objective()
+			job.bhfr_mode = unit:movement():bhfr_mode()
+			job.bhfr_following = unit:movement():bhfr_following()
 			unit:movement()._bhfr_mkp = job
+			unit:movement():set_bhfr_carry_job("fetch")
 			managers.groupai:state():remove_special_objective(job.so_id)
 		end,
 	})
@@ -336,7 +340,15 @@ function M:verify(job, candidate)
 		return false
 	end
 
-	return not self:revive_pending() and not self:older_route_waiting(route)
+	if self:revive_pending() or self:older_route_waiting(route) then
+		return false
+	end
+
+	-- the objective the bot gets back after the job (admin_clbk only sees the job's own)
+	job.candidates = job.candidates or {}
+	job.candidates[candidate:key()] = candidate:brain():objective()
+
+	return true
 end
 
 function M:on_pickup_done(job, unit)
@@ -351,6 +363,7 @@ function M:on_pickup_done(job, unit)
 	bag:carry_data():link_to(unit)
 
 	job.state = "carrying"
+	unit:movement():set_bhfr_carry_job("bring")
 	job.t = now()
 	job.objective = self:make_drop_objective(job)
 
@@ -393,6 +406,7 @@ function M:end_job(job, unit, mark)
 
 		if movement._bhfr_mkp == job then
 			movement._bhfr_mkp = nil
+			movement:set_bhfr_carry_job(nil)
 
 			if alive(job.bag) and job.bag:carry_data() and job.bag:carry_data():is_linked() then
 				movement:drop_all_carry()
@@ -403,7 +417,34 @@ function M:end_job(job, unit, mark)
 			if objective and objective == job.objective then
 				unit:brain():set_objective(nil)
 			end
+
+			-- the game hands out a new objective after the job (in stealth: stand still) or none at all
+			managers.enemy:add_delayed_clbk("bhfr_mkp_restore" .. tostring(job.key), function()
+				self:restore_follow(unit, job)
+			end, now() + 0.1)
 		end
+	end
+end
+
+-- the bot goes back to following whom it followed before the job, unless it was told something else since
+function M:restore_follow(unit, job)
+	local prev = job.prev_objective
+
+	if not alive(unit) or not prev or prev.type ~= "follow" or not alive(prev.follow_unit) then
+		return
+	end
+
+	local movement = unit:movement()
+
+	if movement._bhfr_mkp or movement._bhfr_gpk or movement:downed() or unit:character_damage():need_revive() or
+		movement:bhfr_mode() ~= job.bhfr_mode or movement:bhfr_following() ~= job.bhfr_following then
+		return
+	end
+
+	local objective = unit:brain():objective()
+
+	if not objective or objective.type == "defend_area" then
+		unit:brain():set_objective(prev)
 	end
 end
 
@@ -449,6 +490,9 @@ function M:update(t)
 			if bag:carry_data():is_linked() or not bag:interaction():active() then
 				self:end_job(job, unit, false)
 			end
+		elseif job.state == "walking" and (bag:carry_data():is_linked() or not bag:interaction():active()) and alive(unit) then
+			-- someone else took the bag on the way
+			self:end_job(job, unit, false)
 		elseif not alive(unit) or unit:movement():downed() or unit:character_damage():need_revive() or
 			unit:brain():objective() ~= job.objective or t - job.t > self.JOB_TIMEOUT then
 			self:end_job(job, unit, true)

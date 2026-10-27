@@ -80,6 +80,19 @@ function HUDTeammateAI:_create_bot_mode_panel()
     })
     self._bot_follow_icon:set_center_y((HUDTeammateAI.PLAYER_NAME_H / 2) - 4)
 
+    local carry_icon = tweak_data.gui.icons.waypoint_special_loot
+
+    self._bot_carry_job_icon = self._right_panel:bitmap({
+        layer = 1,
+        name = "bot_carry_job_icon",
+        texture = carry_icon.texture,
+        texture_rect = carry_icon.texture_rect,
+        h = HUDTeammateAI.PLAYER_NAME_H - 2,
+        w = HUDTeammateAI.PLAYER_NAME_H - 2,
+        visible = false,
+    })
+    self._bot_carry_job_icon:set_center_y((HUDTeammateAI.PLAYER_NAME_H / 2) - 4)
+
     self._bot_respawn_text = self._right_panel:text({
         align = "left",
         font = tweak_data.gui.fonts[HUDTeammateAI.PLAYER_NAME_FONT],
@@ -136,8 +149,21 @@ function HUDTeammateAI:set_bot_follow(color)
     self:_update_bot_icons()
 end
 
+-- monkeepers_mode: loot = on its way to a bag, loot_drop = carrying it to the throw spot
+function HUDTeammateAI:set_bot_carry_job(state)
+    self._bot_carry_job = state
+
+    local icon = state and tweak_data.gui.icons[(state == "bring") and "waypoint_special_loot_drop" or "waypoint_special_loot"]
+
+    if icon then
+        self._bot_carry_job_icon:set_image(icon.texture, unpack(icon.texture_rect))
+    end
+    self:_update_bot_icons()
+end
+
 -- icons are only shown while the bot is up
 function HUDTeammateAI:_update_bot_icons()
+    self._bot_carry_job_icon:set_visible((self._bot_carry_job ~= nil) and not self._bot_downed)
     self._bot_follow_icon:set_visible((self._bot_follow_color ~= nil) and not self._bot_downed)
     self._bot_mode_icon:set_visible((self._bot_mode ~= nil) and not self._bot_downed)
     self._bot_revive_icon:set_visible((self._bot_revive_state ~= nil) and not self._bot_downed)
@@ -179,7 +205,7 @@ function HUDTeammateAI:_fit_bot_carry_panel()
     -- everything next to the name, left to right
     local x = self._bot_carry_weight_panel:visible() and self._bot_carry_weight_panel:right() or self._player_name:right()
 
-    for _, icon in ipairs({ self._bot_mode_icon, self._bot_revive_icon, self._bot_follow_icon }) do
+    for _, icon in ipairs({ self._bot_mode_icon, self._bot_revive_icon, self._bot_follow_icon, self._bot_carry_job_icon }) do
         if icon then
             icon:set_left(x + 10)
 
@@ -216,6 +242,8 @@ Hooks:PostHook(HUDTeammateAI, "reset_state", "BHFR_HUDTeammateAI_reset_state",
         self._bot_downed = nil
         self._bot_follow_color = nil
         self._bot_follow_icon:set_visible(false)
+        self._bot_carry_job = nil
+        self._bot_carry_job_icon:set_visible(false)
         self._bot_respawn_name = nil
         self._bot_respawn_text:stop()
         self._bot_respawn_text:set_visible(false)

@@ -26,7 +26,12 @@ local function get_grenade(unit)
 		projectile_indices[projectile] = BlackMarketTweakData:get_index_from_projectile_id(projectile)
 	end
 
-	return projectile_indices[projectile], tweak_data.projectiles[projectile]
+	return projectile_indices[projectile], tweak_data.projectiles[projectile], projectile
+end
+
+-- projectile index, tweak data and id of the throwable of this bot (grenadepickups.lua counts them)
+function BotsHaveFeelingsReborn.GetBotGrenade(unit)
+	return get_grenade(unit)
 end
 
 -- nobody of ours (players, bots, the thrower) inside the blast
@@ -106,6 +111,15 @@ Hooks:PreHook(TeamAILogicAssault, "update", "BHFR_TeamAILogicAssault_update", fu
 		return
 	end
 
+	-- a bot carries as many as a player can, and only gets new ones from grenade pickups (grenadepickups.lua)
+	local pickups = BotsHaveFeelingsReborn.GrenadePickups
+
+	if pickups and pickups:amount(data.unit) <= 0 then
+		data.bhfr_grenade_t = t + CHECK_INTERVAL
+
+		return
+	end
+
 	data.bhfr_grenade_t = t + CHECK_INTERVAL
 
 	local crim_mov = data.unit:movement()
@@ -123,6 +137,10 @@ Hooks:PreHook(TeamAILogicAssault, "update", "BHFR_TeamAILogicAssault_update", fu
 	mvec3_norm(direction)
 
 	if ProjectileBase.throw_projectile(projectile_index, from_pos, direction) then
+		if pickups then
+			pickups:spent(data.unit)
+		end
+
 		crim_mov:play_redirect("throw_grenade")
 		managers.network:session():send_to_peers_synched("play_distance_interact_redirect", data.unit, "throw_grenade")
 	end

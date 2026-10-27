@@ -52,3 +52,15 @@ function HUDManager:set_bot_bhfr_follow(i, name_label_id, color)
         name_label:set_bot_follow(color)
     end
 end
+
+function HUDManager:set_bot_bhfr_carry(i, name_label_id, state)
+    local panel = self._teammate_panels[i]
+    if panel and panel.set_bot_carry_job then
+        panel:set_bot_carry_job(state)
+    end
+
+    local name_label = name_label_id and self:_get_name_label(name_label_id)
+    if name_label and name_label.set_bot_carry_job then
+        name_label:set_bot_carry_job(state)
+    end
+end

@@ -110,7 +110,7 @@
   "bhfr_bot_grenades": "Bot-Granaten",
 
   "bhfr_bots_throw_grenades": "Granaten",
-  "bhfr_bots_throw_grenades_desc": "Bots werfen Granaten auf Gegnergruppen, aber nur wenn niemand vom Team im Explosionsradius steht. Welche Granate: siehe Bot-Granaten.",
+  "bhfr_bots_throw_grenades_desc": "Bots werfen Granaten auf Gegnergruppen, aber nur wenn niemand vom Team im Explosionsradius steht. Welche Granate: siehe Bot-Granaten. Ein Bot trägt so viele wie ein Spieler und füllt an Granaten-Pickups in der Nähe nach.",
 
   "bhfr_bot_grenade_russian": "Kurgan",
   "bhfr_bot_grenade_russian_desc": "Wurfgranate für Kurgan. Nur wirksam bei aktivierten Granaten. Es gilt die Einstellung des Hosts.",
