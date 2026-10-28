@@ -18,7 +18,8 @@ function InteractionTweakData:bhfr_comm_wheel_callback(og_clbk, say_target_id, d
         if table.contains({ "follow", "help", "wait" }, id) then
             local player = managers.player:player_unit()
             local _, _, target = player:movement():current_state():teammate_aimed_at_by_player()
-            if target and managers.groupai:state():all_AI_criminals()[target:key()] then
+            -- vanilla returns the NetworkPeer.unit method (not a unit) for human peers
+            if type(target) == "userdata" and alive(target) and managers.groupai:state():all_AI_criminals()[target:key()] then
                 managers.groupai:state():handle_bot_shout(id, player, target)
             end
         end

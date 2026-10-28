@@ -174,6 +174,7 @@ function BotsHaveFeelingsRebornMenu:Reset(value, item)
 				callback = function()
 					-- reset config
 					BotsHaveFeelingsReborn:LoadConfigDefaults()
+					BotsHaveFeelingsReborn._config = clone(BotsHaveFeelingsReborn._config_defaults)
 					BotsHaveFeelingsReborn:SaveConfig()
 					-- reset menu
 					self._something_changed = false

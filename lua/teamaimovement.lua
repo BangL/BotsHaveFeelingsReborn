@@ -43,9 +43,8 @@ Hooks:PostHook(TeamAIMovement, "check_visual_equipment", "BHFR_TeamAIMovement_ch
 			if cache then
 				local data = cache[BotsHaveFeelingsReborn.Sync.events.bot_bhfr_mode]
 				if data then
-					if (self:bhfr_mode() ~= data.mode) or (self:bhfr_following(data.following)) then
-						self:set_bhfr_mode(data.mode, data.following)
-					end
+					-- set_bhfr_mode compares mode and followed unit itself
+					self:set_bhfr_mode(data.mode, data.following)
 					-- set_bhfr_mode skips the hud if nothing changed, but the label may be new
 					self:_update_bhfr_hud()
 				end
@@ -246,7 +245,7 @@ function TeamAIMovement:_bhfr_follow_color()
 	if alive(target_unit) then
 		if WolfgangHUD and WolfgangHUD.character_color_id then
 			-- its panel mode looks the unit up in the criminals manager, which can fail while units come and go
-			local ok, id = pcall(WolfgangHUD.character_color_id, WolfgangHUD, target_unit)
+			local ok, id = blt.pcall(WolfgangHUD.character_color_id, WolfgangHUD, target_unit)
 
 			color_id = ok and id or nil
 		else
