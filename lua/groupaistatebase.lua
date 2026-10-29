@@ -151,7 +151,8 @@ Hooks:PostHook(GroupAIStateBase, "set_whisper_mode", "BHFR_GroupAIStateBase_set_
 local _determine_objective_for_criminal_AI_original = GroupAIStateBase._determine_objective_for_criminal_AI
 
 function GroupAIStateBase:_determine_objective_for_criminal_AI(unit, ...)
-	if managers.groupai:state():whisper_mode() then
+	-- a bot told to wait stays in its wait mode when a job ends (the game would hand out its default follow)
+	if managers.groupai:state():whisper_mode() or alive(unit) and unit:movement().bhfr_is_wait_mode and unit:movement():bhfr_is_wait_mode() then
 		return unit:movement():get_bhfr_objective_defend_area()
 	end
 

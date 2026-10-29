@@ -34,7 +34,8 @@ local function bot_available(unit)
 	local movement = unit:movement()
 	local objective = unit:brain():objective()
 
-	return not (movement._bhfr_flare or movement._bhfr_mkp or movement:downed() or unit:character_damage():need_revive() or
+	-- a Monkeepers job does not count, the flare goes first (the bag stays on its back)
+	return not (movement._bhfr_flare or movement:downed() or unit:character_damage():need_revive() or
 		(objective and objective.type == "revive"))
 end
 
@@ -222,7 +223,8 @@ function Flares:send_bot(flare_data, game_t)
 		return
 	end
 
-	local best, best_dis
+	-- the closest bot without a job, else the closest one busy with a bag
+	local best, best_dis, busy, busy_dis
 
 	for _, char_data in pairs(managers.criminals:ai_criminals()) do
 		local unit = char_data.unit
@@ -230,11 +232,19 @@ function Flares:send_bot(flare_data, game_t)
 		if bot_available(unit) then
 			local dis = mvec3_dis(unit:position(), flare_pos)
 
-			if dis <= max_dis and (not best_dis or dis < best_dis) then
-				best, best_dis = unit, dis
+			if dis <= max_dis then
+				if unit:movement()._bhfr_mkp then
+					if not busy_dis or dis < busy_dis then
+						busy, busy_dis = unit, dis
+					end
+				elseif not best_dis or dis < best_dis then
+					best, best_dis = unit, dis
+				end
 			end
 		end
 	end
+
+	best = best or busy
 
 	if not best then
 		return

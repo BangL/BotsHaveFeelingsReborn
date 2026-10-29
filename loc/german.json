@@ -35,7 +35,7 @@
   "bhfr_bots_have_strong_back": "Bots haben \"Strong Back\"",
   "bhfr_bots_have_strong_back_desc": "Bots haben +2 Tragegewicht durch \"Strong Back\".",
   "bhfr_monkeepers_mode": "Bots tragen Bags wie Spieler",
-  "bhfr_monkeepers_mode_desc": "Wirf ein Bag weit weg (7 m+), dann holen Bots die Bags dort, wo du deins aufgenommen hast, und werfen sie genauso. Nur als Host. Gleiche ID: nur Bags derselben Sorte, gleicher Typ: nur Bags mit gleicher Wurfweite.",
+  "bhfr_monkeepers_mode_desc": "Bag 7 m+ werfen: Bots holen die Bags von deiner Aufnahmestelle und werfen sie auch. Nur Host. ID: gleiche Sorte, Typ: gleiche Weite.",
   "bhfr_monkeepers_off": "Aus",
   "bhfr_monkeepers_id": "Gleiche ID",
   "bhfr_monkeepers_type": "Gleicher Typ",
@@ -67,7 +67,7 @@
   "bhfr_toggle_follow_wait_f_shouts_loud_desc": "Schaltet beim Schnellzuruf durch Folgen/Warte-Modi. $BTN_INTERACT (im lauten Spiel)",
 
   "bhfr_wait_modes": "Warte-Modi",
-  "bhfr_wait_modes_desc": "Warte-Modi im lauten Spiel. Stationär hält die Position, Deckung nutzen sucht Deckung in der Nähe und kehrt zurück. Erneut rufen wechselt. Client: Host-Einstellung.",
+  "bhfr_wait_modes_desc": "Warte-Modus (laut). Stationär hält die Position, Deckung sucht Deckung in der Nähe. Erneut rufen wechselt. Client: Host-Einstellung.",
   "bhfr_wait_mode_stationary": "Stationär",
   "bhfr_wait_modes_stationary_cover": "Stat. > Deckung",
   "bhfr_wait_modes_cover_stationary": "Deckung > Stat.",
@@ -110,7 +110,7 @@
   "bhfr_bot_grenades": "Bot-Granaten",
 
   "bhfr_bots_throw_grenades": "Granaten",
-  "bhfr_bots_throw_grenades_desc": "Bots werfen Granaten auf Gegnergruppen, aber nur wenn niemand vom Team im Explosionsradius steht. Welche Granate: siehe Bot-Granaten. Ein Bot trägt so viele wie ein Spieler und füllt an Granaten-Pickups in der Nähe nach.",
+  "bhfr_bots_throw_grenades_desc": "Bots werfen Granaten auf Gegnergruppen, nie mit Teamkollegen im Radius. Typ: s. Bot-Granaten. Vorrat wie Spieler, füllt an Pickups auf.",
 
   "bhfr_bot_grenade_russian": "Kurgan",
   "bhfr_bot_grenade_russian_desc": "Wurfgranate für Kurgan. Nur wirksam bei aktivierten Granaten. Es gilt die Einstellung des Hosts.",

@@ -356,7 +356,7 @@ function G:update(t)
 	for _, data in pairs(managers.groupai:state():all_AI_criminals()) do
 		local unit = data.unit
 
-		if alive(unit) and not self.jobs[unit:key()] and BotsHaveFeelingsReborn.Monkeepers:bot_available(unit) and
+		if alive(unit) and not self.jobs[unit:key()] and BotsHaveFeelingsReborn.Monkeepers:bot_available(unit, true) and
 			not self:in_combat(unit) then
 			local have, max = self:amount(unit)
 

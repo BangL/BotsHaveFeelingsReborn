@@ -35,7 +35,7 @@
   "bhfr_bots_have_strong_back": "Bots have strong back",
   "bhfr_bots_have_strong_back_desc": "Bots have +2 carry weight from strong back.",
   "bhfr_monkeepers_mode": "Bots carry bags like players",
-  "bhfr_monkeepers_mode_desc": "Throw a bag far away (7 m+) and bots start to fetch the bags lying around where you picked yours up and throw them the same way. Host only. Same id: only bags of the same kind, same type: only bags that fly the same distance.",
+  "bhfr_monkeepers_mode_desc": "Throw a bag 7 m+ and bots fetch the bags where you picked yours up and throw them too. Host only. Id: same kind, type: same range.",
   "bhfr_monkeepers_off": "Off",
   "bhfr_monkeepers_id": "Same id",
   "bhfr_monkeepers_type": "Same type",
@@ -67,7 +67,7 @@
   "bhfr_toggle_follow_wait_f_shouts_loud_desc": "Cycle follow/wait modes when quick shouting. $BTN_INTERACT (when loud)",
 
   "bhfr_wait_modes": "Wait modes",
-  "bhfr_wait_modes_desc": "Wait modes when loud. Stationary holds the spot, use cover takes cover nearby and returns. Shout again to switch. Client: host's setting.",
+  "bhfr_wait_modes_desc": "Loud wait mode. Stationary holds the spot, use cover hides nearby and returns. Shout again to switch. Client: host's setting.",
   "bhfr_wait_mode_stationary": "Stationary",
   "bhfr_wait_modes_stationary_cover": "Stat. > Cover",
   "bhfr_wait_modes_cover_stationary": "Cover > Stat.",
@@ -110,7 +110,7 @@
   "bhfr_bot_grenades": "Bot Grenades",
 
   "bhfr_bots_throw_grenades": "Grenades",
-  "bhfr_bots_throw_grenades_desc": "Bots throw grenades at groups of enemies, but only when nobody of the team is inside the blast radius. Which throwable: see Bot Grenades. A bot carries as many as a player can and refills at grenade pickups nearby.",
+  "bhfr_bots_throw_grenades_desc": "Bots throw grenades at enemy groups if no teammate is in the blast. Type: see Bot Grenades. Player-sized supply, refills at pickups.",
 
   "bhfr_bot_grenade_russian": "Kurgan",
   "bhfr_bot_grenade_russian_desc": "Throwable for Kurgan. Only used with Grenades enabled. Host setting applies.",

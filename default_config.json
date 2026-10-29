@@ -34,9 +34,9 @@
   "bots_extinguish_flares": true,
   "bots_avoid_grenades": true,
   "bots_throw_grenades": false,
-  "bot_grenade_russian": 3,
+  "bot_grenade_russian": 2,
   "bot_grenade_german": 5,
-  "bot_grenade_british": 4,
-  "bot_grenade_american": 2,
+  "bot_grenade_british": 3,
+  "bot_grenade_american": 4,
   "grenades_migrated": true
 }
