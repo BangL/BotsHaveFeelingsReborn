@@ -7,6 +7,7 @@ BotsHaveFeelingsReborn.Monkeepers = BotsHaveFeelingsReborn.Monkeepers or {
 	routes = {},
 	pickups = {}, -- by peer id: where and what the player picked up last
 	bag_jobs = {}, -- by bag key
+	throws = {}, -- by bag key: player throws that have not landed (or been secured) yet
 }
 
 local M = BotsHaveFeelingsReborn.Monkeepers
@@ -144,11 +145,38 @@ function M:on_player_throw(bag, carry_id, peer, position, dir, level)
 		level = level or 0,
 	}
 
-	managers.enemy:add_delayed_clbk("bhfr_mkp_landing" .. tostring(bag:key()), function()
+	local key = bag:key()
+
+	self.throws[key] = throw
+
+	managers.enemy:add_delayed_clbk("bhfr_mkp_landing" .. tostring(key), function()
+		-- secured in the meantime: on_secured made the route
+		if self.throws[key] ~= throw then
+			return
+		end
+
+		self.throws[key] = nil
+
 		if alive(bag) and self:enabled() and not (bag:carry_data() and bag:carry_data():is_linked()) then
 			self:make_route(throw, mvec3_copy(bag:position()))
 		end
 	end, now() + self.LANDING_DELAY)
+end
+
+-- a thrown bag landed in a secure area: the throw counts however short it was
+function M:on_secured(bag)
+	local key = alive(bag) and bag:key()
+	local throw = key and self.throws[key]
+
+	if not throw then
+		return
+	end
+
+	self.throws[key] = nil
+
+	if self:enabled() then
+		self:make_route(throw, mvec3_copy(bag:position()), true)
+	end
 end
 
 function M:remove_route(i)
@@ -159,10 +187,10 @@ function M:remove_route(i)
 	end
 end
 
-function M:make_route(throw, land_pos)
+function M:make_route(throw, land_pos, secured)
 	local dis = mvec3_dis(throw.pickup_pos:with_z(0), land_pos:with_z(0))
 
-	if dis < self.MIN_DISTANCE and math.abs(land_pos.z - throw.pickup_pos.z) < self.MIN_HEIGHT then
+	if not secured and dis < self.MIN_DISTANCE and math.abs(land_pos.z - throw.pickup_pos.z) < self.MIN_HEIGHT then
 		return
 	end
 
@@ -222,7 +250,7 @@ function M:bot_available(unit, side_job)
 
 	local movement = unit:movement()
 	local job = movement._bhfr_mkp
-	local carrying = side_job and job and job.state == "carrying" and not job.paused
+	local carrying = side_job and job and (job.state == "carrying" or job.state == "collecting") and not job.paused
 
 	if job and not carrying or movement._bhfr_gpk or movement._bhfr_flare or movement._bhfr_flee or movement:downed() or
 		unit:character_damage():need_revive() or movement:is_carrying() and not carrying or
@@ -297,16 +325,74 @@ function M:make_drop_objective(job)
 	}
 end
 
-function M:register_bag(bag, route)
-	local key = bag:key()
-
-	if self.bag_jobs[key] then
-		return
-	end
-
+-- the objective to walk to job.bag and pick it up
+function M:make_pickup_objective(job)
+	local bag = job.bag
 	local seg, pos, area = nav_spot(bag:position())
 
 	if not area then
+		return nil
+	end
+
+	-- loot that is no bag yet takes as long as for a player
+	local interaction_tweak = tweak_data.interaction[bag:interaction().tweak_data]
+	local duration = not self:is_bag(bag) and interaction_tweak and interaction_tweak.timer or 1
+
+	local objective
+	local collecting = job.state == "collecting"
+
+	objective = {
+		type = "act",
+		haste = "run",
+		pose = "crouch",
+		nav_seg = seg,
+		area = area,
+		pos = pos,
+		destroy_clbk_key = false,
+		action_duration = math.max(duration, 1),
+		fail_clbk = function(unit)
+			local interrupted = alive(unit) and self:interrupted(unit)
+
+			if collecting then
+				-- the bags on its back go on to the throw spot (resume); a replaced objective is no failure
+				if job.state == "collecting" and job.objective == objective then
+					job.paused = true
+				end
+
+				return
+			end
+
+			-- nothing carried yet: let the bag wait, without holding the route back
+			self:end_job(job, unit, not interrupted)
+		end,
+		complete_clbk = function(unit)
+			self:on_pickup_done(job, unit)
+		end,
+		action = {
+			variant = "untie",
+			align_sync = true,
+			body_part = 1,
+			type = "act",
+		},
+	}
+
+	return objective
+end
+
+function M:is_targeted(bag)
+	for _, job in pairs(self.bag_jobs) do
+		if job.bag == bag then
+			return true
+		end
+	end
+
+	return false
+end
+
+function M:register_bag(bag, route)
+	local key = bag:key()
+
+	if self.bag_jobs[key] or self:is_targeted(bag) then
 		return
 	end
 
@@ -319,33 +405,13 @@ function M:register_bag(bag, route)
 		t = now(),
 	}
 
-	-- loot that is no bag yet takes as long as for a player
-	local interaction_tweak = tweak_data.interaction[bag:interaction().tweak_data]
-	local duration = not self:is_bag(bag) and interaction_tweak and interaction_tweak.timer or 1
+	local objective = self:make_pickup_objective(job)
 
-	local objective = {
-		type = "act",
-		haste = "run",
-		pose = "crouch",
-		nav_seg = seg,
-		area = area,
-		pos = pos,
-		destroy_clbk_key = false,
-		action_duration = math.max(duration, 1),
-		fail_clbk = function(unit)
-			-- nothing carried yet: let the bag wait, without holding the route back
-			self:end_job(job, unit, not (alive(unit) and self:interrupted(unit)))
-		end,
-		complete_clbk = function(unit)
-			self:on_pickup_done(job, unit)
-		end,
-		action = {
-			variant = "untie",
-			align_sync = true,
-			body_part = 1,
-			type = "act",
-		},
-	}
+	if not objective then
+		return
+	end
+
+	local seg, pos = nav_spot(bag:position())
 
 	self.bag_jobs[key] = job
 
@@ -418,11 +484,49 @@ function M:take(bag, unit)
 		Vector3(), 0, nil, nil)
 end
 
+-- the bags on the bot's back, still carried
+function M:carried(job)
+	local list = {}
+
+	for _, bag in ipairs(job.carried or {}) do
+		if alive(bag) and bag:carry_data() and bag:carry_data():is_linked() then
+			table.insert(list, bag)
+		end
+	end
+
+	return list
+end
+
+-- another bag of the route the bot can still carry along, the closest first
+function M:next_bag(job, unit)
+	local best, best_dis
+
+	for _, bag in ipairs(self:bags_around(job.route)) do
+		local other = self.bag_jobs[bag:key()]
+
+		if (not other or other.state == "waiting") and not (other == nil and self:is_targeted(bag)) and
+			unit:movement():can_carry_weight(bag:carry_data():carry_id()) then
+			local dis = mvec3_dis(unit:position(), bag:position())
+
+			if not best_dis or dis < best_dis then
+				best, best_dis = bag, dis
+			end
+		end
+	end
+
+	return best
+end
+
 function M:on_pickup_done(job, unit)
 	local bag = job.bag
+	local carried = #self:carried(job) > 0
 
 	if job.carrier ~= unit or not self:fetchable(bag) or not unit:movement():can_carry_weight(bag:carry_data():carry_id()) then
-		self:end_job(job, unit, true)
+		if carried then
+			self:start_drop(job, unit)
+		else
+			self:end_job(job, unit, true)
+		end
 
 		return
 	end
@@ -430,16 +534,53 @@ function M:on_pickup_done(job, unit)
 	bag = self:take(bag, unit)
 
 	if not alive(bag) or not unit:movement():add_carry_unit(bag) then
-		self:end_job(job, unit, true)
+		if carried then
+			self:start_drop(job, unit)
+		else
+			self:end_job(job, unit, true)
+		end
 
 		return
 	end
 
 	job.bag = bag
 	bag:carry_data():link_to(unit)
+	job.carried = job.carried or {}
+	table.insert(job.carried, bag)
 
 	job.state = "carrying"
 	unit:movement():set_bhfr_carry_job("bring")
+	job.t = now()
+
+	-- room left: the next bag of the route first
+	local next_bag = self:next_bag(job, unit)
+
+	if next_bag then
+		local other = self.bag_jobs[next_bag:key()]
+
+		if other then
+			self:end_job(other, nil, false)
+		end
+
+		job.bag = next_bag
+		job.state = "collecting"
+		job.objective = self:make_pickup_objective(job)
+
+		if job.objective then
+			unit:brain():set_objective(job.objective)
+
+			return
+		end
+
+		job.bag = bag
+		job.state = "carrying"
+	end
+
+	self:start_drop(job, unit)
+end
+
+function M:start_drop(job, unit)
+	job.state = "carrying"
 	job.t = now()
 	job.objective = self:make_drop_objective(job)
 
@@ -448,13 +589,18 @@ end
 
 -- same event a player's throw sends: every peer pushes the (already existing) bag the same way
 function M:on_drop_done(job, unit)
-	local bag, route = job.bag, job.route
+	local route = job.route
+	local list = self:carried(job)
+	local bag = table.remove(list, 1)
 
-	if alive(bag) and bag:carry_data():is_linked() then
+	job.carried = list
+
+	if bag then
 		local cd = bag:carry_data()
 		local carry_id, multiplier = cd:carry_id(), cd:multiplier()
 		local start = unit:position() + Vector3(0, 0, route.start_dz)
 
+		route.moved[bag:key()] = true
 		cd:unlink() -- not silent: the clients' carry display drops the weight
 		bag:set_position(start)
 
@@ -473,6 +619,13 @@ function M:on_drop_done(job, unit)
 
 	route.last_used_t = now()
 
+	-- more bags on its back: the next throw
+	if #list > 0 then
+		self:start_drop(job, unit)
+
+		return
+	end
+
 	self:end_job(job, unit, false)
 end
 
@@ -483,8 +636,10 @@ function M:end_job(job, unit, mark)
 	end
 
 	-- thrown or dropped on the way: this route leaves the bag alone from now on
-	if job.state == "carrying" and alive(job.bag) then
-		job.route.moved[job.bag:key()] = true
+	for _, bag in ipairs(job.carried or {}) do
+		if alive(bag) then
+			job.route.moved[bag:key()] = true
+		end
 	end
 
 	self.bag_jobs[job.key] = nil
@@ -497,7 +652,7 @@ function M:end_job(job, unit, mark)
 			movement._bhfr_mkp = nil
 			movement:set_bhfr_carry_job(nil)
 
-			if alive(job.bag) and job.bag:carry_data() and job.bag:carry_data():is_linked() then
+			if #self:carried(job) > 0 then
 				movement:drop_all_carry()
 			end
 
@@ -549,7 +704,7 @@ function M:resume(job, unit)
 	end
 
 	if movement:bhfr_mode() ~= job.bhfr_mode or movement:bhfr_following() ~= job.bhfr_following or
-		not job.bag:carry_data():is_linked() then
+		#self:carried(job) == 0 then
 		self:end_job(job, unit, false)
 
 		return
@@ -558,10 +713,8 @@ function M:resume(job, unit)
 	job.paused = nil
 
 	-- the flare / flee job hands the drop objective back by itself
-	if unit:brain():objective() ~= job.objective then
-		job.objective = self:make_drop_objective(job)
-
-		unit:brain():set_objective(job.objective)
+	if job.state == "collecting" or unit:brain():objective() ~= job.objective then
+		self:start_drop(job, unit)
 	end
 end
 
@@ -574,6 +727,7 @@ function M:reset()
 
 	self.routes = {}
 	self.pickups = {}
+	self.throws = {}
 	self.bag_jobs = {}
 end
 
@@ -604,6 +758,10 @@ function M:update(t)
 		elseif job.state == "walking" and (bag:carry_data():is_linked() or not bag:interaction():active()) and alive(unit) then
 			-- someone else took the bag on the way
 			self:end_job(job, unit, false)
+		elseif job.state == "collecting" and not job.paused and alive(unit) and
+			(bag:carry_data():is_linked() or not bag:interaction():active()) then
+			-- someone else took the bag on the way: go on with what is carried
+			job.paused = true
 		elseif job.paused and alive(unit) and not unit:movement():downed() and not unit:character_damage():need_revive() then
 			self:resume(job, unit)
 		elseif not alive(unit) or unit:movement():downed() or unit:character_damage():need_revive() or

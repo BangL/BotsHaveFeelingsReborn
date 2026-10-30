@@ -114,3 +114,12 @@ function CarryData:can_secure(...)
 	end
 	return can_secure_original(self, ...)
 end
+
+-- monkeepers_mode: a thrown bag that lands in a secure area still makes a route
+Hooks:PostHook(CarryData, "sequence_clbk_secured", "BHFR_CarryData_sequence_clbk_secured",
+	function(self)
+		if Network:is_server() and BotsHaveFeelingsReborn.Monkeepers then
+			BotsHaveFeelingsReborn.Monkeepers:on_secured(self._unit)
+		end
+	end
+)

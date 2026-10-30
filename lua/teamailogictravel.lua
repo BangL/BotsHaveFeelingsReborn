@@ -14,6 +14,26 @@ function TeamAILogicTravel.is_available_for_assignment(data, new_objective, ...)
 	return is_available_for_assignment_original(data, new_objective, ...)
 end
 
+-- stealth: following goes straight to the followed player's area, not from cover to cover
+
+local determine_destination_occupation_original = TeamAILogicTravel._determine_destination_occupation
+
+function TeamAILogicTravel._determine_destination_occupation(data, objective, ...)
+	local occupation = determine_destination_occupation_original(data, objective, ...)
+
+	if occupation and occupation.cover and objective.type == "follow" and managers.groupai:state():whisper_mode() then
+		local my_data = data.internal_data
+		local dest_area = managers.groupai:state():get_area_from_nav_seg_id(my_data.coarse_path[#my_data.coarse_path][1])
+
+		occupation = {
+			pos = CopLogicTravel._get_pos_on_wall(dest_area.pos, objective.called and 600 or nil),
+			type = "defend",
+		}
+	end
+
+	return occupation
+end
+
 -- bots_no_unnecessary_revive
 
 BotsHaveFeelingsReborn:BlockRevivesInProgress(TeamAILogicTravel)
