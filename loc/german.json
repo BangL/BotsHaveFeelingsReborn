@@ -106,6 +106,25 @@
   "bhfr_ger_stg44_npc": "Stg44",
   "bhfr_thompson_npc": "Thompson",
   "bhfr_usa_garand_npc": "Garand",
+  "bhfr_ger_geco_npc": "Geco",
+  "bhfr_ger_kar98_npc": "Kar98k",
+
+  "bhfr_bot_weapons_secondary": "Bot-Sekundärwaffen",
+
+  "bhfr_bot_weapon_russian_secondary": "Kurgan",
+  "bhfr_bot_weapon_russian_secondary_desc": "Sekundärwaffe (Stealth, Downed) für Kurgan. Als Client gilt die Einstellung des Hosts.",
+
+  "bhfr_bot_weapon_german_secondary": "Wolfgang",
+  "bhfr_bot_weapon_german_secondary_desc": "Sekundärwaffe (Stealth, Downed) für Wolfgang. Als Client gilt die Einstellung des Hosts.",
+
+  "bhfr_bot_weapon_british_secondary": "Sterling",
+  "bhfr_bot_weapon_british_secondary_desc": "Sekundärwaffe (Stealth, Downed) für Sterling. Als Client gilt die Einstellung des Hosts.",
+
+  "bhfr_bot_weapon_american_secondary": "Rivet",
+  "bhfr_bot_weapon_american_secondary_desc": "Sekundärwaffe (Stealth, Downed) für Rivet. Als Client gilt die Einstellung des Hosts.",
+
+  "bhfr_ger_luger_npc": "Luger",
+  "bhfr_usa_m1911_npc": "M1911",
 
   "bhfr_bot_grenades": "Bot-Granaten",
 

@@ -8,6 +8,11 @@ function TeamAIBase:default_weapon_name(slot, ...)
         if index and BotsHaveFeelingsReborn.BOT_WEAPONS_PRIMARY[index] then
             loadout.primary = BotsHaveFeelingsReborn.BOT_WEAPONS_PRIMARY[index].weapon
         end
+
+        index = BotsHaveFeelingsReborn.Sync:GetConfigOption("bot_weapon_" .. self._tweak_table .. "_secondary")
+        if index and BotsHaveFeelingsReborn.BOT_WEAPONS_SECONDARY[index] then
+            loadout.secondary = BotsHaveFeelingsReborn.BOT_WEAPONS_SECONDARY[index].weapon
+        end
     end
 
     return default_weapon_name_original(self, slot, ...)

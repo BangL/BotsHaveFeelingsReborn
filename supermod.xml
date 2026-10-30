@@ -44,6 +44,10 @@
             <!-- weapons -->
             <post hook_id="lib/units/player_team/teamaibase"
                   script_path="lua/teamaibase.lua" />
+            <post hook_id="lib/units/player_team/teamaiinventory"
+                  script_path="lua/teamaiinventory.lua" />
+            <post hook_id="lib/units/player_team/huskteamaiinventory"
+                  script_path="lua/teamaiinventory.lua" />
             <!-- carry gui -->
             <post hook_id="lib/managers/hudmanagerpd2"
                   script_path="lua/hudmanagerpd2.lua" />

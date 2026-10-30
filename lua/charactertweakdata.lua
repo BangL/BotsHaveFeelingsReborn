@@ -1,3 +1,27 @@
+-- bot_weapon_*_primary: gang_member presets for NPC weapons that have none in vanilla
+
+local _presets_original = CharacterTweakData._presets
+
+function CharacterTweakData:_presets(...)
+    local presets = _presets_original(self, ...)
+    local gang_member = presets.weapon.gang_member
+
+    -- shotgun: based on the m1912 preset
+    if not gang_member.ger_geco_npc then
+        gang_member.ger_geco_npc = deep_clone(gang_member.usa_m1912_npc)
+        gang_member.ger_geco_npc.melee_retry_delay = presets.weapon.normal.ger_geco_npc.melee_retry_delay
+    end
+
+    -- repeater rifle: based on the garand preset
+    if not gang_member.ger_kar98_npc then
+        gang_member.ger_kar98_npc = deep_clone(gang_member.usa_garand_npc)
+        gang_member.ger_kar98_npc.melee_retry_delay = presets.weapon.normal.ger_kar98_npc.melee_retry_delay
+        gang_member.ger_kar98_npc.autofire_rounds = nil
+    end
+
+    return presets
+end
+
 -- improve_bot_movement
 
 local _init_russian_original = CharacterTweakData._init_russian

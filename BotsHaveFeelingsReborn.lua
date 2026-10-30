@@ -10,7 +10,16 @@ BotsHaveFeelingsReborn.BOT_WEAPONS_PRIMARY = {
     { id = "ger_stg44_npc",  weapon = Idstring("units/vanilla/weapons/wpn_npc_ger_stg44/wpn_npc_ger_stg44") },
     { id = "thompson_npc",   weapon = Idstring("units/vanilla/weapons/wpn_npc_smg_thompson/wpn_npc_smg_thompson") },
     { id = "usa_garand_npc", weapon = Idstring("units/vanilla/weapons/wpn_npc_usa_garand/wpn_npc_usa_garand") },
+    { id = "ger_geco_npc",   weapon = Idstring("units/vanilla/weapons/wpn_npc_ger_geco/wpn_npc_ger_geco") },
+    { id = "ger_kar98_npc",  weapon = Idstring("units/vanilla/weapons/wpn_npc_ger_k98/wpn_npc_ger_k98") },
+    -- usa_m1912_npc: invisible, the vanilla model is 1/100 of the size of the other npc weapons
     -- { id = "usa_m1912_npc",  weapon = Idstring("units/vanilla/weapons/wpn_npc_usa_m1912/wpn_npc_usa_m1912") },
+}
+
+-- secondary slot: used in stealth and while downed
+BotsHaveFeelingsReborn.BOT_WEAPONS_SECONDARY = {
+    { id = "ger_luger_npc", weapon = Idstring("units/vanilla/weapons/wpn_npc_ger_luger/wpn_npc_ger_luger") },
+    { id = "usa_m1911_npc", weapon = Idstring("units/vanilla/weapons/wpn_npc_usa_m1911/wpn_npc_usa_m1911") },
 }
 
 -- throwables a bot can be given (id = loc key suffix, projectile = tweak_data.projectiles entry)
@@ -33,6 +42,10 @@ BotsHaveFeelingsReborn.SYNCED_SETTINGS = {
     "bot_weapon_german_primary",
     "bot_weapon_british_primary",
     "bot_weapon_american_primary",
+    "bot_weapon_russian_secondary",
+    "bot_weapon_german_secondary",
+    "bot_weapon_british_secondary",
+    "bot_weapon_american_secondary",
 }
 
 function BotsHaveFeelingsReborn:SaveConfig()

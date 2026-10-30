@@ -65,6 +65,17 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 	self:_MakeOptionMultiChoice("bot_weapon_british_primary", primaries_keys)
 	self:_MakeOptionMultiChoice("bot_weapon_american_primary", primaries_keys)
 
+	self:_MakeSeparator("bhfr_bot_weapons_secondary", true, 16)
+
+	local secondaries_keys = {}
+	for i, data in ipairs(BotsHaveFeelingsReborn.BOT_WEAPONS_SECONDARY) do
+		secondaries_keys[i] = data.id
+	end
+	self:_MakeOptionMultiChoice("bot_weapon_russian_secondary", secondaries_keys)
+	self:_MakeOptionMultiChoice("bot_weapon_german_secondary", secondaries_keys)
+	self:_MakeOptionMultiChoice("bot_weapon_british_secondary", secondaries_keys)
+	self:_MakeOptionMultiChoice("bot_weapon_american_secondary", secondaries_keys)
+
 	self:_MakeSeparator("bhfr_bot_grenades", true, 16)
 
 	self:_MakeOptionToggle("bots_throw_grenades")
