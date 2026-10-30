@@ -29,6 +29,7 @@ BotsHaveFeelingsReborn.BOT_GRENADES = {
     { id = "grenade_d343",     projectile = "d343" },
     { id = "grenade_mills",    projectile = "mills" },
     { id = "grenade_m24",      projectile = "m24" },
+    { id = "grenade_betty",    projectile = "betty" },
 }
 
 -- Settings the host dictates: the client ignores its own copy of these and uses
