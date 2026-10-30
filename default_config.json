@@ -20,7 +20,7 @@
   
   "bots_can_wait_when_loud": true,
   "toggle_follow_wait_f_shouts_loud": true,
-  "wait_modes": 1,
+  "wait_modes": 4,
 
   "send_comm_wheel_like_chat_messages": true,
   "announce_player_uses_mod": true,
@@ -37,7 +37,7 @@
   "bots_no_unnecessary_revive": true,
   "bots_extinguish_flares": true,
   "bots_avoid_grenades": true,
-  "bots_throw_grenades": false,
+  "bots_throw_grenades": true,
   "bot_grenade_russian": 2,
   "bot_grenade_german": 5,
   "bot_grenade_british": 3,
