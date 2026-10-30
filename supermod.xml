@@ -2,7 +2,7 @@
       description="Some slight improvements for the team AI."
       author="Takku, BangL"
       contact="https://steamcommunity.com/id/BangL"
-      version="0.15.0"
+      version="0.15.1"
       priority="-1"
 	min_sblt_version="2.1.0"
       color="60 60 60">

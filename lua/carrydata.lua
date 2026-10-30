@@ -97,7 +97,8 @@ Hooks:PreHook(CarryData, "destroy", "BHFR_CarryData_destroy",
 )
 
 function CarryData:on_carry_unlinked(silent)
-	if self._linked_to and self._linked_to:movement() and self._linked_to:movement().remove_carry_unit then
+	-- on level teardown the carrier may already be destroyed; touching it then crashes the engine
+	if alive(self._linked_to) and self._linked_to:movement() and self._linked_to:movement().remove_carry_unit then
 		self._linked_to:movement():remove_carry_unit(self._unit, silent)
 	end
 	self._linked_to = nil
