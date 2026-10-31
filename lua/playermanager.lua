@@ -11,6 +11,13 @@ BotsHaveFeelingsReborn.NO_CATCH_CARRY_IDS = {
 	turret_m2_gun = true,
 }
 
+-- every corpse has its own carry id (<character>_body), so the flag counts, not only the ids listed above
+function BotsHaveFeelingsReborn:IsNoCatchCarry(carry_id)
+	local carry_tweak = tweak_data.carry and tweak_data.carry[carry_id]
+
+	return (self.NO_CATCH_CARRY_IDS[carry_id] or (carry_tweak and carry_tweak.is_corpse)) and true or false
+end
+
 local BotCarryBags_PlayerManager_server_drop_carry = PlayerManager.server_drop_carry
 
 function PlayerManager:server_drop_carry(carry_id, carry_multiplier, position, rotation,
@@ -23,7 +30,7 @@ function PlayerManager:server_drop_carry(carry_id, carry_multiplier, position, r
 			and alive(carry_unit)
 			and carry_unit:carry_data()
 			and tweak_data.carry then
-			if not BotsHaveFeelingsReborn.NO_CATCH_CARRY_IDS[carry_unit:carry_data():carry_id()] then
+			if not BotsHaveFeelingsReborn:IsNoCatchCarry(carry_unit:carry_data():carry_id()) then
 				carry_unit:carry_data():start_bot_carry_catch()
 			end
 		end

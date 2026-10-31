@@ -44,9 +44,8 @@ end
 
 function M:acceptable(carry_id)
 	local carry_tweak = tweak_data.carry[carry_id]
-	local excluded = BotsHaveFeelingsReborn.NO_CATCH_CARRY_IDS
 
-	return carry_tweak ~= nil and not (excluded and excluded[carry_id])
+	return carry_tweak ~= nil and not BotsHaveFeelingsReborn:IsNoCatchCarry(carry_id)
 end
 
 function M:carry_match(id1, id2)
