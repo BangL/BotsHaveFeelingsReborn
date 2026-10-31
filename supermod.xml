@@ -8,7 +8,7 @@
       color="60 60 60">
       <updates>
             <update identifier="botshavefeelingsreborn">
-                <host meta="https://raw.githubusercontent.com/BangL/raid-mods-meta/main/botshavefeelingsreborn.json"/>
+                <host meta="https://raw.githubusercontent.com/BangL/raid-mods-meta/main/botshavefeelingsreborn.json" patchnotes="https://github.com/BangL/BotsHaveFeelingsReborn/blob/master/CHANGELOG.md"/>
             </update>
       </updates>
       <localization directory="loc">
