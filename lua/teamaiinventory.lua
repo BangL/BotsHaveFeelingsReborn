@@ -1,13 +1,23 @@
--- keep the weapon of bots visible while downed (vanilla hides it via anim callback)
+-- keep the weapon of bots visible while downed (vanilla hides it via anim callback), but not while still cool (stealth)
 
-local function hide_equipped_unit() end
+local function patch(class)
+    local hide_equipped_unit = class.hide_equipped_unit
+
+    function class:hide_equipped_unit(...)
+        if not self._unit:movement():cool() then
+            return
+        end
+
+        return hide_equipped_unit(self, ...)
+    end
+end
 
 if TeamAIInventory then
-    TeamAIInventory.hide_equipped_unit = hide_equipped_unit
+    patch(TeamAIInventory)
 end
 
 if HuskTeamAIInventory then
-    HuskTeamAIInventory.hide_equipped_unit = hide_equipped_unit
+    patch(HuskTeamAIInventory)
 end
 
 -- the m1911 npc model sits too low in the hand, the luger is fine
