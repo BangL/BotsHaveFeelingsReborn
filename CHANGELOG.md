@@ -1,3 +1,6 @@
+0.16.3:
+- fix: crash on quit to desktop (HUD updates on destroyed bot panels)
+
 0.16.2:
 - defaults: bots throw grenades, wait mode 4
 
