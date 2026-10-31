@@ -1,3 +1,6 @@
+0.16.4:
+- fix: bots in stealth (still cool) have their weapon hidden again, only downed or alerted bots keep it visible
+
 0.16.3:
 - fix: crash on quit to desktop (HUD updates on destroyed bot panels)
 
