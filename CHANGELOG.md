@@ -1,3 +1,6 @@
+0.16.5:
+- fix: bots no longer catch or carry corpses (every enemy corpse has its own carry id, a thrown guard was caught and vanished); applies to catching and monkeepers_mode
+
 0.16.4:
 - fix: bots in stealth (still cool) have their weapon hidden again, only downed or alerted bots keep it visible
 
