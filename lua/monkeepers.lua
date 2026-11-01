@@ -29,6 +29,11 @@ M.JOB_TIMEOUT = 60
 M.LANDING_DELAY = 2.5 -- from the throw to where the bag lies
 M.CHECK_INTERVAL = 0.5
 M.SO_PREFIX = "bhfr_mkp_"
+M.ZONE_SCAN_INTERVAL = 5 -- the secure zones are looked up again after this
+M.ZONE_NOTICE_DISTANCE = 2500 -- a carrying bot this close to a zone's throw spot goes there
+M.ZONE_REACH = 900 -- the throw spot (closest navigation point) may be this far from the zone's middle
+M.ZONE_COOLDOWN = 15 -- a bot that did a zone job (or failed one) is left alone for this long
+M.ZONE_START_DZ = 120 -- the bag leaves the hands this high above the feet
 
 local function now()
 	return TimerManager:game():time()
@@ -40,6 +45,11 @@ end
 
 function M:enabled()
 	return Network:is_server() and self:mode() ~= self.MODE_OFF
+end
+
+-- bots_secure_zone_throw: independent of the routes
+function M:zone_enabled()
+	return Network:is_server() and BotsHaveFeelingsReborn:GetConfigOption("bots_secure_zone_throw") and true or false
 end
 
 function M:acceptable(carry_id)
@@ -95,6 +105,159 @@ local function nav_spot(pos)
 	managers.navigation:destroy_nav_tracker(tracker)
 
 	return seg, field_pos, managers.groupai:state():get_area_from_nav_seg_id(seg)
+end
+
+-- secure zones ----------------------------------------------------------------------------------
+
+-- does the element (or something it starts shortly after) secure a carried bag?
+local function secures(element, depth, seen)
+	if not element or seen[element] then
+		return false
+	end
+
+	seen[element] = true
+
+	local operation = element._values.operation
+
+	if operation == "secure" or operation == "secure_silent" then
+		return true
+	end
+
+	if depth <= 0 then
+		return false
+	end
+
+	for _, params in ipairs(element._values.on_executed or {}) do
+		if secures(element:get_mission_element(params.id), depth - 1, seen) then
+			return true
+		end
+	end
+
+	return false
+end
+
+-- the area triggers that react to loot and end in a "secure" carry element
+function M:secure_zones()
+	local t = now()
+
+	if self._zones and t < self._zones_t then
+		return self._zones
+	end
+
+	local zones = {}
+
+	for _, script in pairs(managers.mission:scripts()) do
+		for _, element in pairs(script:elements()) do
+			local values = element._values
+
+			if element.get_shapes and (values.instigator == "loot" or values.instigator == "unique_loot") and
+				element:enabled() and secures(element, 4, {}) then
+				for _, shape in ipairs(element:get_shapes()) do
+					table.insert(zones, shape)
+				end
+			end
+		end
+	end
+
+	self._zones = zones
+	self._zones_t = t + self.ZONE_SCAN_INTERVAL
+
+	return zones
+end
+
+-- a pseudo route for the bag job: where to stand and how to throw
+function M:zone_route(unit)
+	local pos = unit:position()
+	local best, best_dis
+
+	for _, shape in ipairs(self:secure_zones()) do
+		local middle = shape:position()
+		local _, field_pos = nav_spot(middle)
+		local dis = mvec3_dis(field_pos:with_z(0), middle:with_z(0))
+
+		if dis < self.ZONE_REACH and mvec3_dis(pos, field_pos) < self.ZONE_NOTICE_DISTANCE then
+			local to_unit = mvec3_dis(pos, field_pos)
+
+			if not best_dis or to_unit < best_dis then
+				best, best_dis = { shape = shape, middle = middle, field_pos = field_pos }, to_unit
+			end
+		end
+	end
+
+	if not best then
+		return nil
+	end
+
+	local horizontal = (best.middle - best.field_pos):with_z(0)
+	local inside = best.shape:is_inside(best.field_pos + math.UP * 30)
+	local dir, rot = Vector3(), unit:rotation()
+
+	-- not in the zone yet: thrown the way a player does (flat, a bit up)
+	if not inside and mvector3.length(horizontal) > 0.01 then
+		mvector3.normalize(horizontal)
+
+		dir = (horizontal + Vector3(0, 0, 0.33)):normalized()
+		rot = Rotation(horizontal, math.UP)
+	end
+
+	return {
+		zone = true,
+		throw_pos = best.field_pos,
+		dir = dir,
+		rot = rot,
+		start_dz = self.ZONE_START_DZ,
+		level = 0,
+		moved = {},
+		created_t = now(),
+		last_used_t = now(),
+	}
+end
+
+-- a carrying bot near a secure zone brings its bags there (no route needed)
+function M:update_zones(t)
+	self.zone_t = self.zone_t or {}
+
+	for _, data in pairs(managers.groupai:state():all_AI_criminals()) do
+		local unit = data.unit
+		local key = alive(unit) and unit:key()
+		local movement = key and unit:movement()
+
+		if movement and movement.is_carrying and movement:is_carrying() and (self.zone_t[key] or 0) < t and
+			self:bot_available(unit, false, true) then
+			local list = {}
+
+			for _, bag in pairs(movement._carry_units or {}) do
+				if alive(bag) and bag:carry_data() and bag:carry_data():is_linked() then
+					table.insert(list, bag)
+				end
+			end
+
+			local route = #list > 0 and not self:revive_pending() and self:zone_route(unit)
+
+			if route then
+				self.zone_t[key] = t + self.ZONE_COOLDOWN
+
+				local job = {
+					key = "zone" .. tostring(key),
+					so_id = self.SO_PREFIX .. "zone" .. tostring(key),
+					route = route,
+					bag = list[1],
+					carried = list,
+					carrier = unit,
+					state = "carrying",
+					t = t,
+					prev_objective = unit:brain():objective(),
+					bhfr_mode = movement:bhfr_mode(),
+					bhfr_following = movement:bhfr_following(),
+				}
+
+				self.bag_jobs[job.key] = job
+				movement._bhfr_mkp = job
+				movement:set_bhfr_carry_job("bring")
+				self:start_drop(job, unit)
+			end
+		end
+	end
 end
 
 -- recording -----------------------------------------------------------------------------------
@@ -179,7 +342,7 @@ function M:on_secured(bag)
 end
 
 function M:remove_route(i)
-	local route = i > 0 and table.remove(self.routes, i)
+	local route = i and i > 0 and table.remove(self.routes, i)
 
 	if route then
 		route.obsolete = true
@@ -242,7 +405,7 @@ function M:revive_pending()
 end
 
 -- side_job: a short job on the way (grenade pickup) may also take a bot that carries a bag here, it goes on afterwards
-function M:bot_available(unit, side_job)
+function M:bot_available(unit, side_job, carrying_ok)
 	if not alive(unit) or not unit:brain() or not unit:brain()._logic_data then
 		return false
 	end
@@ -252,7 +415,7 @@ function M:bot_available(unit, side_job)
 	local carrying = side_job and job and (job.state == "carrying" or job.state == "collecting") and not job.paused
 
 	if job and not carrying or movement._bhfr_gpk or movement._bhfr_flare or movement._bhfr_flee or movement:downed() or
-		unit:character_damage():need_revive() or movement:is_carrying() and not carrying or
+		unit:character_damage():need_revive() or movement:is_carrying() and not carrying and not carrying_ok or
 		movement:chk_action_forbidden("walk") then
 		return false
 	end
@@ -609,7 +772,7 @@ function M:on_drop_done(job, unit)
 
 		-- the throw came back down where it started: bots can't do this route
 		managers.enemy:add_delayed_clbk("bhfr_mkp_bot_landing" .. tostring(bag:key()), function()
-			if alive(bag) and not route.obsolete and not bag:carry_data():is_linked() and
+			if alive(bag) and not route.zone and not route.obsolete and not bag:carry_data():is_linked() and
 				self:in_pickup_area(route, bag:position()) then
 				self:remove_route(table.index_of(self.routes, route))
 			end
@@ -725,6 +888,8 @@ function M:reset()
 	end
 
 	self.routes = {}
+	self._zones = nil
+	self.zone_t = nil
 	self.pickups = {}
 	self.throws = {}
 	self.bag_jobs = {}
@@ -744,11 +909,15 @@ function M:bags_around(route)
 end
 
 function M:update(t)
+	local routes_on = self:enabled()
+
 	-- jobs that lost their reason
 	for key, job in pairs(table.map_copy(self.bag_jobs)) do
 		local bag, unit = job.bag, job.carrier
 
-		if not alive(bag) or job.route.obsolete and job.state == "waiting" then
+		if not job.route.zone and not routes_on then
+			self:end_job(job, unit, false)
+		elseif not alive(bag) or job.route.obsolete and job.state == "waiting" then
 			self:end_job(job, unit, false)
 		elseif job.state == "waiting" then
 			if bag:carry_data():is_linked() or not bag:interaction():active() then
@@ -769,10 +938,14 @@ function M:update(t)
 		end
 	end
 
+	if self:zone_enabled() then
+		self:update_zones(t)
+	end
+
 	-- routes: find bags to fetch, drop routes nothing was left to do for
 	for i = #self.routes, 1, -1 do
 		local route = self.routes[i]
-		local bags = self:bags_around(route)
+		local bags = routes_on and self:bags_around(route) or {}
 
 		for _, bag in ipairs(bags) do
 			self:register_bag(bag, route)
@@ -782,7 +955,7 @@ function M:update(t)
 			route.last_used_t = t
 		end
 
-		if t - route.last_used_t > self.UNUSED_ROUTE_T then
+		if not routes_on or t - route.last_used_t > self.UNUSED_ROUTE_T then
 			self:remove_route(i)
 		end
 	end
@@ -802,7 +975,7 @@ Hooks:PostHook(GroupAIStateBase, "update", "BHFR_GroupAIStateBase_update_monkeep
 
 		self._bhfr_mkp_t = game_t + M.CHECK_INTERVAL
 
-		if M:enabled() then
+		if M:enabled() or M:zone_enabled() then
 			M:update(game_t)
 		elseif next(M.routes) or next(M.bag_jobs) then
 			M:reset()

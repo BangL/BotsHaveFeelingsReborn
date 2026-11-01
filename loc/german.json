@@ -36,6 +36,8 @@
   "bhfr_bots_have_strong_back_desc": "Bots haben +2 Tragegewicht durch \"Strong Back\".",
   "bhfr_monkeepers_mode": "Bots tragen Bags wie Spieler",
   "bhfr_monkeepers_mode_desc": "Bag 7 m+ werfen: Bots holen die Bags von deiner Aufnahmestelle und werfen sie auch. Nur Host. ID: gleiche Sorte, Typ: gleiche Weite.",
+  "bhfr_bots_secure_zone_throw": "Bots werfen Bags in Secure-Zonen",
+  "bhfr_bots_secure_zone_throw_desc": "Bots mit Beute werfen sie in eine nahe Secure-Zone (LKW, Boot usw.), keine Monkeepers-Route nötig. Nur Host.",
   "bhfr_monkeepers_off": "Aus",
   "bhfr_monkeepers_id": "Gleiche ID",
   "bhfr_monkeepers_type": "Gleicher Typ",

@@ -36,6 +36,8 @@
   "bhfr_bots_have_strong_back_desc": "Bots have +2 carry weight from strong back.",
   "bhfr_monkeepers_mode": "Bots carry bags like players",
   "bhfr_monkeepers_mode_desc": "Throw a bag 7 m+ and bots fetch the bags where you picked yours up and throw them too. Host only. Id: same kind, type: same range.",
+  "bhfr_bots_secure_zone_throw": "Bots throw bags into secure zones",
+  "bhfr_bots_secure_zone_throw_desc": "Bots carrying loot throw it into a nearby secure zone (truck, boat etc.), no Monkeepers route needed. Host only.",
   "bhfr_monkeepers_off": "Off",
   "bhfr_monkeepers_id": "Same id",
   "bhfr_monkeepers_type": "Same type",

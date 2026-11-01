@@ -33,6 +33,7 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 	self:_MakeOptionToggle("bots_have_strong_back")
 	self:_MakeOptionToggle("bots_slowed_by_carry")
 	self:_MakeOptionMultiChoice("monkeepers_mode", { "monkeepers_off", "monkeepers_id", "monkeepers_type", "monkeepers_any" })
+	self:_MakeOptionToggle("bots_secure_zone_throw")
 	self:_MakeOptionToggle("shift_f_for_drop_all_carry")
 
 	self:_MakeSeparator("bhfr_cat_commands_stealth", true, 16)
