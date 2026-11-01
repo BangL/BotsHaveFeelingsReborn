@@ -83,8 +83,10 @@ local function release(unit, job)
 
 	local brain = unit:brain()
 
-	if brain:objective() ~= job.objective then
-		-- something else gave the bot a new job, not ours to restore anymore
+	local current = brain:objective()
+
+	-- something else gave the bot a new job, not ours to restore anymore (none at all: the bot would stand there jobless)
+	if current and current ~= job.objective then
 		return
 	end
 
@@ -275,9 +277,23 @@ function Flares:update_bot(unit, job, game_t)
 	local ext = alive(flare) and flare:interaction()
 	local brain = unit:brain()
 
-	if not ext or not ext:active() or unit:movement():downed() or unit:character_damage():need_revive() or
-		brain:objective() ~= job.objective then
+	if not ext or not ext:active() or unit:movement():downed() or unit:character_damage():need_revive() then
 		release(unit, job)
+
+		return
+	end
+
+	if brain:objective() ~= job.objective then
+		-- the game dropped the objective (reached, completed): give it back a few times, else the bot is jobless without the flare put out
+		job.lost = (job.lost or 0) + 1
+
+		log("[BHFR flares] objective of " .. tostring(unit:base()._tweak_table) .. " is " .. tostring(brain:objective() and brain:objective().type) .. " (" .. job.lost .. ")")
+
+		if brain:objective() or job.lost > 5 then
+			release(unit, job)
+		else
+			brain:set_objective(job.objective)
+		end
 
 		return
 	end
