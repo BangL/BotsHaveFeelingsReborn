@@ -60,6 +60,12 @@
   "bhfr_bots_are_undetectable": "Undetectable bots in stealth",
   "bhfr_bots_are_undetectable_desc": "Bots are undetectable in stealth. Carried items on their backs still are! [for follow in stealth]",
 
+  "bhfr_bots_avoid_guards": "Bots avoid guards (experimental)",
+  "bhfr_bots_melee_guards": "Bots take out lone guards (experimental)",
+  "bhfr_bots_melee_guards_desc": "Needs \"Bots avoid guards\". A bot that nobody sees sneaks up on a guard that no other guard sees and takes it out with a melee strike. A bot that is about to be noticed by a single guard hits it first, if it can get there in time. [for follow in stealth]",
+
+  "bhfr_bots_avoid_guards_desc": "Bots are detectable in stealth, but back off when a guard looks their way and wait until it is safe. Replaces \"Undetectable bots\". Applies from the next mission. [for follow in stealth]",
+
   "bhfr_cat_commands_loud": "Commands (Loud)",
 
   "bhfr_bots_can_wait_when_loud": "Can shout at bots to wait when loud",

@@ -128,6 +128,9 @@ function TeamAIMovement:set_bhfr_mode(mode, caller)
 	self._bhfr_mode = mode
 	self._bhfr_following = caller
 
+	-- bots_avoid_guards: whether the guards see this bot depends on its mode
+	BotsHaveFeelingsReborn:ResetAttentionCache()
+
 	-- bot crouching
 	self._unit:character_damage():set_crouch_move(self:bhfr_mode() ~= self.bhfr_modes.vanilla)
 

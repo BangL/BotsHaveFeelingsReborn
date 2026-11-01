@@ -32,6 +32,33 @@ BotsHaveFeelingsReborn.BOT_GRENADES = {
     { id = "grenade_betty",    projectile = "betty" },
 }
 
+-- The guards' attention candidates are cached per access filter. Whether a bot is one depends on its state (see lua/aiattentionobject.lua),
+-- so the cache has to go whenever that changes.
+function BotsHaveFeelingsReborn:ResetAttentionCache()
+    local gstate = managers.groupai and managers.groupai:state()
+    local cache = gstate and gstate._attention_objects
+
+    if cache then
+        for filter in pairs(cache) do
+            if filter ~= "all" then
+                cache[filter] = nil
+            end
+        end
+    end
+end
+
+-- bots_avoid_guards: guards notice a bot at this share of the speed they notice a player
+BotsHaveFeelingsReborn.BOT_NOTICE_DELAY_MUL = 0.5
+
+-- icon per bot activity (TeamAIMovement:set_bhfr_carry_job): monkeepers carry jobs and the stealth actions of bots_avoid_guards / bots_melee_guards
+BotsHaveFeelingsReborn.BOT_JOB_ICONS = {
+    fetch = "waypoint_special_loot",
+    bring = "waypoint_special_loot_drop",
+    avoid = "waypoint_special_escape",
+    ambush = "rwd_melee",
+    detour = "ico_nav_right_base",
+}
+
 -- Settings the host dictates: the client ignores its own copy of these and uses
 -- the value from the handshake. Ids are config keys, used verbatim with
 -- GetConfigOption(), so each one has to exist in default_config.json.

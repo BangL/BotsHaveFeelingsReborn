@@ -60,6 +60,8 @@
                   script_path="lua/playerstandard.lua" />
             <post hook_id="lib/units/props/aiattentionobject"
                   script_path="lua/aiattentionobject.lua" />
+            <post hook_id="lib/units/player_team/teamaimovement"
+                  script_path="lua/botsavoid.lua" />
             <post hook_id="lib/network/handlers/unitnetworkhandler"
                   script_path="lua/unitnetworkhandler.lua" />
             <post hook_id="lib/tweak_data/interactiontweakdata"

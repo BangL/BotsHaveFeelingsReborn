@@ -205,7 +205,7 @@ end
 function HUDNameLabel:set_bot_carry_job(state)
     self._bot_carry_job = state
 
-    local icon = state and tweak_data.gui.icons[(state == "bring") and "waypoint_special_loot_drop" or "waypoint_special_loot"]
+    local icon = state and tweak_data.gui.icons[BotsHaveFeelingsReborn.BOT_JOB_ICONS[state] or "waypoint_special_loot"]
 
     if icon then
         self._bot_carry_job_icon:set_image(icon.texture, unpack(icon.texture_rect))

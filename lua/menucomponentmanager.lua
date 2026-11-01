@@ -41,6 +41,8 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 	self:_MakeOptionToggle("bots_can_follow_in_stealth")
 	self:_MakeOptionToggle("toggle_follow_wait_f_shouts_stealth")
 	self:_MakeOptionToggle("bots_are_undetectable")
+	self:_MakeOptionToggle("bots_avoid_guards")
+	self:_MakeOptionToggle("bots_melee_guards")
 
 	self:_MakeSeparator("bhfr_cat_commands_loud", true, 16)
 
