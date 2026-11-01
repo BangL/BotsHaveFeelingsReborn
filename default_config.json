@@ -21,6 +21,7 @@
   "bots_avoid_guards": false,
   "bots_melee_guards": false,
   
+  "bots_prioritize_marked": true,
   "bots_can_wait_when_loud": true,
   "toggle_follow_wait_f_shouts_loud": true,
   "wait_modes": 4,

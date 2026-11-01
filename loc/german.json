@@ -61,6 +61,8 @@
   "bhfr_bots_are_undetectable_desc": "Bots sind im Schleichen nicht zu entdecken. Von ihnen getragene Gegenstände weiterhin schon! [für Folgen im Schleichen]",
 
   "bhfr_bots_avoid_guards": "Bots meiden Wachen (experimentell)",
+  "bhfr_bots_prioritize_marked": "Bots bevorzugen markierte Gegner",
+  "bhfr_bots_prioritize_marked_desc": "Bots schießen zuerst auf Gegner, die du oder andere Bots markiert haben (8 Sekunden lang, solange sichtbar).",
   "bhfr_bots_melee_guards": "Bots schalten einzelne Wachen aus (experimentell)",
   "bhfr_bots_melee_guards_desc": "Benötigt \"Bots meiden Wachen\". Ein unbeobachteter Bot schleicht sich an eine Wache an, die keine andere Wache sieht, und schaltet sie per Nahkampf aus. Ein Bot, den eine einzelne Wache gleich bemerkt, schlägt zuerst zu, wenn er rechtzeitig dort ist. [für Folgen im Schleichen]",
 

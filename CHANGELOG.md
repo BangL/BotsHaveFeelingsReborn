@@ -1,3 +1,7 @@
+0.18.0:
+- new: bots prioritize enemies marked by players (vanilla mark_t was never set)
+- new option bots_prioritize_marked (default on)
+
 0.17.0:
 - new: bots_secure_zone_throw - bots carrying loot throw it into a nearby secure zone (truck, boat etc.), host only
 - new (experimental): bots_avoid_guards - bots stay detectable in stealth but back off when a guard looks their way and are noticed at half the speed

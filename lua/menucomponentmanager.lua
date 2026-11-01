@@ -46,6 +46,7 @@ function BotsHaveFeelingsRebornMenu:Init(root)
 
 	self:_MakeSeparator("bhfr_cat_commands_loud", true, 16)
 
+	self:_MakeOptionToggle("bots_prioritize_marked")
 	self:_MakeOptionToggle("bots_can_wait_when_loud")
 	self:_MakeOptionToggle("toggle_follow_wait_f_shouts_loud")
 	self:_MakeOptionMultiChoice("wait_modes", { "wait_modes_stationary_cover", "wait_modes_cover_stationary", "wait_mode_stationary", "wait_mode_cover" })

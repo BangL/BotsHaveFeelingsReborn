@@ -2,7 +2,7 @@
       description="Some slight improvements for the team AI."
       author="Takku, BangL"
       contact="https://steamcommunity.com/id/BangL"
-      version="0.17.2"
+      version="0.18.0"
       priority="-1"
 	min_sblt_version="2.1.0"
       color="60 60 60">
@@ -85,6 +85,9 @@
                   script_path="lua/coplogicattack.lua" />
             <post hook_id="lib/units/player_team/logics/teamailogicidle"
                   script_path="lua/teamailogicidle.lua" />
+            <!-- bots prioritize marked enemies -->
+            <post hook_id="lib/units/contourext"
+                  script_path="lua/contourext.lua" />
             <!-- bot respawn timer -->
             <post hook_id="lib/managers/trademanager"
                   script_path="lua/trademanager.lua" />

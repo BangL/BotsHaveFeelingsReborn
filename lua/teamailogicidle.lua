@@ -35,3 +35,42 @@ end
 -- bots_no_unnecessary_revive
 
 BotsHaveFeelingsReborn:BlockRevivesInProgress(TeamAILogicIdle)
+
+-- bots_prioritize_marked: vanilla reads attention_data.mark_t but never sets it (and would only
+-- honor it within 16 m); here a visible marked enemy (nearest first) wins at any distance
+local MARK_WINDOW = 8
+
+local _get_priority_attention_original = TeamAILogicIdle._get_priority_attention
+
+function TeamAILogicIdle._get_priority_attention(data, attention_objects, ...)
+	local best, best_dis, best_reaction, marked_found
+
+	if BotsHaveFeelingsReborn:GetConfigOption("bots_prioritize_marked") then
+		local reaction_func
+		for _, attention_data in pairs(attention_objects) do
+			local unit = attention_data.unit
+			local base = alive(unit) and unit:base()
+			local mark_t = base and base._bhfr_mark_t
+			if mark_t then
+				attention_data.mark_t = mark_t
+				if attention_data.identified and attention_data.verified and not attention_data.pause_expire_t and
+					data.t - mark_t < MARK_WINDOW then
+					reaction_func = reaction_func or TeamAILogicBase._chk_reaction_to_attention_object
+					local reaction = reaction_func(data, attention_data, not CopLogicAttack._can_move(data))
+					local dis = mvec3_dis(data.m_pos, attention_data.m_pos)
+					if reaction and reaction >= AIAttentionObject.REACT_COMBAT and (not best_dis or dis < best_dis) then
+						best, best_dis, best_reaction = attention_data, dis, reaction
+					end
+				end
+			end
+		end
+	end
+
+	local target, slot, reaction = _get_priority_attention_original(data, attention_objects, ...)
+
+	if best then
+		return best, 1, best_reaction
+	end
+
+	return target, slot, reaction
+end
