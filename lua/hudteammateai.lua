@@ -118,7 +118,7 @@ function HUDTeammateAI:_animate_bot_respawn_timer(text)
         local seconds = math.floor(managers.trade:respawn_delay_by_name(self._bot_respawn_name))
 
         -- 0 = waiting for the trade to be allowed (e.g. stealth)
-        text:set_text((seconds > 0) and string.format("%d:%02d", math.floor(seconds / 60), seconds % 60) or "...")
+        text:set_text((seconds > 0) and string.format("%d:%02d", math.floor(seconds / 60), seconds % 60) or "")
         self:_fit_bot_carry_panel()
 
         local t = 0
