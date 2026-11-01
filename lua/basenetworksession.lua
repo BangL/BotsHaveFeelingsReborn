@@ -22,7 +22,7 @@ if not BotsHaveFeelingsReborn.Sync then
         },
         drop_in_cache = {},
         settings_cache = {},
-        protocol_version = 6,
+        protocol_version = 7,
     }
 
     -- LuaNetworking:TableToString() flattens everything through tostring() and
@@ -189,14 +189,22 @@ if not BotsHaveFeelingsReborn.Sync then
 
         if peer_id == 1 then
             log("[BHFR handshake] The host is using compatible BHFR version.")
-            self.settings_cache = data
+            -- values come positionally in SYNCED_SETTINGS order (see below)
+            self.settings_cache = {}
+            for i, option_id in ipairs(BotsHaveFeelingsReborn.SYNCED_SETTINGS) do
+                if type(data.s) == "table" then
+                    self.settings_cache[option_id] = data.s[i]
+                end
+            end
         else
             log("[BHFR handshake] Client " .. tostring(peer_id) .. " is using compatible BHFR version.")
             if Network:is_server() then
                 -- host handshake confirmation back to client, including server protocol version and synced settings
-                local host_data = { version = self.protocol_version }
-                for _, option_id in ipairs(BotsHaveFeelingsReborn.SYNCED_SETTINGS) do
-                    host_data[option_id] = BotsHaveFeelingsReborn:GetConfigOption(option_id)
+                -- positional values: with the option ids as keys the message passes
+                -- the 255 char chat limit and arrives cut off (broken json)
+                local host_data = { version = self.protocol_version, s = {} }
+                for i, option_id in ipairs(BotsHaveFeelingsReborn.SYNCED_SETTINGS) do
+                    host_data.s[i] = BotsHaveFeelingsReborn:GetConfigOption(option_id)
                 end
                 self:send_to_peer(peer_id, self.events.handshake, host_data)
             end
