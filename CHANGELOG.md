@@ -1,3 +1,9 @@
+0.17.0:
+- new: bots_secure_zone_throw - bots carrying loot throw it into a nearby secure zone (truck, boat etc.), host only
+- new (experimental): bots_avoid_guards - bots stay detectable in stealth but back off when a guard looks their way and are noticed at half the speed
+- new (experimental): bots_melee_guards - bots sneak up on lone guards and take them out with a melee strike
+- fix: bots with a flare job are no longer left jobless when the game drops the objective
+
 0.16.5:
 - fix: bots no longer catch or carry corpses (every enemy corpse has its own carry id, a thrown guard was caught and vanished); applies to catching and monkeepers_mode
 
