@@ -1,3 +1,6 @@
+0.18.2:
+- fix: downed bots keep their weapon visible only while loud (camp, stealth and animations like peeing keep the vanilla hide)
+
 0.18.1:
 - the handshake settings are sent as one message again (before 0.17.1), LuaNetworking splits long messages since base 2.4.0
 - protocol version 6 again (not compatible with 0.17.1 to 0.18.0)

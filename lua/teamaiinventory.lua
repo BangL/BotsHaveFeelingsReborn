@@ -1,10 +1,10 @@
--- keep the weapon of bots visible while downed (vanilla hides it via anim callback), but not while still cool (stealth)
+-- keep the weapon of bots visible while downed (vanilla hides it via anim callback), only while loud (camp, stealth and animations like peeing keep the vanilla hide)
 
 local function patch(class)
     local hide_equipped_unit = class.hide_equipped_unit
 
     function class:hide_equipped_unit(...)
-        if not self._unit:movement():cool() then
+        if managers.groupai and managers.groupai:state():enemy_weapons_hot() then
             return
         end
 
