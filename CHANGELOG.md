@@ -1,3 +1,8 @@
+0.18.1:
+- the handshake settings are sent as one message again (before 0.17.1), LuaNetworking splits long messages since base 2.4.0
+- protocol version 6 again (not compatible with 0.17.1 to 0.18.0)
+- requires base 2.4.0
+
 0.18.0:
 - new: bots prioritize enemies marked by players (vanilla mark_t was never set)
 - new option bots_prioritize_marked (default on)
